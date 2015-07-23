@@ -1,0 +1,790 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# initial state
+0 0:00 EnvTemperature 22
+0 0:00 User Nobody
+0 0:00 BodyTemperature 0
+0 0:00 HeartRate 0
+
+0 0:00 PeopleQuantity 0
+0 0:00 ACTemperature 0
+0 0:00 EXP_ACTemperature 0
+
+###Normal week###
+### Monday ###
+
+0 08:00 EnvTemperature 22
+0 08:00 User Guilherme
+0 08:00 BodyTemperature 36
+0 08:00 HeartRate 78
+0 08:01 PeopleQuantity 1
+0 08:01 ACTemperature 24
+0 08:01 EXP_ACTemperature 24
+
+0 08:30 User Nobody
+0 08:30 BodyTemperature 0
+0 08:30 HeartRate 0
+0 08:30 PeopleQuantity 0
+0 08:30 ACTemperature 0
+0 08:30 EXP_ACTemperature 0
+
+
+0 18:00 EnvTemperature 24
+0 18:00 User Guilherme
+0 18:00 BodyTemperature 36
+0 18:00 HeartRate 76
+0 18:01 PeopleQuantity 1
+0 18:01 ACTemperature 24
+0 18:01 EXP_ACTemperature 24
+
+
+0 18:30 User Nobody
+0 18:30 BodyTemperature 0
+0 18:30 HeartRate 0
+0 18:30 PeopleQuantity 0
+0 18:30 ACTemperature 0
+0 18:30 EXP_ACTemperature 0
+
+### Tuesday ###
+
+1 08:00 BEGIN_EXPECTATIONS
+1 08:00 EnvTemperature 22
+1 08:00 User Guilherme
+1 08:00 BodyTemperature 36
+1 08:00 HeartRate 67
+1 08:01 PeopleQuantity 1
+1 08:01 ACTemperature 24
+1 08:01 EXP_ACTemperature 24
+1 08:01 END_EXPECTATIONS
+
+1 08:30 BEGIN_EXPECTATIONS
+1 08:30 User Nobody
+1 08:30 BodyTemperature 0
+1 08:30 HeartRate 0
+1 08:30 PeopleQuantity 0
+1 08:30 ACTemperature 0
+1 08:30 EXP_ACTemperature 0
+1 08:31 END_EXPECTATIONS
+
+1 18:00 BEGIN_EXPECTATIONS
+1 18:00 EnvTemperature 24
+1 18:00 User Guilherme
+1 18:00 BodyTemperature 38
+1 18:00 HeartRate 82
+1 18:01 PeopleQuantity 1
+1 18:01 ACTemperature 22
+1 18:01 EXP_ACTemperature 22
+1 18:01 END_EXPECTATIONS
+
+1 18:30 BEGIN_EXPECTATIONS
+1 18:30 User Nobody
+1 18:30 BodyTemperature 0
+1 18:30 HeartRate 0
+1 18:30 PeopleQuantity 0
+1 18:30 ACTemperature 0
+1 18:30 EXP_ACTemperature 24
+1 18:31 END_EXPECTATIONS
+
+### Wednesday ###
+
+2 08:00 BEGIN_EXPECTATIONS
+2 08:00 EnvTemperature 22
+2 08:00 User Guilherme
+2 08:00 BodyTemperature 39
+2 08:00 HeartRate 81
+2 08:01 PeopleQuantity 2
+2 08:01 ACTemperature 22
+2 08:01 EXP_ACTemperature 22
+2 08:01 END_EXPECTATIONS
+
+2 08:30 BEGIN_EXPECTATIONS
+2 08:30 User Nobody
+2 08:30 BodyTemperature 0
+2 08:30 HeartRate 0
+2 08:30 PeopleQuantity 0
+2 08:30 ACTemperature 0
+2 08:30 EXP_ACTemperature 0
+2 08:31 END_EXPECTATIONS
+
+
+2 18:00 BEGIN_EXPECTATIONS
+2 18:00 EnvTemperature 24
+2 18:00 User Guilherme
+2 18:00 BodyTemperature 36
+2 18:00 HeartRate 70
+2 18:01 PeopleQuantity 1
+2 18:01 ACTemperature 24
+2 18:01 EXP_ACTemperature 24
+2 18:01 END_EXPECTATIONS
+
+
+2 18:30 BEGIN_EXPECTATIONS
+2 18:30 User Nobody
+2 18:30 BodyTemperature 0
+2 18:30 HeartRate 0
+2 18:30 PeopleQuantity 0
+2 18:30 ACTemperature 0
+2 18:30 EXP_ACTemperature 0
+2 18:31 END_EXPECTATIONS
+
+### Thursday ###
+
+3 08:00 BEGIN_EXPECTATIONS
+3 08:00 EnvTemperature 22
+3 08:00 User Guilherme
+3 08:00 BodyTemperature 36
+3 08:00 HeartRate 70
+3 08:01 PeopleQuantity 2
+3 08:01 ACTemperature 24
+3 08:01 EXP_ACTemperature 24
+3 08:01 END_EXPECTATIONS
+
+3 08:30 BEGIN_EXPECTATIONS
+3 08:30 User Nobody
+3 08:30 BodyTemperature 0
+3 08:30 HeartRate 0
+3 08:30 PeopleQuantity 0
+3 08:30 ACTemperature 0
+3 08:30 EXP_ACTemperature 0
+3 08:31 END_EXPECTATIONS
+
+
+3 18:00 BEGIN_EXPECTATIONS
+3 18:00 EnvTemperature 24
+3 18:00 User Guilherme
+3 18:00 BodyTemperature 36
+3 18:00 HeartRate 70
+3 18:01 PeopleQuantity 5
+3 18:01 ACTemperature 24
+3 18:01 EXP_ACTemperature 24
+3 18:01 END_EXPECTATIONS
+
+3 18:30 BEGIN_EXPECTATIONS
+3 18:30 User Nobody
+3 18:30 BodyTemperature 0
+3 18:30 HeartRate 0
+3 18:30 PeopleQuantity 0
+3 18:30 ACTemperature 0
+3 18:30 EXP_ACTemperature 0
+3 18:31 END_EXPECTATIONS
+
+### Friday ###
+
+4 08:00 BEGIN_EXPECTATIONS
+4 08:00 EnvTemperature 22
+4 08:00 User Guilherme
+4 08:00 BodyTemperature 36
+4 08:00 HeartRate 70
+4 08:01 PeopleQuantity 5
+4 08:01 ACTemperature 24
+4 08:01 EXP_ACTemperature 24
+4 08:01 END_EXPECTATIONS
+
+4 08:30 BEGIN_EXPECTATIONS
+4 08:30 User Nobody
+4 08:30 BodyTemperature 0
+4 08:30 HeartRate 0
+4 08:30 PeopleQuantity 0
+4 08:30 ACTemperature 0
+4 08:30 EXP_ACTemperature 0
+4 08:31 END_EXPECTATIONS
+
+
+4 18:00 BEGIN_EXPECTATIONS
+4 18:00 EnvTemperature 24
+4 18:00 User Guilherme
+4 18:00 BodyTemperature 36
+4 18:00 HeartRate 70
+4 18:01 PeopleQuantity 1
+4 18:01 ACTemperature 24
+4 18:01 EXP_ACTemperature 24
+4 18:01 END_EXPECTATIONS
+
+
+4 18:30 BEGIN_EXPECTATIONS
+4 18:30 User Nobody
+4 18:30 BodyTemperature 0
+4 18:30 HeartRate 0
+4 18:30 PeopleQuantity 0
+4 18:30 ACTemperature 0
+4 18:30 EXP_ACTemperature 0
+4 18:31 END_EXPECTATIONS
+
+### Saturday ###
+
+5 09:00 BEGIN_EXPECTATIONS
+5 09:00 EnvTemperature 22
+5 09:00 User Guilherme
+5 09:00 BodyTemperature 36
+5 09:00 HeartRate 70
+5 09:01 PeopleQuantity 1
+5 09:01 ACTemperature 24
+5 09:01 EXP_ACTemperature 24
+5 09:01 END_EXPECTATIONS
+
+5 09:17 BEGIN_EXPECTATIONS
+5 09:17 User Nobody
+5 09:17 BodyTemperature 0
+5 09:17 HeartRate 0
+5 09:18 PeopleQuantity 0
+5 09:18 ACTemperature 0
+5 09:18 EXP_ACTemperature 0
+5 09:18 END_EXPECTATIONS
+
+### Sunday ###
+
+6 21:00 BEGIN_EXPECTATIONS
+6 21:00 EnvTemperature 22
+6 21:00 User Guilherme
+6 21:00 BodyTemperature 36
+6 21:00 HeartRate 70
+6 21:01 PeopleQuantity 1
+6 21:01 ACTemperature 24
+6 21:01 EXP_ACTemperature 24
+6 21:01 END_EXPECTATIONS
+
+6 21:18 BEGIN_EXPECTATIONS
+6 21:18 User Nobody
+6 21:18 BodyTemperature 0
+6 21:18 HeartRate 0
+6 21:19 PeopleQuantity 0
+6 21:19 ACTemperature 0
+6 21:19 EXP_ACTemperature 0
+6 21:19 END_EXPECTATIONS
+
+
+###Hot weather###
+### Monday ###
+
+6 08:00 BEGIN_EXPECTATIONS
+6 08:00 EnvTemperature 32
+6 08:00 User Guilherme
+6 08:00 BodyTemperature 38
+6 08:00 HeartRate 70
+6 08:01 PeopleQuantity 1
+6 08:01 ACTemperature 20
+6 08:01 EXP_ACTemperature 20
+
+6 08:12 ACTemperature 23
+6 08:12 EXP_ACTemperature 23
+6 08:12 END_EXPECTATIONS
+
+6 08:30 BEGIN_EXPECTATIONS
+6 08:30 User Nobody
+6 08:30 BodyTemperature 0
+6 08:30 HeartRate 0
+6 08:30 PeopleQuantity 0
+6 08:30 ACTemperature 0
+6 08:30 EXP_ACTemperature 0
+6 08:01 END_EXPECTATIONS
+
+
+6 18:00 BEGIN_EXPECTATIONS
+6 18:00 EnvTemperature 34
+6 18:00 User Guilherme
+6 18:00 BodyTemperature 39
+6 18:00 HeartRate 70
+6 18:01 PeopleQuantity 1
+6 18:01 ACTemperature 18
+6 18:01 EXP_ACTemperature 18
+6 18:01 END_EXPECTATIONS
+
+
+6 18:30 BEGIN_EXPECTATIONS
+6 18:30 User Nobody
+6 18:30 BodyTemperature 0
+6 18:30 HeartRate 0
+6 18:30 PeopleQuantity 0
+6 18:30 ACTemperature 0
+6 18:30 EXP_ACTemperature 0
+6 18:31 END_EXPECTATIONS
+
+### Tuesday ###
+
+7 08:00 BEGIN_EXPECTATIONS
+7 08:00 EnvTemperature 40
+7 08:00 User Guilherme
+7 08:00 BodyTemperature 36
+7 08:00 HeartRate 70
+7 08:01 PeopleQuantity 1
+7 08:01 ACTemperature 22
+7 08:01 EXP_ACTemperature 22
+7 08:01 END_EXPECTATIONS
+
+7 08:30 BEGIN_EXPECTATIONS
+7 08:30 User Nobody
+7 08:30 BodyTemperature 0
+7 08:30 HeartRate 0
+7 08:30 PeopleQuantity 0
+7 08:30 ACTemperature 0
+7 08:30 EXP_ACTemperature 0
+7 08:31 END_EXPECTATIONS
+
+
+7 18:00 BEGIN_EXPECTATIONS
+7 18:00 EnvTemperature 28
+7 18:00 User Guilherme
+7 18:00 BodyTemperature 34
+7 18:00 HeartRate 70
+7 18:01 PeopleQuantity 2
+7 18:01 ACTemperature 24
+7 18:01 EXP_ACTemperature 24
+7 18:01 END_EXPECTATIONS
+
+
+7 18:30 BEGIN_EXPECTATIONS
+7 18:30 User Nobody
+7 18:30 BodyTemperature 0
+7 18:30 HeartRate 0
+7 18:30 PeopleQuantity 0
+7 18:30 ACTemperature 0
+7 18:30 EXP_ACTemperature 0
+7 18:31 END_EXPECTATIONS
+
+### Wednesday ###
+
+8 08:00 BEGIN_EXPECTATIONS
+8 08:00 EnvTemperature 42
+8 08:00 User Guilherme
+8 08:00 BodyTemperature 34
+8 08:00 HeartRate 70
+8 08:01 PeopleQuantity 2
+8 08:01 ACTemperature 24
+8 08:01 EXP_ACTemperature 24
+8 08:01 END_EXPECTATIONS
+
+8 08:30 BEGIN_EXPECTATIONS
+8 08:30 User Nobody
+8 08:30 BodyTemperature 0
+8 08:30 HeartRate 0
+8 08:30 PeopleQuantity 0
+8 08:30 ACTemperature 0
+8 08:30 EXP_ACTemperature 0
+8 08:31 END_EXPECTATIONS
+
+
+8 18:00 BEGIN_EXPECTATIONS
+8 18:00 EnvTemperature 24
+8 18:00 User Guilherme
+8 18:00 BodyTemperature 36
+8 18:00 HeartRate 70
+8 18:01 PeopleQuantity 5
+8 18:01 ACTemperature 24
+8 18:01 EXP_ACTemperature 24
+8 18:01 END_EXPECTATIONS
+
+
+8 18:30 BEGIN_EXPECTATIONS
+8 18:30 User Nobody
+8 18:30 BodyTemperature 0
+8 18:30 HeartRate 0
+8 18:30 PeopleQuantity 0
+8 18:30 ACTemperature 0
+8 18:30 EXP_ACTemperature 0
+8 18:31 END_EXPECTATIONS
+
+### Thursday ###
+
+9 08:00 BEGIN_EXPECTATIONS
+9 08:00 EnvTemperature 22
+9 08:00 User Guilherme
+9 08:00 BodyTemperature 36
+9 08:00 HeartRate 70
+9 08:01 PeopleQuantity 4
+9 08:01 ACTemperature 25
+9 08:01 EXP_ACTemperature 25
+9 08:01 END_EXPECTATIONS
+
+9 08:30 BEGIN_EXPECTATIONS
+9 08:30 User Nobody
+9 08:30 BodyTemperature 0
+9 08:30 HeartRate 0
+9 08:30 PeopleQuantity 0
+9 08:30 ACTemperature 0
+9 08:30 EXP_ACTemperature 0
+9 08:31 END_EXPECTATIONS
+
+
+9 18:00 BEGIN_EXPECTATIONS
+9 18:00 EnvTemperature 24
+9 18:00 User Guilherme
+9 18:00 BodyTemperature 36
+9 18:00 HeartRate 70
+9 18:01 PeopleQuantity 4
+9 18:01 ACTemperature 22
+9 18:01 EXP_ACTemperature 22
+9 18:01 END_EXPECTATIONS
+
+9 18:30 BEGIN_EXPECTATIONS
+9 18:30 User Nobody
+9 18:30 BodyTemperature 0
+9 18:30 HeartRate 0
+9 18:30 PeopleQuantity 0
+9 18:30 ACTemperature 0
+9 18:30 EXP_ACTemperature 0
+9 18:31 END_EXPECTATIONS
+
+### Friday ###
+
+10 08:00 BEGIN_EXPECTATIONS
+10 08:00 EnvTemperature 22
+10 08:00 User Guilherme
+10 08:00 BodyTemperature 36
+10 08:00 HeartRate 65
+10 08:01 PeopleQuantity 1
+10 08:01 ACTemperature 22
+10 08:01 EXP_ACTemperature 22
+10 08:01 END_EXPECTATIONS
+
+10 08:30 BEGIN_EXPECTATIONS
+10 08:30 User Nobody
+10 08:30 BodyTemperature 0
+10 08:30 HeartRate 0
+10 08:30 PeopleQuantity 0
+10 08:30 ACTemperature 0
+10 08:30 EXP_ACTemperature 0
+10 08:31 END_EXPECTATIONS
+
+
+11 18:00 BEGIN_EXPECTATIONS
+11 18:00 EnvTemperature 24
+11 18:00 User Guilherme
+11 18:00 BodyTemperature 36
+11 18:00 HeartRate 65
+11 18:01 PeopleQuantity 1
+11 18:01 ACTemperature 24
+11 18:01 EXP_ACTemperature 24
+11 18:01 END_EXPECTATIONS
+
+
+11 18:30 BEGIN_EXPECTATIONS
+11 18:30 User Nobody
+11 18:30 BodyTemperature 0
+11 18:30 HeartRate 0
+11 18:30 PeopleQuantity 0
+11 18:30 ACTemperature 0
+11 18:30 EXP_ACTemperature 0
+11 18:31 END_EXPECTATIONS
+
+### Saturday ###
+
+12 09:00 BEGIN_EXPECTATIONS
+12 09:00 EnvTemperature 22
+12 09:00 User Guilherme
+12 09:00 BodyTemperature 36
+12 09:00 HeartRate 75
+12 09:01 PeopleQuantity 1
+12 09:01 ACTemperature 26
+12 09:01 EXP_ACTemperature 26
+12 09:01 END_EXPECTATIONS
+
+12 09:17 BEGIN_EXPECTATIONS
+12 09:17 User Nobody
+12 09:17 BodyTemperature 0
+12 09:17 HeartRate 0
+12 09:18 PeopleQuantity 0
+12 09:18 ACTemperature 0
+12 09:18 EXP_ACTemperature 0
+12 09:18 END_EXPECTATIONS
+
+### Sunday ###
+
+13 21:00 BEGIN_EXPECTATIONS
+13 21:00 EnvTemperature 22
+13 21:00 User Guilherme
+13 21:00 BodyTemperature 36
+13 21:00 HeartRate 75
+13 21:01 PeopleQuantity 1
+13 21:01 ACTemperature 21
+13 21:01 EXP_ACTemperature 21
+
+13 21:18 User Nobody
+13 21:18 BodyTemperature 0
+13 21:18 HeartRate 0
+13 21:19 PeopleQuantity 0
+13 21:19 ACTemperature 0
+13 21:19 EXP_ACTemperature 0
+13 21:19 END_EXPECTATIONS
+
+###Cold weather###
+### Monday ###
+
+14 08:00 BEGIN_EXPECTATIONS
+14 08:00 EnvTemperature 10
+14 08:00 User Guilherme
+14 08:00 BodyTemperature 36
+14 08:00 HeartRate 74
+14 08:01 PeopleQuantity 1
+14 08:01 ACTemperature 26
+14 08:01 EXP_ACTemperature 26
+
+14 08:16 ACTemperature 23
+14 08:16 EXP_ACTemperature 23
+14 08:16 END_EXPECTATIONS
+
+14 08:30 BEGIN_EXPECTATIONS
+14 08:30 User Nobody
+14 08:30 BodyTemperature 0
+14 08:30 HeartRate 0
+14 08:30 PeopleQuantity 0
+14 08:30 ACTemperature 0
+14 08:30 EXP_ACTemperature 0
+14 08:31 END_EXPECTATIONS
+
+
+14 18:00 BEGIN_EXPECTATIONS
+14 18:00 EnvTemperature 7
+14 18:00 User Guilherme
+14 18:00 BodyTemperature 34
+14 18:00 HeartRate 76
+14 18:01 PeopleQuantity 2
+14 18:01 ACTemperature 27
+14 18:01 EXP_ACTemperature 27
+14 18:01 END_EXPECTATIONS
+
+
+14 18:30 BEGIN_EXPECTATIONS
+14 18:30 User Nobody
+14 18:30 BodyTemperature 0
+14 18:30 HeartRate 0
+14 18:30 PeopleQuantity 0
+14 18:30 ACTemperature 0
+14 18:30 EXP_ACTemperature 0
+14 18:31 END_EXPECTATIONS
+
+### Tuesday ###
+
+15 08:00 BEGIN_EXPECTATIONS
+15 08:00 EnvTemperature 16
+15 08:00 User Guilherme
+15 08:00 BodyTemperature 34
+15 08:00 HeartRate 78
+15 08:01 PeopleQuantity 3
+15 08:01 ACTemperature 26
+15 08:01 EXP_ACTemperature 26
+15 08:01 END_EXPECTATIONS
+
+15 08:30 BEGIN_EXPECTATIONS
+15 08:30 User Nobody
+15 08:30 BodyTemperature 0
+15 08:30 HeartRate 0
+15 08:30 PeopleQuantity 0
+15 08:30 ACTemperature 0
+15 08:30 EXP_ACTemperature 0
+15 08:31 END_EXPECTATIONS
+
+
+15 18:00 BEGIN_EXPECTATIONS
+15 18:00 EnvTemperature 16
+15 18:00 User Guilherme
+15 18:00 BodyTemperature 36
+15 18:00 HeartRate 70
+15 18:01 PeopleQuantity 1
+15 18:01 ACTemperature 25
+15 18:01 EXP_ACTemperature 25
+15 18:01 END_EXPECTATIONS
+
+
+15 18:30 BEGIN_EXPECTATIONS
+15 18:30 User Nobody
+15 18:30 BodyTemperature 0
+15 18:30 HeartRate 0
+15 18:30 PeopleQuantity 0
+15 18:30 ACTemperature 0
+15 18:30 EXP_ACTemperature 0
+15 18:31 END_EXPECTATIONS
+
+### Wednesday ###
+
+16 08:00 BEGIN_EXPECTATIONS
+16 08:00 EnvTemperature 22
+16 08:00 User Guilherme
+16 08:00 BodyTemperature 36
+16 08:00 HeartRate 70
+16 08:01 PeopleQuantity 1
+16 08:01 ACTemperature 24
+16 08:01 EXP_ACTemperature 24
+16 08:01 END_EXPECTATIONS
+
+16 08:30 BEGIN_EXPECTATIONS
+16 08:30 User Nobody
+16 08:30 BodyTemperature 0
+16 08:30 HeartRate 0
+16 08:30 PeopleQuantity 0
+16 08:30 ACTemperature 0
+16 08:30 EXP_ACTemperature 0
+16 08:31 END_EXPECTATIONS
+
+
+16 18:00 BEGIN_EXPECTATIONS
+16 18:00 EnvTemperature 8
+16 18:00 User Guilherme
+16 18:00 BodyTemperature 33
+16 18:00 HeartRate 79
+16 18:01 PeopleQuantity 2
+16 18:01 ACTemperature 29
+16 18:01 EXP_ACTemperature 29
+16 18:01 END_EXPECTATIONS
+
+
+16 18:30 BEGIN_EXPECTATIONS
+16 18:30 User Nobody
+16 18:30 BodyTemperature 0
+16 18:30 HeartRate 0
+16 18:30 PeopleQuantity 0
+16 18:30 ACTemperature 0
+16 18:30 EXP_ACTemperature 0
+16 18:31 END_EXPECTATIONS
+
+### Thursday ###
+
+17 08:00 BEGIN_EXPECTATIONS
+17 08:00 EnvTemperature 22
+17 08:00 User Guilherme
+17 08:00 BodyTemperature 36
+17 08:00 HeartRate 70
+17 08:01 PeopleQuantity 1
+17 08:01 ACTemperature 24
+17 08:01 EXP_ACTemperature 24
+17 08:01 END_EXPECTATIONS
+
+17 08:30 BEGIN_EXPECTATIONS
+17 08:30 User Nobody
+17 08:30 BodyTemperature 0
+17 08:30 HeartRate 0
+17 08:30 PeopleQuantity 0
+17 08:30 ACTemperature 0
+17 08:30 EXP_ACTemperature 0
+17 08:31 END_EXPECTATIONS
+
+
+17 18:00 BEGIN_EXPECTATIONS
+17 18:00 EnvTemperature 8
+17 18:00 User Guilherme
+17 18:00 BodyTemperature 33
+17 18:00 HeartRate 79
+17 18:01 PeopleQuantity 2
+17 18:01 ACTemperature 29
+17 18:01 EXP_ACTemperature 29
+17 18:01 END_EXPECTATIONS
+
+
+17 18:30 BEGIN_EXPECTATIONS
+17 18:30 User Nobody
+17 18:30 BodyTemperature 0
+17 18:30 HeartRate 0
+17 18:30 PeopleQuantity 0
+17 18:30 ACTemperature 0
+17 18:30 EXP_ACTemperature 0
+17 18:31 END_EXPECTATIONS
+
+### Friday ###
+
+18 08:00 BEGIN_EXPECTATIONS
+18 08:00 EnvTemperature 10
+18 08:00 User Guilherme
+18 08:00 BodyTemperature 38
+18 08:00 HeartRate 80
+18 08:01 PeopleQuantity 5
+18 08:01 ACTemperature 24
+18 08:01 EXP_ACTemperature 24
+
+18 08:21 ACTemperature 26
+18 08:21 EXP_ACTemperature 26
+18 08:01 END_EXPECTATIONS
+
+18 08:30 BEGIN_EXPECTATIONS
+18 08:30 User Nobody
+18 08:30 BodyTemperature 0
+18 08:30 HeartRate 0
+18 08:30 PeopleQuantity 0
+18 08:30 ACTemperature 0
+18 08:30 EXP_ACTemperature 0
+18 08:31 END_EXPECTATIONS
+
+
+18 18:00 BEGIN_EXPECTATIONS
+18 18:00 EnvTemperature 14
+18 18:00 User Guilherme
+18 18:00 BodyTemperature 36
+18 18:00 HeartRate 70
+18 18:01 PeopleQuantity 1
+18 18:01 ACTemperature 24
+18 18:01 EXP_ACTemperature 24
+18 18:01 END_EXPECTATIONS
+
+
+18 18:30 BEGIN_EXPECTATIONS
+18 18:30 User Nobody
+18 18:30 BodyTemperature 0
+18 18:30 HeartRate 0
+18 18:30 PeopleQuantity 0
+18 18:30 ACTemperature 0
+18 18:30 EXP_ACTemperature 0
+18 18:31 END_EXPECTATIONS
+
+### Saturday ###
+
+19 09:00 BEGIN_EXPECTATIONS
+19 09:00 EnvTemperature 12
+19 09:00 User Guilherme
+19 09:00 BodyTemperature 34
+19 09:00 HeartRate 61
+19 09:01 PeopleQuantity 1
+19 09:01 ACTemperature 26
+19 09:01 EXP_ACTemperature 26
+
+19 09:17 User Nobody
+19 09:17 BodyTemperature 0
+19 09:17 HeartRate 0
+19 09:18 PeopleQuantity 0
+19 09:18 ACTemperature 0
+19 09:18 EXP_ACTemperature 0
+19 09:18 END_EXPECTATIONS
+
+### Sunday ###
+
+20 21:00 BEGIN_EXPECTATIONS
+20 21:00 EnvTemperature 9
+20 21:00 User Guilherme
+20 21:00 BodyTemperature 36
+20 21:00 HeartRate 65
+20 21:01 PeopleQuantity 2
+20 21:01 ACTemperature 27
+20 21:01 EXP_ACTemperature 27
+
+20 21:18 User Nobody
+20 21:18 BodyTemperature 0
+20 21:18 HeartRate 0
+20 21:19 PeopleQuantity 0
+20 21:19 ACTemperature 0
+20 21:19 EXP_ACTemperature 0
+20 21:01 END_EXPECTATIONS

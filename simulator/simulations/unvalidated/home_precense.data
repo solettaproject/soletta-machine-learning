@@ -1,0 +1,155 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Initial State
+0 0:00 BEGIN_EXPECTATIONS
+0 0:00 User Nobody
+0 0:00 UserActivity None
+0 0:00 EXP_UserActivity None
+
+# Guilherme usually goes to work at 8:30
+# and comes back home around 8:30 pm
+
+### Monday ###
+0 6:30 User Guilherme
+0 6:32 UserActivity WayOut
+0 6:32 EXP_UserActivity WayOut
+
+0 20:07 User Guilherme
+0 20:08 UserActivity WayIn
+0 20:08 EXP_UserActivity WayIn
+
+### Tuesday ###
+1 8:35 User Guilherme
+1 8:36 UserActivity WayOut
+1 8:36 EXP_UserActivity WayOut
+
+1 20:23 User Guilherme
+1 20:24 UserActivity WayIn
+1 20:24 EXP_UserActivity WayIn
+
+### Wednesday ###
+2 6:23 User Guilherme
+2 6:24 UserActivity WayOut
+2 6:24 EXP_UserActivity WayOut
+
+2 20:45 User Guilherme
+2 20:47 UserActivity WayIn
+2 20:47 EXP_UserActivity Wayin
+
+### Thursday ###
+3 8:43 User Guilherme
+3 8:44 UserActivity WayOut
+3 8:44 EXP_UserActivity WayOut
+
+### Friday ###
+4 0:03 User Guilherme
+4 0:04 UserActivity WayIn
+4 0:04 EXP_UserActivity None
+
+4 9:01 User Guilherme
+4 9:02 UserActivity WayOut
+4 9:02 EXP_UserActivity WayOut
+### Saturday ###
+5 3:11 User Guilherme
+5 3:12 UserActivity WayIn
+5 3:12 EXP_UserActivity None
+
+5 13:01 User Guilherme
+5 13:02 UserActivity WayOut
+5 13:02 EXP_UserActivity WayOut
+
+### Saturday ###
+6 5:07 User Guilherme
+6 5:08 UserActivity WayIn
+6 5:08 EXP_UserActivity None
+
+### Sunday ###
+
+### Monday ###
+7 6:24 User Guilherme
+7 6:25 UserActivity WayOut
+7 6:25 EXP_UserActivity WayOut
+
+7 20:18 User Guilherme
+7 20:19 UserActivity WayIn
+7 20:19 EXP_UserActivity WayIn
+
+### Tuesday ###
+8 8:40 User Guilherme
+8 8:41 UserActivity WayOut
+8 8:41 EXP_UserActivity WayOut
+
+8 20:33 User Guilherme
+8 20:34 UserActivity WayIn
+8 20:34 EXP_UserActivity WayIn
+
+### Wednesday ###
+9 6:38 User Guilherme
+9 6:39 UserActivity WayOut
+9 6:39 EXP_UserActivity WayOut
+
+9 21:10 User Guilherme
+9 21:11 UserActivity WayIn
+9 21:11 EXP_UserActivity WayIn
+
+### Thursday ###
+10 8:29 User Guilherme
+10 8:44 UserActivity WayOut
+10 8:44 EXP_UserActivity WayOut
+
+10 23:48 User Guilherme
+10 23:49 UserActivity WayIn
+10 23:49 EXP_UserActivity WayIn
+
+### Friday ###
+11 8:42 User Guilherme
+11 8:43 UserActivity WayOut
+11 8:43 EXP_UserActivity WayOut
+
+### Saturday ###
+12 1:27 User Guilherme
+12 1:28 UserActivity WayIn
+12 1:28 EXP_UserActivity WayIn
+
+12 17:19 User Guilherme
+12 17:20 UserActivity WayOut
+12 17:20 EXP_UserActivity WayOut
+
+### Sunday ###
+13 13:16 User Guilherme
+13 13:17 UserActivity WayIn
+13 13:17 EXP_UserActivity WayIn
+
+13 19:43 User Guilherme
+13 19:44 UserActivity WayOut
+13 19:44 EXP_UserActivity WayOut
+
+13 23:59 END_EXPECTATIONS

@@ -1,0 +1,620 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# initial state
+0 0:00 EnvTemperature 16
+0 0:00 User Nobody
+0 0:00 BodyTemperature 35
+0 0:00 HeartRate 0
+
+0 0:00 WaterVolume 0
+0 0:00 EXP_WaterVolume 0
+0 0:00 WaterTemperature 22
+0 0:00 EXP_WaterTemperature 22
+
+### Monday ###
+
+# Bruno take shower every
+# weekday when he wakes up
+0 07:30 EnvTemperature 22
+0 07:45 User Bruno
+0 07:46 HeartRate Awake
+0 07:46 BodyTemperature 37.4
+
+0 07:47 WaterVolume 60
+0 07:47 WaterTemperature 55
+0 07:47 EXP_WaterVolume 60
+0 07:47 EXP_WaterTemperature 55
+
+0 08:00 EnvTemperature 25
+
+0 08:10 WaterVolume 0
+0 08:10 WaterTemperature 22
+0 08:10 EXP_WaterVolume 0
+0 08:10 EXP_WaterTemperature 22
+0 08:10 User Nobody
+
+# Guilherme take shower every day
+# after workout
+0 09:05 User Guilherme
+0 09:05 HeartRate Aerobic
+0 09:05 BodyTemperature 37.6
+
+0 09:05 WaterVolume 90
+0 09:05 WaterTemperature 28
+0 09:05 EXP_WaterVolume 90
+0 09:05 EXP_WaterTemperature 28
+
+0 09:15 WaterVolume 0
+0 09:15 WaterTemperature 25
+0 09:15 EXP_WaterVolume 0
+0 09:15 EXP_WaterTemperature 25
+0 09:15 User Nobody
+
+0 12:00 EnvTemperature 32
+
+0 21:00 EnvTemperature 17
+
+# Otavio takes shower some days at night.
+# On Mon, Wed, Fri, after workouts
+0 21:12 User Otavio
+0 21:12 HeartRate Anaerobic
+0 21:12 BodyTemperature 36.5
+
+0 21:15 WaterVolume 90
+0 21:15 WaterTemperature 24
+0 21:15 EXP_WaterVolume 90
+0 21:15 EXP_WaterTemperature 24
+
+0 21:45 WaterVolume 0
+0 21:45 WaterTemperature 17
+0 21:45 EXP_WaterVolume 0
+0 21:45 EXP_WaterTemperature 17
+0 21:45 User Nobody
+
+### Tuesday ###
+
+1 07:12 EnvTemperature 18
+1 07:35 User Bruno
+1 07:36 HeartRate Awake
+1 07:36 BodyTemperature 37.2
+
+1 07:37 WaterVolume 65
+1 07:37 WaterTemperature 60
+1 07:37 EXP_WaterVolume 65
+1 07:37 EXP_WaterTemperature 60
+
+1 07:51 WaterVolume 0
+1 07:51 WaterTemperature 18
+1 07:51 EXP_WaterVolume 0
+1 07:51 EXP_WaterTemperature 18
+1 07:51 User Nobody
+
+1 08:30 EnvTemperature 23
+
+1 09:20 User Guilherme
+1 09:20 HeartRate WeightControl
+1 09:20 BodyTemperature 37.3
+
+1 09:05 WaterVolume 90
+1 09:05 WaterTemperature 25
+1 09:05 EXP_WaterVolume 90
+1 09:05 EXP_WaterTemperature 25
+
+1 09:15 WaterVolume 0
+1 09:15 WaterTemperature 23
+1 09:15 EXP_WaterVolume 0
+1 09:15 EXP_WaterTemperature 23
+1 09:15 User Nobody
+
+1 13:14 EnvTemperature 29
+
+1 21:15 EnvTemperature 18
+
+### Wednesday ###
+
+2 07:12 EnvTemperature 14
+2 08:03 User Bruno
+2 08:03 HeartRate Awake
+2 08:03 BodyTemperature 37.3
+
+2 08:03 WaterVolume 52
+2 08:03 WaterTemperature 63
+2 08:03 EXP_WaterVolume 52
+2 08:03 EXP_WaterTemperature 63
+
+2 08:10 WaterVolume 0
+2 08:10 WaterTemperature 14
+2 08:10 EXP_WaterVolume 0
+2 08:10 EXP_WaterTemperature 14
+2 08:10 User Nobody
+
+2 08:30 EnvTemperature 20
+
+2 09:20 User Guilherme
+2 09:20 HeartRate Aerobic
+2 09:20 BodyTemperature 37.2
+
+2 09:20 WaterVolume 90
+2 09:20 WaterTemperature 24
+2 09:20 EXP_WaterVolume 90
+2 09:20 EXP_WaterTemperature 24
+
+2 09:43 WaterVolume 0
+2 09:43 WaterTemperature 20
+2 09:43 EXP_WaterVolume 0
+2 09:43 EXP_WaterTemperature 20
+2 09:43 User Nobody
+
+2 12:00 EnvTemperature 23
+
+2 21:00 EnvTemperature 25
+
+2 21:50 User Otavio
+2 21:50 HeartRate Anaerobic
+2 21:50 BodyTemperature 36.8
+
+2 21:52 WaterVolume 86
+2 21:52 WaterTemperature 28
+2 21:52 EXP_WaterVolume 86
+2 21:52 EXP_WaterTemperature 28
+
+2 21:45 WaterVolume 0
+2 21:45 WaterTemperature 25
+2 21:45 EXP_WaterVolume 0
+2 21:45 EXP_WaterTemperature 25
+2 21:45 User Nobody
+
+### Thursday ###
+
+3 08:30 EnvTemperature 25
+
+3 09:00 User Guilherme
+3 09:00 HeartRate Anaerobic
+3 09:00 BodyTemperature 37.4
+
+3 09:00 WaterVolume 90
+3 09:00 WaterTemperature 27
+3 09:00 EXP_WaterVolume 90
+3 09:00 EXP_WaterTemperature 27
+
+3 09:25 WaterVolume 0
+3 09:25 WaterTemperature 20
+3 09:25 EXP_WaterVolume 0
+3 09:25 EXP_WaterTemperature 20
+3 09:25 User Nobody
+
+3 10:03 User Bruno
+3 10:03 HeartRate Awake
+3 10:03 BodyTemperature 37.4
+
+3 10:03 WaterVolume 66
+3 10:03 WaterTemperature 63
+3 10:03 EXP_WaterVolume 66
+3 10:03 EXP_WaterTemperature 63
+
+3 10:03 WaterTemperature 30
+3 10:03 EXP_WaterTemperature 30
+
+3 10:20 WaterVolume 0
+3 10:20 WaterTemperature 14
+3 10:20 EXP_WaterVolume 0
+3 10:20 EXP_WaterTemperature 14
+3 10:20 User Nobody
+
+3 12:15 EnvTemperature 34
+
+3 19:00 EnvTemperature 27
+
+3 20:50 User Otavio
+3 20:50 HeartRate Awake
+3 20:50 BodyTemperature 36.4
+
+3 20:52 WaterVolume 90
+3 20:52 WaterTemperature 50
+3 20:52 EXP_WaterVolume 90
+3 20:52 EXP_WaterTemperature 50
+
+3 20:45 WaterVolume 0
+3 20:45 WaterTemperature 27
+3 20:45 EXP_WaterVolume 0
+3 20:45 EXP_WaterTemperature 27
+3 20:45 User Nobody
+
+### Friday ###
+
+4 07:12 EnvTemperature 8
+
+4 08:12 User Bruno
+4 08:12 HeartRate Awake
+4 08:12 BodyTemperature 37.0
+
+4 08:12 WaterVolume 60
+4 08:12 WaterTemperature 80
+4 08:12 EXP_WaterVolume 60
+4 08:12 EXP_WaterTemperature 80
+
+4 08:30 WaterVolume 0
+4 08:30 WaterTemperature 8
+4 08:30 EXP_WaterVolume 0
+4 08:30 EXP_WaterTemperature 8
+4 08:30 User Nobody
+
+4 08:40 EnvTemperature 13
+
+4 09:30 User Guilherme
+4 09:30 HeartRate Aerobic
+4 09:30 BodyTemperature 37.2
+
+4 09:30 WaterVolume 90
+4 09:30 WaterTemperature 20
+4 09:30 EXP_WaterVolume 90
+4 09:30 EXP_WaterTemperature 20
+
+4 09:53 WaterVolume 0
+4 09:53 WaterTemperature 13
+4 09:53 EXP_WaterVolume 0
+4 09:53 EXP_WaterTemperature 13
+4 09:53 User Nobody
+
+4 12:00 EnvTemperature 15
+
+4 17:00 EnvTemperature 12
+
+4 21:50 User Otavio
+4 21:50 HeartRate Anaerobic
+4 21:50 BodyTemperature 36.9
+
+4 21:52 WaterVolume 90
+4 21:52 WaterTemperature 20
+4 21:52 EXP_WaterVolume 90
+4 21:52 EXP_WaterTemperature 20
+
+4 21:45 WaterVolume 0
+4 21:45 WaterTemperature 12
+4 21:45 EXP_WaterVolume 0
+4 21:45 EXP_WaterTemperature 12
+4 21:45 User Nobody
+
+### Saturday ###
+
+5 07:24 EnvTemperature 18
+5 11:48 EnvTemperature 23
+5 15:07 EnvTemperature 28
+5 19:12 EnvTemperature 20
+5 23:33 EnvTemperature 12
+
+### Sunday ###
+
+6 08:19 EnvTemperature 20
+6 13:10 EnvTemperature 31
+6 16:22 EnvTemperature 27
+6 21:00 EnvTemperature 21
+
+### Monday ###
+
+7 07:30 EnvTemperature 22
+7 07:45 User Bruno
+7 07:46 HeartRate Awake
+7 07:46 BodyTemperature 37.4
+
+7 07:47 BEGIN_EXPECTATIONS
+7 07:47 WaterVolume nan
+7 07:47 WaterTemperature nan
+7 07:47 EXP_WaterVolume 60
+7 07:47 EXP_WaterTemperature 55
+7 07:47 END_EXPECTATIONS
+
+7 08:00 EnvTemperature 25
+
+7 08:10 WaterVolume 0
+7 08:10 WaterTemperature 22
+7 08:10 EXP_WaterVolume 0
+7 08:10 EXP_WaterTemperature 22
+7 08:10 User Nobody
+
+7 09:05 User Guilherme
+7 09:05 HeartRate Aerobic
+7 09:05 BodyTemperature 37.6
+
+7 09:05 BEGIN_EXPECTATIONS
+7 09:05 WaterVolume nan
+7 09:05 WaterTemperature nan
+7 09:05 EXP_WaterVolume 90
+7 09:05 EXP_WaterTemperature 28
+7 09:05 END_EXPECTATIONS
+
+7 09:15 WaterVolume 0
+7 09:15 WaterTemperature 25
+7 09:15 EXP_WaterVolume 0
+7 09:15 EXP_WaterTemperature 25
+7 09:15 User Nobody
+
+7 12:00 EnvTemperature 32
+
+7 21:00 EnvTemperature 17
+
+7 21:12 User Otavio
+7 21:12 HeartRate Anaerobic
+7 21:12 BodyTemperature 36.5
+
+7 21:15 BEGIN_EXPECTATIONS
+7 21:15 WaterVolume nan
+7 21:15 WaterTemperature nan
+7 21:15 EXP_WaterVolume 90
+7 21:15 EXP_WaterTemperature 24
+7 21:15 END_EXPECTATIONS
+
+7 21:45 WaterVolume 0
+7 21:45 WaterTemperature 17
+7 21:45 EXP_WaterVolume 0
+7 21:45 EXP_WaterTemperature 17
+7 21:45 User Nobody
+
+### Tuesday ###
+
+8 07:12 EnvTemperature 18
+8 07:35 User Bruno
+8 07:36 HeartRate Awake
+8 07:36 BodyTemperature 37.2
+
+8 07:37 BEGIN_EXPECTATIONS
+8 07:37 WaterVolume nan
+8 07:37 WaterTemperature nan
+8 07:37 EXP_WaterVolume 65
+8 07:37 EXP_WaterTemperature 60
+8 07:37 END_EXPECTATIONS
+
+8 07:51 WaterVolume 0
+8 07:51 WaterTemperature 18
+8 07:51 EXP_WaterVolume 0
+8 07:51 EXP_WaterTemperature 18
+8 07:51 User Nobody
+
+8 08:30 EnvTemperature 23
+
+8 09:20 User Guilherme
+8 09:20 HeartRate WeightControl
+8 09:20 BodyTemperature 37.3
+
+8 09:05 BEGIN_EXPECTATIONS
+8 09:05 WaterVolume nan
+8 09:05 WaterTemperature nan
+8 09:05 EXP_WaterVolume 90
+8 09:05 EXP_WaterTemperature 25
+8 09:05 END_EXPECTATIONS
+
+8 09:15 WaterVolume 0
+8 09:15 WaterTemperature 23
+8 09:15 EXP_WaterVolume 0
+8 09:15 EXP_WaterTemperature 23
+8 09:15 User Nobody
+
+8 13:14 EnvTemperature 29
+
+8 21:15 EnvTemperature 18
+
+### Wednesday ###
+
+9 07:12 EnvTemperature 14
+9 08:03 User Bruno
+9 08:03 HeartRate Awake
+9 08:03 BodyTemperature 37.3
+
+9 08:03 BEGIN_EXPECTATIONS
+9 08:03 WaterVolume nan
+9 08:03 WaterTemperature nan
+9 08:03 EXP_WaterVolume 52
+9 08:03 EXP_WaterTemperature 63
+9 08:03 END_EXPECTATIONS
+
+9 08:10 WaterVolume 0
+9 08:10 WaterTemperature 14
+9 08:10 EXP_WaterVolume 0
+9 08:10 EXP_WaterTemperature 14
+9 08:10 User Nobody
+
+9 08:30 EnvTemperature 20
+
+9 09:20 User Guilherme
+9 09:20 HeartRate Aerobic
+9 09:20 BodyTemperature 37.2
+
+9 09:20 BEGIN_EXPECTATIONS
+9 09:20 WaterVolume nan
+9 09:20 WaterTemperature nan
+9 09:20 EXP_WaterVolume 90
+9 09:20 EXP_WaterTemperature 24
+9 09:20 END_EXPECTATIONS
+
+9 09:43 WaterVolume 0
+9 09:43 WaterTemperature 20
+9 09:43 EXP_WaterVolume 0
+9 09:43 EXP_WaterTemperature 20
+9 09:43 User Nobody
+
+9 12:00 EnvTemperature 23
+
+9 21:00 EnvTemperature 25
+
+9 21:50 User Otavio
+9 21:50 HeartRate Anaerobic
+9 21:50 BodyTemperature 36.8
+
+9 21:52 BEGIN_EXPECTATIONS
+9 21:52 WaterVolume nan
+9 21:52 WaterTemperature nan
+9 21:52 EXP_WaterVolume 86
+9 21:52 EXP_WaterTemperature 28
+9 21:52 END_EXPECTATIONS
+
+9 21:45 WaterVolume 0
+9 21:45 WaterTemperature 25
+9 21:45 EXP_WaterVolume 0
+9 21:45 EXP_WaterTemperature 25
+9 21:45 User Nobody
+
+### Thursday ###
+
+10 08:30 EnvTemperature 25
+
+10 09:00 User Guilherme
+10 09:00 HeartRate Anaerobic
+10 09:00 BodyTemperature 37.4
+
+10 09:00 BEGIN_EXPECTATIONS
+10 09:00 WaterVolume nan
+10 09:00 WaterTemperature nan
+10 09:00 EXP_WaterVolume 90
+10 09:00 EXP_WaterTemperature 27
+10 09:00 END_EXPECTATIONS
+
+10 09:25 WaterVolume 0
+10 09:25 WaterTemperature 20
+10 09:25 EXP_WaterVolume 0
+10 09:25 EXP_WaterTemperature 20
+10 09:25 User Nobody
+
+10 10:03 User Bruno
+10 10:03 HeartRate Awake
+10 10:03 BodyTemperature 37.4
+
+10 10:03 BEGIN_EXPECTATIONS
+10 10:03 WaterVolume nan
+10 10:03 WaterTemperature nan
+10 10:03 EXP_WaterVolume 66
+10 10:03 EXP_WaterTemperature 63
+10 10:03 END_EXPECTATIONS
+
+10 10:03 WaterTemperature 30
+10 10:03 EXP_WaterTemperature 30
+
+10 10:20 WaterVolume 0
+10 10:20 WaterTemperature 14
+10 10:20 EXP_WaterVolume 0
+10 10:20 EXP_WaterTemperature 14
+10 10:20 User Nobody
+
+10 12:15 EnvTemperature 34
+
+10 19:00 EnvTemperature 27
+
+10 20:50 User Otavio
+10 20:50 HeartRate Awake
+10 20:50 BodyTemperature 36.4
+
+10 20:52 BEGIN_EXPECTATIONS
+10 20:52 WaterVolume nan
+10 20:52 WaterTemperature nan
+10 20:52 EXP_WaterVolume 90
+10 20:52 EXP_WaterTemperature 50
+10 20:52 END_EXPECTATIONS
+
+10 20:45 WaterVolume 0
+10 20:45 WaterTemperature 27
+10 20:45 EXP_WaterVolume 0
+10 20:45 EXP_WaterTemperature 27
+10 20:45 User Nobody
+
+### Friday ###
+
+11 07:12 EnvTemperature 8
+
+11 08:12 User Bruno
+11 08:12 HeartRate Awake
+11 08:12 BodyTemperature 37.0
+
+11 08:12 BEGIN_EXPECTATIONS
+11 08:12 WaterVolume nan
+11 08:12 WaterTemperature nan
+11 08:12 EXP_WaterVolume 60
+11 08:12 EXP_WaterTemperature 80
+11 08:12 END_EXPECTATIONS
+
+11 08:30 WaterVolume 0
+11 08:30 WaterTemperature 8
+11 08:30 EXP_WaterVolume 0
+11 08:30 EXP_WaterTemperature 8
+11 08:30 User Nobody
+
+11 08:40 EnvTemperature 13
+
+11 09:30 User Guilherme
+11 09:30 HeartRate Aerobic
+11 09:30 BodyTemperature 37.2
+
+11 09:30 BEGIN_EXPECTATIONS
+11 09:30 WaterVolume nan
+11 09:30 WaterTemperature nan
+11 09:30 EXP_WaterVolume 90
+11 09:30 EXP_WaterTemperature 20
+11 09:30 END_EXPECTATIONS
+
+11 09:53 WaterVolume 0
+11 09:53 WaterTemperature 13
+11 09:53 EXP_WaterVolume 0
+11 09:53 EXP_WaterTemperature 13
+11 09:53 User Nobody
+
+11 12:00 EnvTemperature 15
+
+11 17:00 EnvTemperature 12
+
+11 21:50 User Otavio
+11 21:50 HeartRate Anaerobic
+11 21:50 BodyTemperature 36.9
+
+11 21:52 BEGIN_EXPECTATIONS
+11 21:52 WaterVolume nan
+11 21:52 WaterTemperature nan
+11 21:52 EXP_WaterVolume 90
+11 21:52 EXP_WaterTemperature 20
+11 21:52 END_EXPECTATIONS
+
+11 21:45 WaterVolume 0
+11 21:45 WaterTemperature 12
+11 21:45 EXP_WaterVolume 0
+11 21:45 EXP_WaterTemperature 12
+11 21:45 User Nobody
+
+### Saturday ###
+
+12 07:24 EnvTemperature 18
+12 11:48 EnvTemperature 23
+12 15:07 EnvTemperature 28
+12 19:12 EnvTemperature 20
+12 23:33 EnvTemperature 12
+
+### Sunday ###
+
+13 08:19 EnvTemperature 20
+13 13:10 EnvTemperature 31
+13 16:22 EnvTemperature 27
+13 21:00 EnvTemperature 21

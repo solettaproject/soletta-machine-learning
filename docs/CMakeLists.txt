@@ -1,0 +1,24 @@
+cmake_minimum_required(VERSION 2.8)
+
+project(docs)
+
+find_package(Doxygen REQUIRED)
+
+set(DOXY_IN ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
+set(DOXY ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+set(HEAD_FILE ${CMAKE_CURRENT_SOURCE_DIR}/head.html)
+set(FOOT_FILE ${CMAKE_CURRENT_SOURCE_DIR}/foot.html)
+set(STYLE_FILE ${CMAKE_CURRENT_SOURCE_DIR}/style.css)
+set(EXAMPLES_PATH ${CMAKE_SOURCE_DIR}/examples)
+set(INPUT_FILES "${CMAKE_CURRENT_SOURCE_DIR}/examples.dox ${CMAKE_SOURCE_DIR}/sml/include")
+
+set(OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/html)
+
+configure_file(${DOXY_IN} ${DOXY} @ONLY)
+
+add_custom_target(doc
+  COMMAND ${DOXYGEN_EXECUTABLE} ${DOXY}
+  WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
+  COMMENT "Generating API documentation with Doxygen"
+  VERBATIM)

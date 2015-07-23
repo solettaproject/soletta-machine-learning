@@ -1,0 +1,123 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# File structure:
+# Each line contains information about a single game.
+# <Goalkeeper from team1> <Striker from team1> <Goalkeeper from team2> <Striker from team2> <team1 score> <team2 score>
+
+# Championship 1
+Abel Felipe Isabella Davi 5 10
+Abel Felipe Pedro Lucas 1 10
+Abel Felipe Manuela Gabriel 3 10
+Abel Felipe Rafael Beatriz 6 10
+Abel Felipe Maria Eduarda 4 10
+Abel Felipe Enzo Luiza 6 10
+Abel Felipe Bernardo Giovanna 10 6
+Abel Felipe Laura Matheus 6 10
+Abel Felipe Arthur Miguel 0 10
+Isabella Davi Pedro Lucas 6 10
+Isabella Davi Manuela Gabriel 10 8
+Isabella Davi Rafael Beatriz 10 5
+Isabella Davi Maria Eduarda 9 10
+Isabella Davi Enzo Luiza 10 2
+Isabella Davi Bernardo Giovanna 10 2
+Isabella Davi Laura Matheus 10 6
+Isabella Davi Arthur Miguel 1 10
+Pedro Lucas Manuela Gabriel 2 10
+Pedro Lucas Rafael Beatriz 10 9
+Pedro Lucas Maria Eduarda 7 10
+Pedro Lucas Enzo Luiza 10 3
+Pedro Lucas Bernardo Giovanna 5 10
+Pedro Lucas Laura Matheus 10 5
+Pedro Lucas Arthur Miguel 9 10
+Manuela Gabriel Rafael Beatriz 10 4
+Manuela Gabriel Maria Eduarda 10 3
+Manuela Gabriel Enzo Luiza 10 3
+Manuela Gabriel Bernardo Giovanna 10 5
+Manuela Gabriel Laura Matheus 10 9
+Manuela Gabriel Arthur Miguel 9 10
+Rafael Beatriz Maria Eduarda 10 7
+Rafael Beatriz Enzo Luiza 10 8
+Rafael Beatriz Bernardo Giovanna 4 10
+Rafael Beatriz Laura Matheus 2 10
+Rafael Beatriz Arthur Miguel 2 10
+Maria Eduarda Enzo Luiza 10 5
+Maria Eduarda Bernardo Giovanna 10 8
+Maria Eduarda Laura Matheus 8 10
+Maria Eduarda Arthur Miguel 3 10
+Enzo Luiza Bernardo Giovanna 2 10
+Enzo Luiza Laura Matheus 4 10
+Enzo Luiza Arthur Miguel 5 10
+Bernardo Giovanna Laura Matheus 8 10
+Bernardo Giovanna Arthur Miguel 2 10
+Laura Matheus Arthur Miguel 1 10
+
+#Championship 2
+Isabella Lucas Maria Alice 10 7
+Isadora Laura Isabella Lucas 9 10
+Maria Alice Abel Giovanna 10 5
+Isabella Lucas Abel Giovanna 10 0
+Maria Alice Isadora Laura 10 9
+Maria Alice Isabella Lucas 6 10
+Abel Giovanna Maria Alice 2 10
+Abel Giovanna Maria Alice 2 10
+Abel Giovanna Isabella Lucas 3 10
+Isadora Laura Maria Alice 9 10
+Heitor Mariana Samuel Enzo 10 8
+Luiza Felipe Matheus Rafael 10 6
+Samuel Enzo Luiza Felipe 10 2
+Matheus Rafael Luiza Felipe 7 10
+Matheus Rafael Samuel Enzo 1 10
+Eduarda Manuela Bernardo Pedro 3 10
+Beatriz Davi Sophia Arthur 10 6
+Eduarda Manuela Rafaelna Miguel 3 10
+Bernardo Pedro Beatriz Davi 5 10
+Sophia Arthur Eduarda Manuela 10 2
+Bernardo Pedro Rafaelna Miguel 10 2
+Rafaelna Miguel Beatriz Davi 10 4
+Sophia Arthur Bernardo Pedro 7 10
+Bernardo Pedro Eduarda Manuela 10 2
+Beatriz Davi Bernardo Pedro 7 10
+Eduarda Manuela Sophia Arthur 0 10
+Rafaelna Miguel Bernardo Pedro 7 10
+Beatriz Davi Rafaelna Miguel 9 10
+
+#Championship 3
+Pedro Gabriela Alice Beatriz 4 10
+Gabriel Matheus Manuela Laura 10 6
+Lucas Helena Nicolas Rafaela 10 8
+Alice Beatriz Eduarda Miguel 10 6
+Davi Maria Giovanna Luiza 10 1
+Gabriel Matheus Enzo Henrique 10 3
+Lucas Helena Rafaelna Bernardo 10 6
+Alice Beatriz Davi Maria 10 9
+Gabriel Matheus Lucas Helena 9 10
+Alice Beatriz Lucas Helena 8 10
+Gabriel Matheus Davi Maria 10 3

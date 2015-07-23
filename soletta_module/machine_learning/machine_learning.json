@@ -1,0 +1,257 @@
+{
+  "name": "machine-learning",
+  "$schema": "http://solettaproject.github.io/soletta/schemas/node-type-genspec.schema",
+  "meta": {
+    "author": "Intel Corporation",
+    "license": "BSD 3-Clause",
+    "version": "1"
+  },
+  "types": [
+    {
+      "category": "machine-learning",
+      "description": "Tag output variables.",
+      "in_ports": [
+       {
+        "data_type": "float",
+        "description": "Output variable value to be tagged.",
+        "methods": {
+         "process": "tagger_process"
+        },
+        "name": "IN"
+       }
+      ],
+      "methods": {
+       "close": "tagger_close",
+       "open": "tagger_open"
+      },
+      "name": "machine-learning/tagger",
+      "options": {
+       "members": [
+        {
+         "data_type": "string",
+         "description": "Tag to be applied to all packets passing through this node.",
+         "name": "tag"
+        }
+       ],
+       "version": 1
+      },
+      "out_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Tagged float.",
+        "name": "OUT"
+       }
+      ],
+      "private_data_type": "tagger_data",
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/tagger.html"
+    },
+    {
+      "category": "machine-learning",
+      "description": "Filter output variables.",
+      "in_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Output variable value to be filtered.",
+        "methods": {
+         "process": "filter_process"
+        },
+        "name": "IN"
+       }
+      ],
+      "methods": {
+       "close": "tagger_close",
+       "open": "tagger_open"
+      },
+      "name": "machine-learning/filter",
+      "options": {
+       "members": [
+        {
+         "data_type": "string",
+         "description": "Tag to be used to filter packets passing through this node. If the packet's tag doesn't match this option, no packet will be sent in 'OUT' port. Otherwise a packet with only the float value will be sent.",
+         "name": "tag"
+        }
+       ],
+       "version": 1
+      },
+      "out_ports": [
+       {
+        "data_type": "float",
+        "description": "Only the float value for packets that match the tag.",
+        "name": "OUT"
+       }
+      ],
+      "private_data_type": "tagger_data",
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/filter.html"
+    },
+    {
+      "category": "machine-learning",
+      "description": "Learn output values based on input and output observation. Uses a fuzzy logic algorithm.",
+      "in_ports": [
+       {
+        "data_type": "float",
+        "description": "Port for inputs sending float packets.",
+        "methods": {
+         "connect": "input_var_connect",
+         "process": "input_var_process"
+        },
+        "name": "IN_VAR"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Port for outputs sending tagged float packets.",
+        "methods": {
+         "connect": "output_var_connect",
+         "process": "output_var_process"
+        },
+        "name": "OUT_VAR"
+       },
+       {
+        "data_type": "any",
+        "description": "Port used to trigger machine learning prediction.",
+        "methods": {
+         "process": "prediction_trigger_process"
+        },
+        "name": "PREDICTION_TRIGGER"
+       },
+       {
+        "data_type": "any",
+        "description": "Port used to trigger machine learning processing.",
+        "methods": {
+         "process": "trigger_process"
+        },
+        "name": "TRIGGER"
+       }
+      ],
+      "methods": {
+       "close": "machine_learning_close",
+       "open": "machine_learning_fuzzy_open"
+      },
+      "name": "machine-learning/fuzzy",
+      "options": {
+       "members": [
+        {
+         "data_type": "int",
+         "default": 5,
+         "description": "Amount of reads without input changes to consider input stable. If zero, it's always considered stable.",
+         "name": "stabilization_hits"
+        },
+        {
+         "data_type": "int",
+         "default": 15,
+         "description": "Number of fuzzy terms to be created for each variable.",
+         "name": "number_of_terms"
+        }
+       ],
+       "version": 1
+      },
+      "out_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Prediction values for output variables.",
+        "name": "OUT"
+       },
+       {
+        "data_type": "empty",
+        "description": "Process has finished.",
+        "name": "PROCESS_FINISHED"
+       }
+      ],
+      "private_data_type": "machine_learning_data",
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/fuzzy.html"
+    },
+    {
+      "category": "machine-learning",
+      "description": "Learn output values based on input and output observation. Uses neural network algorithm.",
+      "in_ports": [
+       {
+        "data_type": "float",
+        "description": "Port for inputs sending float packets.",
+        "methods": {
+         "connect": "input_var_connect",
+         "process": "input_var_process"
+        },
+        "name": "IN_VAR"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Port for outputs sending tagged float packets.",
+        "methods": {
+         "connect": "output_var_connect",
+         "process": "output_var_process"
+        },
+        "name": "OUT_VAR"
+       },
+       {
+        "data_type": "any",
+        "description": "Port used to trigger machine learning prediction.",
+        "methods": {
+         "process": "prediction_trigger_process"
+        },
+        "name": "PREDICTION_TRIGGER"
+       },
+       {
+        "data_type": "any",
+        "description": "Port used to trigger machine learning processing.",
+        "methods": {
+         "process": "trigger_process"
+        },
+        "name": "TRIGGER"
+       }
+      ],
+      "methods": {
+       "close": "machine_learning_close",
+       "open": "machine_learning_neural_network_open"
+      },
+      "name": "machine-learning/neural-network",
+      "options": {
+       "members": [
+        {
+         "data_type": "int",
+         "default": 5,
+         "description": "Amount of reads without input changes to consider input stable. If zero, it's always considered stable.",
+         "name": "stabilization_hits"
+        },
+        {
+         "data_type": "int",
+         "default": 0,
+         "description": "Amound of initial observations necessary to first neural network training. If zero or negative, the default initial observation value will be used.",
+         "name": "initial_required_observations"
+        },
+        {
+         "data_type": "float",
+         "default": 0.1,
+         "description": "Desired mean squared error. It's the difference between the estimator and what is estimated. The neural network will try to reach this value. Higher values can be reached easily, requiring less time and processing on training phase. Also, it won't try to guess the output if the desired mse wasn't reached.",
+         "name": "mse"
+        },
+        {
+         "data_type": "string",
+         "default": "rprop",
+         "description": "Training algorithm to be used by the neural network. Supported algorithms are: 'rprop' - resilient backpropagation, and 'quickprop' - discrete pseudo-Newton method.",
+         "name": "training_algorithm"
+        },
+        {
+         "data_type": "string",
+         "default": "sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric",
+         "description": "Activation functions that may be used for neural network. It'll try to use all of these functions to get the best one for its observations. Supported activation functions are: sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric. It's possible to set more than one, separeted by space. By default all of them are considered candidates. Reducing this set will reduce processing on training phase.",
+         "name": "activation_functions"
+        }
+       ],
+       "version": 1
+      },
+      "out_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Prediction values for output variables.",
+        "name": "OUT"
+       },
+       {
+        "data_type": "empty",
+        "description": "Process has finished.",
+        "name": "PROCESS_FINISHED"
+       }
+      ],
+      "private_data_type": "machine_learning_data",
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/fuzzy.html"
+    }
+  ]
+}

@@ -1,0 +1,212 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# initial state
+0 0:00 User Nobody
+0 0:00 MindState Neutral
+0 0:00 BodyState Healthy
+0 0:00 PeopleQuantity 0
+0 0:00 Order None
+0 0:00 EXP_Order None
+
+# # # Monday # # #
+0 20:13 User Bruno
+0 20:13 PeopleQuantity 1
+0 20:15 MindState Neutral
+0 20:16 BodyState Tired
+
+0 20:18 Order Arab
+0 20:18 EXP_Order Arab
+
+# # # Tuesday # # #
+1 7:11 User Nobody
+1 7:11 Order None
+1 7:12 MindState Neutral
+1 7:12 BodyState Healthy
+1 7:15 PeopleQuantity 0
+
+1 20:40 User Bruno
+1 20:42 PeopleQuantity 1
+1 20:15 MindState Neutral
+1 20:16 BodyState Tired
+
+# # # Wednesday # # #
+2 7:08 User Nobody
+2 7:09 MindState Annoyed
+2 7:09 BodyState Ill
+2 7:10 PeopleQuantity 0
+
+2 21:02 User Bruno
+2 21:03 PeopleQuantity 4
+2 21:04 MindState Annoyed
+2 21:05 BodyState Ill
+
+2 21:28 Order Pizza
+2 21:28 EXP_Order Pizza
+
+2 23:05 PeopleQuantity 1
+
+# # # Thursday # # #
+3 8:00 User Nobody
+3 8:00 Order None
+3 8:02 MindState Happy
+3 8:03 BodyState Tired
+3 8:04 PeopleQuantity 0
+
+3 19:45 User Bruno
+3 19:46 PeopleQuantity 1
+3 19:47 MindState Neutral
+3 19:47 BodyState Tired
+
+# # # Friday # # #
+4 7:23 User Nobody
+4 7:23 Order None
+4 7:25 MindState Neutral
+4 7:25 BodyState Healthy
+4 7:28 PeopleQuantity 0
+
+4 21:22 User Bruno
+4 21:23 PeopleQuantity 2
+4 21:24 MindState Happy
+4 21:24 BodyState Tired
+
+4 21:40 Order Hamburger
+4 21:40 EXP_Order Hamburger
+
+# # # Saturday # # #
+5 10:34 User Nobody
+5 10:34 Order None
+5 10:35 MindState Neutral
+5 10:35 BodyState Healthy
+5 10:41 PeopleQuantity 0
+
+5 23:07 User Bruno
+5 23:08 PeopleQuantity 2
+5 23:09 MindState Happy
+5 23:09 BodyState Tired
+
+# # # Sunday # # #
+6 19:47 MindState Annoyed
+6 19:48 BodyState Healthy
+6 19:50 PeopleQuantity 1
+
+6 19:53 BEGIN_EXPECTATIONS
+6 19:53 Order nan
+6 19:53 EXP_Order Arab
+6 19:53 END_EXPECTATIONS
+6 19:54 Order Arab
+
+# # # Monday # # #
+7 7:31 User Nobody
+7 7:31 Order None
+7 7:33 MindState Neutral
+7 7:33 BodyState Healthy
+7 7:33 PeopleQuantity 0
+
+7 20:24 User Bruno
+7 20:24 PeopleQuantity 1
+7 20:25 MindState Annoyed
+7 20:26 BodyState Tired
+
+7 21:08 Order Temaki
+7 21:08 EXP_Order Temaki
+
+# # # Tuesday # # #
+8 6:49 User Nobody
+8 6:49 Order None
+8 6:49 MindState Sad
+8 6:51 BodyState Tired
+8 6:51 PeopleQuantity 0
+
+8 18:37 User Bruno
+8 18:37 PeopleQuantity 1
+8 18:40 MindState Sad
+8 18:45 BodyState Tired
+
+# # # Wednesday # # #
+9 7:21 User Nobody
+9 7:21 Order None
+9 7:22 MindState Annoyed
+9 7:22 BodyState Ill
+9 7:25 PeopleQuantity 0
+
+9 21:06 User Bruno
+9 21:06 PeopleQuantity 3
+9 21:07 MindState Annoyed
+9 21:08 BodyState Ill
+
+9 21:47 BEGIN_EXPECTATIONS
+9 21:47 Order nan
+9 21:47 EXP_Order Pizza
+9 21:47 END_EXPECTATIONS
+9 21:48 Order Pizza
+
+9 22:46 PeopleQuantity 1
+
+# # # Thursday # # #
+10 7:24 User Nobody
+10 7:24 Order None
+10 7:24 MindState Neutral
+10 7:26 BodyState Exhausted
+10 7:26 PeopleQuantity 0
+
+10 19:23 User Bruno
+10 19:23 PeopleQuantity 1
+10 19:25 MindState Annoyed
+10 19:26 BodyState Exhausted
+
+10 19:37 BEGIN_EXPECTATIONS
+10 19:37 Order nan
+10 19:37 EXP_Order Hamburger
+10 19:37 END_EXPECTATIONS
+10 19:38 Order Hamburger
+
+# # # Friday # # #
+11 8:02 User Nobody
+11 8:02 Order None
+11 8:05 MindState Neutral
+11 8:05 BodyState Ill
+11 8:08 PeopleQuantity 0
+
+# # # Saturday # # #
+12 21:07 User Bruno
+12 21:08 PeopleQuantity 2
+12 21:09 MindState Happy
+12 21:09 BodyState Tired
+
+# # # Sunday # # #
+13 19:15 MindState Annoyed
+13 19:15 BodyState Healthy
+
+13 20:23 BEGIN_EXPECTATIONS
+13 20:23 Order nan
+13 20:23 EXP_Order Temaki
+13 20:23 END_EXPECTATIONS
+13 20:24 Order Temaki

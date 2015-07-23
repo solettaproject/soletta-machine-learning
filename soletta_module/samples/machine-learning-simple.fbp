@@ -1,0 +1,71 @@
+#!/usr/bin/env sol-fbp-runner
+
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Timer(timer:interval=200) OUT -> IN Random1(random/float:seed=666)
+Random1 OUT -> IN Input1(float/map:use_input_range=true,output_range=0|-0.5|5.5|1)
+Input1 OUT -> IN Input1Value(console)
+
+Timer OUT -> IN Random2(random/float)
+Random2 OUT -> IN Input2(float/map:use_input_range=true,output_range=0|0.5|6.5|1)
+Input2 OUT -> IN Input2Value(console)
+
+Input1 OUT -> OPERAND[0] Output(float/multiplication)
+Input2 OUT -> OPERAND[1] Output
+Output OUT -> IN OutputValue(console)
+
+# add a random error to check if machine learning will correct this
+TimerError(timer:interval=2020) OUT -> IN RandomError(random/float)
+RandomError OUT -> IN OutputError(float/map:use_input_range=true,output_range=0|0|30|1)
+OutputError OUT -> IN Error(console)
+
+Output OUT -> IN Tagger(machine-learning/tagger:tag=Result)
+OutputError OUT -> IN Tagger
+
+# guess using fuzzy
+Input1 OUT -> IN_VAR Fuzzy(machine-learning/fuzzy:stabilization_hits=2)
+Input2 OUT -> IN_VAR Fuzzy
+Tagger OUT -> OUT_VAR Fuzzy
+
+TimerTrigger(timer:interval=20) OUT -> TRIGGER Fuzzy
+
+Fuzzy OUT -> IN FilterFuzzy(machine-learning/filter:tag=Result)
+FilterFuzzy OUT -> IN OutputGuessFuzzy(console)
+
+# guess using neural network
+Input1 OUT -> IN_VAR NN(machine-learning/neural-network)
+Input2 OUT -> IN_VAR NN
+Tagger OUT -> OUT_VAR NN
+
+TimerTrigger OUT -> TRIGGER NN
+
+NN OUT -> IN FilterNN(machine-learning/filter:tag=Result)
+FilterNN OUT -> IN OutputGuessNN(console)

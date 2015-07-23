@@ -1,0 +1,6 @@
+#pragma once
+
+#define @CMAKE_BUILD_TYPE@
+#cmakedefine FUZZY_ENGINE
+#cmakedefine ANN_ENGINE
+#cmakedefine NAIVE_ENGINE

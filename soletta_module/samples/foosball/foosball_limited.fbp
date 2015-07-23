@@ -1,0 +1,88 @@
+#!/usr/bin/env sol-fbp-runner
+
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+DECLARE=MultiplePlayerSelector:fbp:multiple_player_selector.fbp
+DECLARE=FoosballMachine:fbp:foosball_machine.fbp
+
+players(MultiplePlayerSelector)
+score1(int/accumulator:setup_value=min:0|max:10)
+score2(int/accumulator:setup_value=min:0|max:10)
+
+main(ButtonMain) OUT -> BTN_CHANGE_PLAYER players
+next(ButtonNext) OUT -> BTN_NEXT players
+
+players LCD -> IN lcd(Lcd)
+
+reset(ButtonReset) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> RESET players
+
+#prediction
+sml(FoosballMachine)
+players PLAYER1 -> GOAL_KEEPER1 sml
+players PLAYER2 -> STRIKER1 sml
+players PLAYER3 -> GOAL_KEEPER2 sml
+players PLAYER4 -> STRIKER2 sml
+
+players DONE -> PREDICTION_TRIGGER sml
+sml PREDICTED_WINNER1 -> IN _(converter/empty-to-boolean:output_value=true) OUT -> IN led1(Led1)
+sml PREDICTED_WINNER2 -> IN _(converter/empty-to-boolean:output_value=true) OUT -> IN led2(Led2)
+false(constant/boolean:value=false) OUT -> IN led1
+false OUT -> IN led2
+
+sml PREDICTED_WINNER1 -> IN _(converter/empty-to-boolean:output_value=true) OUT -> IN led1_(console)
+sml PREDICTED_WINNER2 -> IN _(converter/empty-to-boolean:output_value=true) OUT -> IN led2_(console)
+#Learn
+players DONE -> RESET score1
+players DONE -> RESET score2
+players DONE -> IN score_lcd
+players DONE -> IN game_started(boolean/toggle)
+score1 OUT -> IN winner1(converter/int-to-empty:range=min:3|max:3) OUT -> WINNER1 sml
+game_started OUT -> IN[0] score1_inc(boolean/and)
+main OUT -> IN[1] score1_inc
+score1_inc OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC score1
+
+score2 OUT -> IN winner2(converter/int-to-empty:range=min:3|max:3) OUT -> WINNER2 sml
+game_started OUT -> OUTPUT_VALUE score2_inc(converter/empty-to-boolean:output_value=false)
+next OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN score2_inc OUT -> IN _filter(boolean/filter) TRUE -> INC score2
+
+#Game reset
+sml PROCESS_END -> RESET players
+sml PROCESS_END -> IN game_started
+sml PROCESS_END -> IN end_false(converter/empty-to-boolean:output_value=false)
+end_false OUT -> IN led1
+end_false OUT -> IN led2
+
+#score
+str_score(string/concatenate:separator=" x ")
+score1 OUT -> IN _(converter/int-to-string) OUT -> IN[0] str_score
+score2 OUT -> IN _(converter/int-to-string) OUT -> IN[1] str_score
+str_score OUT -> OUTPUT_VALUE score_lcd(converter/empty-to-string)
+str_score OUT -> IN score_lcd OUT -> IN lcd

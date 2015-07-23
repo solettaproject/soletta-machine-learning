@@ -1,0 +1,83 @@
+# This file is part of the Soletta Project
+# 
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+# 
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+# 
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+# 
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+Engine: fuzzy_test_2
+InputVariable: sensor1
+  enabled: true
+  range: 0 1
+  term: t0 Ramp 0.1375 0.0
+  term: t1 Triangle 0.1125 0.25 0.3875
+  term: t2 Triangle 0.3625 0.5 0.6375
+  term: t3 Triangle 0.6125 0.75 0.8875
+  term: t4 Ramp 0.8625 1.0
+
+InputVariable: sensor2
+  enabled: true
+  range: 0 1
+  term: t0 Ramp 0.275 0.0
+  term: t1 Triangle 0.225 0.5 0.775
+  term: t2 Ramp 0.725 1.0
+
+OutputVariable: out
+  enabled: true
+  range: 0.000 1.000
+  default: 0.0
+  defuzzifier: MeanOfMaximum 500
+  accumulation: Maximum
+  term: t0 Ramp 0.06875 0.0
+  term: t1 Triangle 0.05625 0.125 0.19375
+  term: t2 Triangle 0.18125 0.25 0.31875
+  term: t3 Triangle 0.30625 0.375 0.44375
+  term: t4 Triangle 0.43125 0.5 0.56875
+  term: t5 Triangle 0.55625 0.625 0.69375
+  term: t6 Triangle 0.68125 0.75 0.81875
+  term: t7 Triangle 0.80625 0.875 0.94375
+  term: t8 Ramp 0.93125 1.0
+
+RuleBlock:
+  enabled: true
+  conjunction: Minimum
+  disjunction: Maximum
+  activation: Minimum
+  rule: if sensor1 is t0 and sensor2 is t0 then out is t0
+  rule: if sensor1 is t0 and sensor2 is t1 then out is t0
+  rule: if sensor1 is t0 and sensor2 is t2 then out is t4
+  rule: if sensor1 is t1 and sensor2 is t0 then out is t0
+  rule: if sensor1 is t1 and sensor2 is t1 then out is t0
+  rule: if sensor1 is t1 and sensor2 is t2 then out is t2
+  rule: if sensor1 is t2 and sensor2 is t0 then out is t0
+  rule: if sensor1 is t2 and sensor2 is t1 then out is t1
+  rule: if sensor1 is t2 and sensor2 is t2 then out is t1
+  rule: if sensor1 is t3 and sensor2 is t0 then out is t1
+  rule: if sensor1 is t3 and sensor2 is t1 then out is t6
+  rule: if sensor1 is t3 and sensor2 is t2 then out is t6
+  rule: if sensor1 is t4 and sensor2 is t0 then out is t0
+  rule: if sensor1 is t4 and sensor2 is t1 then out is t7
+  rule: if sensor1 is t4 and sensor2 is t2 then out is t0

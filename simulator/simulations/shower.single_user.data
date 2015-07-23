@@ -1,0 +1,351 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# initial state
+0 0:00 EnvTemperature 16
+0 0:00 User Nobody
+0 0:00 BodyTemperature 35
+0 0:00 HeartRate 0
+
+0 0:00 WaterVolume 0
+0 0:00 EXP_WaterVolume 0
+0 0:00 WaterTemperature 22
+0 0:00 EXP_WaterTemperature 22
+
+### Monday ###
+
+# Bruno take shower every
+# weekday when he wakes up
+0 07:30 EnvTemperature 22
+0 07:45 User Bruno
+0 07:46 HeartRate Awake
+0 07:46 BodyTemperature 37.4
+
+0 07:47 WaterVolume 60
+0 07:47 WaterTemperature 55
+0 07:47 EXP_WaterVolume 60
+0 07:47 EXP_WaterTemperature 55
+
+0 08:00 EnvTemperature 25
+
+0 08:10 WaterVolume 0
+0 08:10 WaterTemperature 22
+0 08:10 EXP_WaterVolume 0
+0 08:10 EXP_WaterTemperature 22
+0 08:10 User Nobody
+
+0 12:00 EnvTemperature 32
+
+0 21:00 EnvTemperature 17
+
+### Tuesday ###
+
+1 07:12 EnvTemperature 18
+1 07:35 User Bruno
+1 07:36 HeartRate Awake
+1 07:36 BodyTemperature 37.2
+
+1 07:37 WaterVolume 65
+1 07:37 WaterTemperature 60
+1 07:37 EXP_WaterVolume 65
+1 07:37 EXP_WaterTemperature 60
+
+1 07:51 WaterVolume 0
+1 07:51 WaterTemperature 18
+1 07:51 EXP_WaterVolume 0
+1 07:51 EXP_WaterTemperature 18
+1 07:51 User Nobody
+
+1 08:30 EnvTemperature 23
+
+1 13:14 EnvTemperature 29
+
+1 21:15 EnvTemperature 18
+
+### Wednesday ###
+
+2 07:12 EnvTemperature 14
+2 08:03 User Bruno
+2 08:03 HeartRate Awake
+2 08:03 BodyTemperature 37.3
+
+2 08:03 WaterVolume 52
+2 08:03 WaterTemperature 63
+2 08:03 EXP_WaterVolume 52
+2 08:03 EXP_WaterTemperature 63
+
+2 08:10 WaterVolume 0
+2 08:10 WaterTemperature 14
+2 08:10 EXP_WaterVolume 0
+2 08:10 EXP_WaterTemperature 14
+2 08:10 User Nobody
+
+2 08:30 EnvTemperature 20
+
+2 12:00 EnvTemperature 23
+
+2 21:00 EnvTemperature 25
+
+### Thursday ###
+
+3 08:30 EnvTemperature 25
+
+3 10:03 User Bruno
+3 10:03 HeartRate Awake
+3 10:03 BodyTemperature 37.4
+
+3 10:03 WaterVolume 66
+3 10:03 WaterTemperature 63
+3 10:03 EXP_WaterVolume 66
+3 10:03 EXP_WaterTemperature 63
+
+3 10:03 WaterTemperature 30
+3 10:03 EXP_WaterTemperature 30
+
+3 10:20 WaterVolume 0
+3 10:20 WaterTemperature 14
+3 10:20 EXP_WaterVolume 0
+3 10:20 EXP_WaterTemperature 14
+3 10:20 User Nobody
+
+3 12:15 EnvTemperature 34
+
+3 19:00 EnvTemperature 27
+
+### Friday ###
+
+4 07:12 EnvTemperature 8
+
+4 08:12 User Bruno
+4 08:12 HeartRate Awake
+4 08:12 BodyTemperature 37.0
+
+4 08:12 WaterVolume 60
+4 08:12 WaterTemperature 80
+4 08:12 EXP_WaterVolume 60
+4 08:12 EXP_WaterTemperature 80
+
+4 08:30 BEGIN_EXPECTATIONS off_state1
+4 08:30 WaterVolume 0
+4 08:30 WaterTemperature 8
+4 08:30 EXP_WaterVolume 0
+4 08:30 EXP_WaterTemperature nan
+4 08:30 User Nobody
+
+4 08:40 EnvTemperature 13
+
+4 12:00 EnvTemperature 15
+
+4 17:00 EnvTemperature 12
+
+### Saturday ###
+
+5 07:24 EnvTemperature 18
+5 11:48 EnvTemperature 23
+5 15:07 EnvTemperature 28
+5 19:12 EnvTemperature 20
+5 23:33 EnvTemperature 12
+
+### Sunday ###
+
+6 08:19 EnvTemperature 20
+6 13:10 EnvTemperature 31
+6 16:22 EnvTemperature 27
+6 21:00 EnvTemperature 21
+
+### Monday ###
+
+7 07:30 EnvTemperature 22
+7 07:40 END_EXPECTATIONS #off_state1
+
+7 07:45 WaterVolume nan
+7 07:45 WaterTemperature nan
+7 07:45 User Bruno
+7 07:46 HeartRate Awake
+7 07:46 BodyTemperature 37.4
+
+7 07:47 BEGIN_EXPECTATIONS shower1
+7 07:47 EXP_WaterVolume 60
+7 07:47 EXP_WaterTemperature 55
+7 07:47 END_EXPECTATIONS #shower1
+
+7 08:00 EnvTemperature 25
+
+7 08:10 EXP_WaterVolume 0
+7 08:10 EXP_WaterTemperature nan
+7 08:10 User Nobody
+
+7 08:10 BEGIN_EXPECTATIONS off_state2
+
+7 12:00 EnvTemperature 32
+
+7 21:00 EnvTemperature 17
+
+### Tuesday ###
+
+8 07:12 EnvTemperature 18
+8 07:30 END_EXPECTATIONS #off_state2
+8 07:35 User Bruno
+8 07:36 HeartRate Awake
+8 07:36 BodyTemperature 37.2
+
+8 07:37 BEGIN_EXPECTATIONS shower2
+8 07:37 WaterVolume 65
+8 07:37 WaterTemperature 60
+8 07:37 EXP_WaterVolume 65
+8 07:37 EXP_WaterTemperature 60
+8 07:37 END_EXPECTATIONS #shower2
+
+8 07:51 WaterVolume 0
+8 07:51 WaterTemperature 18
+8 07:51 EXP_WaterVolume 0
+8 07:51 EXP_WaterTemperature 18
+8 07:51 User Nobody
+
+8 08:30 EnvTemperature 23
+
+8 13:14 EnvTemperature 29
+
+8 21:15 EnvTemperature 18
+
+### Wednesday ###
+
+9 07:12 EnvTemperature 14
+9 08:03 User Bruno
+9 08:03 HeartRate Awake
+9 08:03 BodyTemperature 37.3
+
+9 08:03 BEGIN_EXPECTATIONS shower3
+9 08:03 WaterVolume 52
+9 08:03 WaterTemperature 63
+9 08:03 EXP_WaterVolume 52
+9 08:03 EXP_WaterTemperature 63
+9 08:03 END_EXPECTATIONS #shower2
+
+9 08:10 WaterVolume 0
+9 08:10 WaterTemperature 14
+9 08:10 EXP_WaterVolume 0
+9 08:10 EXP_WaterTemperature nan
+9 08:10 User Nobody
+9 08:10 BEGIN_EXPECTATIONS off_state3
+
+9 08:30 EnvTemperature 20
+9 12:00 EnvTemperature 23
+9 21:00 EnvTemperature 25
+
+### Thursday ###
+
+10 08:30 EnvTemperature 25
+10 10:00 END_EXPECTATIONS #off_state3
+
+10 10:03 BEGIN_EXPECTATIONS shower4
+10 10:03 User Bruno
+10 10:03 HeartRate Awake
+10 10:03 BodyTemperature 37.4
+10 10:03 WaterVolume 66
+10 10:03 WaterTemperature 63
+10 10:03 EXP_WaterVolume 66
+10 10:03 EXP_WaterTemperature 63
+10 10:03 END_EXPECTATIONS #shower4
+
+10 10:03 WaterTemperature 30
+10 10:03 EXP_WaterTemperature 30
+
+10 10:20 WaterVolume 0
+10 10:20 WaterTemperature 14
+10 10:20 EXP_WaterVolume 0
+10 10:20 EXP_WaterTemperature 14
+10 10:20 User Nobody
+
+10 12:15 EnvTemperature 34
+
+
+10 19:03 BEGIN_EXPECTATIONS night_shower
+10 19:03 User Bruno
+10 19:03 HeartRate Awake
+10 19:03 BodyTemperature 37.4
+10 19:03 WaterVolume nan
+10 19:03 WaterTemperature nan
+10 19:03 EXP_WaterVolume 66
+10 19:03 EXP_WaterTemperature 63
+10 19:03 END_EXPECTATIONS #night_shower
+
+10 20:00 WaterVolume 0
+10 20:00 WaterTemperature 0
+10 20:00 User Nobody
+10 21:00 EnvTemperature 27
+
+### Friday ###
+
+11 07:10 EnvTemperature 8
+
+11 08:12 BEGIN_EXPECTATIONS long_shower
+11 08:12 User Bruno
+11 08:12 HeartRate Awake
+11 08:12 BodyTemperature 37.0
+11 08:12 WaterVolume 60
+11 08:12 WaterTemperature 80
+11 08:12 EXP_WaterVolume 60
+11 08:12 EXP_WaterTemperature 80
+
+11 08:40 EnvTemperature 13
+11 08:50 EnvTemperature 20
+11 09:10 EnvTemperature 25
+11 09:20 EnvTemperature 30
+11 09:40 EnvTemperature 25
+11 10:00 EnvTemperature 20
+11 10:10 EnvTemperature 10
+
+11 10:20 END_EXPECTATIONS #long_shower
+
+11 10:30 WaterVolume 0
+11 10:30 WaterTemperature 8
+11 10:30 EXP_WaterVolume 0
+11 10:30 EXP_WaterTemperature 8
+11 10:30 User Nobody
+
+11 12:00 EnvTemperature 15
+
+11 17:00 EnvTemperature 12
+
+### Saturday ###
+
+12 07:24 EnvTemperature 18
+12 11:48 EnvTemperature 23
+12 15:07 EnvTemperature 28
+12 19:12 EnvTemperature 20
+12 23:33 EnvTemperature 12
+
+### Sunday ###
+
+13 08:19 EnvTemperature 20
+13 13:10 EnvTemperature 31
+13 16:22 EnvTemperature 27
+13 21:00 EnvTemperature 21

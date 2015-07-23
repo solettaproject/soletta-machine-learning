@@ -1,0 +1,136 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+INPORT=reset.IN:RESET
+INPORT=enabled_hub.IN:ENABLED
+INPORT=btn_hub.IN[0]:BTN_CHANGE_PLAYER
+INPORT=next_hub.IN[0]:BTN_NEXT
+OUTPORT=player1.OUT:PLAYER1
+OUTPORT=player2.OUT:PLAYER2
+OUTPORT=player3.OUT:PLAYER3
+OUTPORT=player4.OUT:PLAYER4
+OUTPORT=lcd.OUT:LCD
+OUTPORT=done.OUT:DONE
+
+#inputs
+reset(hub/empty)
+_(constant/boolean:value=true) OUT -> IN enabled_hub(hub/boolean)
+btn_hub(boolean/and)
+enabled_hub OUT -> IN[1] btn_hub
+next_hub(boolean/and)
+enabled_hub OUT -> IN[1] next_hub
+next_hub OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player_selection
+
+#reset timer
+timer(timer:interval=10) OUT -> INC player_selection
+timer OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> ENABLED timer
+reset OUT -> IN enable_timer(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
+enable_timer OUT -> IN enabled_hub
+
+#state machine
+player_selection(int/accumulator:setup_value=min:0|max:5)
+player_selection OUT -> IN state_player1(converter/int-to-boolean:true_range=min:1|max:1)
+player_selection OUT -> IN state_player2(converter/int-to-boolean:true_range=min:2|max:2)
+player_selection OUT -> IN state_player3(converter/int-to-boolean:true_range=min:3|max:3)
+player_selection OUT -> IN state_player4(converter/int-to-boolean:true_range=min:4|max:4)
+player_selection OUT -> IN done(converter/int-to-empty:range=min:5|max:5) OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> IN enabled_hub
+reset OUT -> RESET player_selection
+
+#Player1
+reset OUT -> RESET player1(int/accumulator:setup_value=min:0|max:14)
+btn_hub OUT -> IN[0] player1_enabled(boolean/and)
+state_player1 OUT -> IN[1] player1_enabled
+player1_enabled OUT -> IN _(boolean/filter) TRUE -> INC player1
+
+#Player2
+reset OUT -> RESET player2(int/accumulator:setup_value=min:0|max:14)
+btn_hub OUT -> IN[0] player2_enabled(boolean/and)
+state_player2 OUT -> IN[1] player2_enabled
+player2_enabled OUT -> IN _(boolean/filter) TRUE -> INC player2
+
+#Player3
+reset OUT -> RESET player3(int/accumulator:setup_value=min:0|max:14)
+btn_hub OUT -> IN[0] player3_enabled(boolean/and)
+state_player3 OUT -> IN[1] player3_enabled
+player3_enabled OUT -> IN _(boolean/filter) TRUE -> INC player3
+
+#player4
+reset OUT -> RESET player4(int/accumulator:setup_value=min:0|max:14)
+btn_hub OUT -> IN[0] player4_enabled(boolean/and)
+state_player4 OUT -> IN[1] player4_enabled
+player4_enabled OUT -> IN _(boolean/filter) TRUE -> INC player4
+
+#LCD
+#player_selection OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd(string/concatenate)
+_(constant/string:value="Player 1: ") OUT -> IN[0] lcd1(string/concatenate)
+player1 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd1
+state_player1 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 1: 0") OUT -> IN lcd
+
+_(constant/string:value="Player 2: ") OUT -> IN[0] lcd2(string/concatenate)
+player2 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd2
+state_player2 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 2: 0") OUT -> IN lcd
+
+_(constant/string:value="Player 3: ") OUT -> IN[0] lcd3(string/concatenate)
+player3 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd3
+state_player3 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 3: 0") OUT -> IN lcd
+
+_(constant/string:value="Player 4: ") OUT -> IN[0] lcd4(string/concatenate)
+player4 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd4
+state_player4 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 4: 0") OUT -> IN lcd
+
+lcd1 OUT -> IN lcd(hub/string)
+lcd2 OUT -> IN lcd
+lcd3 OUT -> IN lcd
+lcd4 OUT -> IN lcd
+
+#Don't allow multiple players selection
+player1 OUT -> IN[0] player2_cmp(int/equal)
+player2 OUT -> IN[1] player2_cmp OUT -> IN[0] player2_inc(boolean/and) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player2
+state_player2 OUT -> IN[1] player2_inc
+
+player1 OUT -> IN[0] player3_cmp(int/equal)
+player3 OUT -> IN[1] player3_cmp OUT -> IN[0] player3_inc(boolean/and) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player3
+state_player3 OUT -> IN[1] player3_inc
+
+player2 OUT -> IN[0] player3_cmp2(int/equal)
+player3 OUT -> IN[1] player3_cmp2 OUT -> IN[0] player3_inc2(boolean/and) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player3
+state_player3 OUT -> IN[1] player3_inc2
+
+player1 OUT -> IN[0] player4_cmp(int/equal)
+player4 OUT -> IN[1] player4_cmp OUT -> IN[0] player4_inc(boolean/and) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player4
+state_player4 OUT -> IN[1] player4_inc
+
+player2 OUT -> IN[0] player4_cmp2(int/equal)
+player4 OUT -> IN[1] player4_cmp2 OUT -> IN[0] player4_inc2(boolean/and) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player4
+state_player4 OUT -> IN[1] player4_inc2
+
+player3 OUT -> IN[0] player4_cmp3(int/equal)
+player4 OUT -> IN[1] player4_cmp3 OUT -> IN[0] player4_inc3(boolean/and) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player4
+state_player4 OUT -> IN[1] player4_inc3

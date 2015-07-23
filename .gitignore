@@ -1,0 +1,17 @@
+CMakeCache.txt
+Makefile
+cmake_install.cmake
+CMakeFiles
+*.so
+*.out
+sml/common/include/config.h
+sml/sml.pc
+install_manifest.txt
+bin/
+gen/
+obj/
+local.properties
+gdb.setup
+gdbserver
+docs/Doxyfile
+soletta_module/machine_learning.json

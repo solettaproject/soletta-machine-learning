@@ -1,0 +1,59 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+#Test created to check how annoying is sml when user decides to have an output
+#with a value different from the value learned for a short time
+#
+#Initial Scenario
+#Day 0, 1, 2 learn basic rules
+0 0:00 in i0
+0 0:00 out o0
+0 0:00 EXP_out o0
+
+1 0:00 in i1
+1 0:00 out o1
+1 0:00 EXP_out o1
+
+#Day 3 Annoy user?
+2 0:00 in i0
+2 0:00 out o0
+2 0:00 EXP_out o0
+
+2 1:00 BEGIN_EXPECTATIONS
+2 1:00 in i1        #User gets into a room
+2 1:00 out o0       #The user don't turn the lights on
+2 1:00 EXP_out o1   #It is expected that sml turns the lights on
+2 1:00 END_EXPECTATIONS
+
+2 1:01 BEGIN_EXPECTATIONS
+2 1:01 out o0       #User turns the light off
+2 1:01 EXP_out o0   #Don't fight with user for the next minutes
+2 1:10 END_EXPECTATIONS
+

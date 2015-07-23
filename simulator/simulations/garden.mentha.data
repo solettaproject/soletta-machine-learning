@@ -1,0 +1,6282 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+
+#### Week 0 ####
+### Monday ###
+0 0:00 Temperature 24
+0 0:00 WaterVolume 0
+0 0:00 Light 10
+0 0:00 EXP_WaterVolume 0
+0 0:00 Moisture 30
+0 0:00 Fertilizer 1.8
+
+0 1:00 Temperature 24
+0 1:00 WaterVolume 40
+0 1:00 Light 11
+0 1:00 EXP_WaterVolume 40
+0 1:00 Moisture 25
+0 1:00 Fertilizer 2.0
+
+0 2:00 Temperature 24
+0 2:00 WaterVolume 40
+0 2:00 Light 13
+0 2:00 EXP_WaterVolume 40
+0 2:00 Moisture 28
+0 2:00 Fertilizer 2.8
+
+0 3:00 Temperature 24
+0 3:00 WaterVolume 40
+0 3:00 Light 15
+0 3:00 EXP_WaterVolume 40
+0 3:00 Moisture 27
+0 3:00 Fertilizer 1.9
+
+0 4:00 Temperature 25
+0 4:00 WaterVolume 40
+0 4:00 Light 20
+0 4:00 EXP_WaterVolume 40
+0 4:00 Moisture 28
+0 4:00 Fertilizer 2.8
+
+0 5:00 Temperature 25
+0 5:00 WaterVolume 40
+0 5:00 Light 25
+0 5:00 EXP_WaterVolume 40
+0 5:00 Moisture 27
+0 5:00 Fertilizer 1.3
+
+0 6:00 Temperature 26
+0 6:00 WaterVolume 40
+0 6:00 Light 40
+0 6:00 EXP_WaterVolume 40
+0 6:00 Moisture 27
+0 6:00 Fertilizer 2.5
+
+0 7:00 Temperature 26
+0 7:00 WaterVolume 0
+0 7:00 Light 45
+0 7:00 EXP_WaterVolume 0
+0 7:00 Moisture 30
+0 7:00 Fertilizer 2.0
+
+0 8:00 Temperature 26
+0 8:00 WaterVolume 40
+0 8:00 Light 50
+0 8:00 EXP_WaterVolume 40
+0 8:00 Moisture 25
+0 8:00 Fertilizer 2.3
+
+0 9:00 Temperature 26
+0 9:00 WaterVolume 40
+0 9:00 Light 50
+0 9:00 EXP_WaterVolume 40
+0 9:00 Moisture 26
+0 9:00 Fertilizer 2.1
+
+0 10:00 Temperature 26
+0 10:00 WaterVolume 40
+0 10:00 Light 50
+0 10:00 EXP_WaterVolume 40
+0 10:00 Moisture 28
+0 10:00 Fertilizer 2.6
+
+0 11:00 Temperature 27
+0 11:00 WaterVolume 40
+0 11:00 Light 60
+0 11:00 EXP_WaterVolume 40
+0 11:00 Moisture 29
+0 11:00 Fertilizer 1.6
+
+0 12:00 Temperature 28
+0 12:00 WaterVolume 0
+0 12:00 Light 80
+0 12:00 EXP_WaterVolume 0
+0 12:00 Moisture 33
+0 12:00 Fertilizer 1.8
+
+0 13:00 Temperature 27
+0 13:00 WaterVolume 0
+0 13:00 Light 70
+0 13:00 EXP_WaterVolume 0
+0 13:00 Moisture 32
+0 13:00 Fertilizer 2.4
+
+0 14:00 Temperature 27
+0 14:00 WaterVolume 40
+0 14:00 Light 70
+0 14:00 EXP_WaterVolume 40
+0 14:00 Moisture 29
+0 14:00 Fertilizer 1.8
+
+0 15:00 Temperature 27
+0 15:00 WaterVolume 0
+0 15:00 Light 70
+0 15:00 EXP_WaterVolume 0
+0 15:00 Moisture 50
+0 15:00 Fertilizer 2.7
+
+0 16:00 Temperature 27
+0 16:00 WaterVolume 0
+0 16:00 Light 65
+0 16:00 EXP_WaterVolume 0
+0 16:00 Moisture 49
+0 16:00 Fertilizer 1.7
+
+0 17:00 Temperature 27
+0 17:00 WaterVolume 0
+0 17:00 Light 60
+0 17:00 EXP_WaterVolume 0
+0 17:00 Moisture 44
+0 17:00 Fertilizer 1.9
+
+0 18:00 Temperature 26
+0 18:00 WaterVolume 0
+0 18:00 Light 50
+0 18:00 EXP_WaterVolume 0
+0 18:00 Moisture 40
+0 18:00 Fertilizer 2.0
+
+0 19:00 Temperature 25
+0 19:00 WaterVolume 0
+0 19:00 Light 30
+0 19:00 EXP_WaterVolume 0
+0 19:00 Moisture 40
+0 19:00 Fertilizer 1.6
+
+0 20:00 Temperature 24
+0 20:00 WaterVolume 0
+0 20:00 Light 10
+0 20:00 EXP_WaterVolume 0
+0 20:00 Moisture 40
+0 20:00 Fertilizer 2.3
+
+0 21:00 Temperature 24
+0 21:00 WaterVolume 0
+0 21:00 Light 10
+0 21:00 EXP_WaterVolume 0
+0 21:00 Moisture 36
+0 21:00 Fertilizer 2.2
+
+0 22:00 Temperature 24
+0 22:00 WaterVolume 0
+0 22:00 Light 10
+0 22:00 EXP_WaterVolume 0
+0 22:00 Moisture 34
+0 22:00 Fertilizer 1.5
+
+0 23:00 Temperature 24
+0 23:00 WaterVolume 0
+0 23:00 Light 10
+0 23:00 EXP_WaterVolume 0
+0 23:00 Moisture 30
+0 23:00 Fertilizer 2.0
+
+### Tuesday ###
+1 0:00 Temperature 19
+1 0:00 WaterVolume 0
+1 0:00 Light 10
+1 0:00 EXP_WaterVolume 0
+1 0:00 Moisture 30
+1 0:00 Fertilizer 1.4
+
+1 1:00 Temperature 19
+1 1:00 WaterVolume 40
+1 1:00 Light 11
+1 1:00 EXP_WaterVolume 40
+1 1:00 Moisture 26
+1 1:00 Fertilizer 1.3
+
+1 2:00 Temperature 19
+1 2:00 WaterVolume 40
+1 2:00 Light 13
+1 2:00 EXP_WaterVolume 40
+1 2:00 Moisture 25
+1 2:00 Fertilizer 2.0
+
+1 3:00 Temperature 19
+1 3:00 WaterVolume 40
+1 3:00 Light 15
+1 3:00 EXP_WaterVolume 40
+1 3:00 Moisture 29
+1 3:00 Fertilizer 1.3
+
+1 4:00 Temperature 20
+1 4:00 WaterVolume 0
+1 4:00 Light 20
+1 4:00 EXP_WaterVolume 0
+1 4:00 Moisture 31
+1 4:00 Fertilizer 2.4
+
+1 5:00 Temperature 20
+1 5:00 WaterVolume 0
+1 5:00 Light 25
+1 5:00 EXP_WaterVolume 0
+1 5:00 Moisture 31
+1 5:00 Fertilizer 1.3
+
+1 6:00 Temperature 21
+1 6:00 WaterVolume 0
+1 6:00 Light 40
+1 6:00 EXP_WaterVolume 0
+1 6:00 Moisture 31
+1 6:00 Fertilizer 1.7
+
+1 7:00 Temperature 21
+1 7:00 WaterVolume 0
+1 7:00 Light 45
+1 7:00 EXP_WaterVolume 0
+1 7:00 Moisture 30
+1 7:00 Fertilizer 2.9
+
+1 8:00 Temperature 21
+1 8:00 WaterVolume 0
+1 8:00 Light 50
+1 8:00 EXP_WaterVolume 0
+1 8:00 Moisture 30
+1 8:00 Fertilizer 2.7
+
+1 9:00 Temperature 21
+1 9:00 WaterVolume 0
+1 9:00 Light 50
+1 9:00 EXP_WaterVolume 0
+1 9:00 Moisture 30
+1 9:00 Fertilizer 1.6
+
+1 10:00 Temperature 21
+1 10:00 WaterVolume 40
+1 10:00 Light 50
+1 10:00 EXP_WaterVolume 40
+1 10:00 Moisture 26
+1 10:00 Fertilizer 1.0
+
+1 11:00 Temperature 22
+1 11:00 WaterVolume 0
+1 11:00 Light 60
+1 11:00 EXP_WaterVolume 0
+1 11:00 Moisture 30
+1 11:00 Fertilizer 2.7
+
+1 12:00 Temperature 23
+1 12:00 WaterVolume 0
+1 12:00 Light 80
+1 12:00 EXP_WaterVolume 0
+1 12:00 Moisture 30
+1 12:00 Fertilizer 2.3
+
+1 13:00 Temperature 22
+1 13:00 WaterVolume 40
+1 13:00 Light 70
+1 13:00 EXP_WaterVolume 40
+1 13:00 Moisture 27
+1 13:00 Fertilizer 1.0
+
+1 14:00 Temperature 22
+1 14:00 WaterVolume 40
+1 14:00 Light 70
+1 14:00 EXP_WaterVolume 40
+1 14:00 Moisture 28
+1 14:00 Fertilizer 2.4
+
+1 15:00 Temperature 22
+1 15:00 WaterVolume 0
+1 15:00 Light 70
+1 15:00 EXP_WaterVolume 0
+1 15:00 Moisture 30
+1 15:00 Fertilizer 2.3
+
+1 16:00 Temperature 22
+1 16:00 WaterVolume 40
+1 16:00 Light 65
+1 16:00 EXP_WaterVolume 40
+1 16:00 Moisture 27
+1 16:00 Fertilizer 1.9
+
+1 17:00 Temperature 22
+1 17:00 WaterVolume 0
+1 17:00 Light 60
+1 17:00 EXP_WaterVolume 0
+1 17:00 Moisture 30
+1 17:00 Fertilizer 2.8
+
+1 18:00 Temperature 21
+1 18:00 WaterVolume 40
+1 18:00 Light 50
+1 18:00 EXP_WaterVolume 40
+1 18:00 Moisture 27
+1 18:00 Fertilizer 1.1
+
+1 19:00 Temperature 20
+1 19:00 WaterVolume 40
+1 19:00 Light 30
+1 19:00 EXP_WaterVolume 40
+1 19:00 Moisture 28
+1 19:00 Fertilizer 1.3
+
+1 20:00 Temperature 19
+1 20:00 WaterVolume 0
+1 20:00 Light 10
+1 20:00 EXP_WaterVolume 0
+1 20:00 Moisture 32
+1 20:00 Fertilizer 2.3
+
+1 21:00 Temperature 19
+1 21:00 WaterVolume 0
+1 21:00 Light 10
+1 21:00 EXP_WaterVolume 0
+1 21:00 Moisture 32
+1 21:00 Fertilizer 2.3
+
+1 22:00 Temperature 19
+1 22:00 WaterVolume 0
+1 22:00 Light 10
+1 22:00 EXP_WaterVolume 0
+1 22:00 Moisture 32
+1 22:00 Fertilizer 1.5
+
+1 23:00 Temperature 19
+1 23:00 WaterVolume 40
+1 23:00 Light 10
+1 23:00 EXP_WaterVolume 40
+1 23:00 Moisture 29
+1 23:00 Fertilizer 2.2
+
+### Wednesday ###
+2 0:00 Temperature 23
+2 0:00 WaterVolume 40
+2 0:00 Light 10
+2 0:00 EXP_WaterVolume 40
+2 0:00 Moisture 29
+2 0:00 Fertilizer 1.5
+
+2 1:00 Temperature 23
+2 1:00 WaterVolume 0
+2 1:00 Light 11
+2 1:00 EXP_WaterVolume 0
+2 1:00 Moisture 30
+2 1:00 Fertilizer 2.9
+
+2 2:00 Temperature 23
+2 2:00 WaterVolume 40
+2 2:00 Light 13
+2 2:00 EXP_WaterVolume 40
+2 2:00 Moisture 25
+2 2:00 Fertilizer 2.4
+
+2 3:00 Temperature 23
+2 3:00 WaterVolume 40
+2 3:00 Light 15
+2 3:00 EXP_WaterVolume 40
+2 3:00 Moisture 25
+2 3:00 Fertilizer 2.0
+
+2 4:00 Temperature 24
+2 4:00 WaterVolume 40
+2 4:00 Light 20
+2 4:00 EXP_WaterVolume 40
+2 4:00 Moisture 26
+2 4:00 Fertilizer 1.5
+
+2 5:00 Temperature 24
+2 5:00 WaterVolume 0
+2 5:00 Light 25
+2 5:00 EXP_WaterVolume 0
+2 5:00 Moisture 30
+2 5:00 Fertilizer 2.6
+
+2 6:00 Temperature 25
+2 6:00 WaterVolume 40
+2 6:00 Light 40
+2 6:00 EXP_WaterVolume 40
+2 6:00 Moisture 26
+2 6:00 Fertilizer 1.0
+
+2 7:00 Temperature 25
+2 7:00 WaterVolume 40
+2 7:00 Light 45
+2 7:00 EXP_WaterVolume 40
+2 7:00 Moisture 26
+2 7:00 Fertilizer 2.8
+
+2 8:00 Temperature 25
+2 8:00 WaterVolume 40
+2 8:00 Light 50
+2 8:00 EXP_WaterVolume 40
+2 8:00 Moisture 27
+2 8:00 Fertilizer 1.8
+
+2 9:00 Temperature 25
+2 9:00 WaterVolume 0
+2 9:00 Light 50
+2 9:00 EXP_WaterVolume 0
+2 9:00 Moisture 30
+2 9:00 Fertilizer 1.5
+
+2 10:00 Temperature 25
+2 10:00 WaterVolume 40
+2 10:00 Light 50
+2 10:00 EXP_WaterVolume 40
+2 10:00 Moisture 27
+2 10:00 Fertilizer 2.0
+
+2 11:00 Temperature 26
+2 11:00 WaterVolume 40
+2 11:00 Light 60
+2 11:00 EXP_WaterVolume 40
+2 11:00 Moisture 28
+2 11:00 Fertilizer 1.8
+
+2 12:00 Temperature 27
+2 12:00 WaterVolume 40
+2 12:00 Light 80
+2 12:00 EXP_WaterVolume 40
+2 12:00 Moisture 28
+2 12:00 Fertilizer 1.3
+
+2 13:00 Temperature 26
+2 13:00 WaterVolume 0
+2 13:00 Light 70
+2 13:00 EXP_WaterVolume 0
+2 13:00 Moisture 30
+2 13:00 Fertilizer 1.0
+
+2 14:00 Temperature 26
+2 14:00 WaterVolume 0
+2 14:00 Light 70
+2 14:00 EXP_WaterVolume 0
+2 14:00 Moisture 30
+2 14:00 Fertilizer 1.2
+
+2 15:00 Temperature 26
+2 15:00 WaterVolume 80
+2 15:00 Light 70
+2 15:00 EXP_WaterVolume 80
+2 15:00 Moisture 0
+2 15:00 Fertilizer 2.0
+
+2 16:00 Temperature 26
+2 16:00 WaterVolume 80
+2 16:00 Light 65
+2 16:00 EXP_WaterVolume 80
+2 16:00 Moisture 6
+2 16:00 Fertilizer 1.7
+
+2 17:00 Temperature 26
+2 17:00 WaterVolume 60
+2 17:00 Light 60
+2 17:00 EXP_WaterVolume 60
+2 17:00 Moisture 14
+2 17:00 Fertilizer 2.1
+
+2 18:00 Temperature 25
+2 18:00 WaterVolume 60
+2 18:00 Light 50
+2 18:00 EXP_WaterVolume 60
+2 18:00 Moisture 17
+2 18:00 Fertilizer 2.7
+
+2 19:00 Temperature 24
+2 19:00 WaterVolume 40
+2 19:00 Light 30
+2 19:00 EXP_WaterVolume 40
+2 19:00 Moisture 20
+2 19:00 Fertilizer 2.0
+
+2 20:00 Temperature 23
+2 20:00 WaterVolume 60
+2 20:00 Light 10
+2 20:00 EXP_WaterVolume 60
+2 20:00 Moisture 19
+2 20:00 Fertilizer 1.0
+
+2 21:00 Temperature 23
+2 21:00 WaterVolume 40
+2 21:00 Light 10
+2 21:00 EXP_WaterVolume 40
+2 21:00 Moisture 24
+2 21:00 Fertilizer 2.8
+
+2 22:00 Temperature 23
+2 22:00 WaterVolume 40
+2 22:00 Light 10
+2 22:00 EXP_WaterVolume 40
+2 22:00 Moisture 24
+2 22:00 Fertilizer 1.6
+
+2 23:00 Temperature 23
+2 23:00 WaterVolume 40
+2 23:00 Light 10
+2 23:00 EXP_WaterVolume 40
+2 23:00 Moisture 23
+2 23:00 Fertilizer 2.6
+
+### Thursday ###
+3 0:00 Temperature 21
+3 0:00 WaterVolume 40
+3 0:00 Light 10
+3 0:00 EXP_WaterVolume 40
+3 0:00 Moisture 22
+3 0:00 Fertilizer 1.0
+
+3 1:00 Temperature 21
+3 1:00 WaterVolume 40
+3 1:00 Light 11
+3 1:00 EXP_WaterVolume 40
+3 1:00 Moisture 25
+3 1:00 Fertilizer 1.1
+
+3 2:00 Temperature 21
+3 2:00 WaterVolume 40
+3 2:00 Light 13
+3 2:00 EXP_WaterVolume 40
+3 2:00 Moisture 24
+3 2:00 Fertilizer 1.2
+
+3 3:00 Temperature 21
+3 3:00 WaterVolume 40
+3 3:00 Light 15
+3 3:00 EXP_WaterVolume 40
+3 3:00 Moisture 28
+3 3:00 Fertilizer 1.1
+
+3 4:00 Temperature 22
+3 4:00 WaterVolume 0
+3 4:00 Light 20
+3 4:00 EXP_WaterVolume 0
+3 4:00 Moisture 31
+3 4:00 Fertilizer 1.3
+
+3 5:00 Temperature 22
+3 5:00 WaterVolume 0
+3 5:00 Light 25
+3 5:00 EXP_WaterVolume 0
+3 5:00 Moisture 31
+3 5:00 Fertilizer 1.9
+
+3 6:00 Temperature 23
+3 6:00 WaterVolume 40
+3 6:00 Light 40
+3 6:00 EXP_WaterVolume 40
+3 6:00 Moisture 28
+3 6:00 Fertilizer 1.8
+
+3 7:00 Temperature 23
+3 7:00 WaterVolume 0
+3 7:00 Light 45
+3 7:00 EXP_WaterVolume 0
+3 7:00 Moisture 30
+3 7:00 Fertilizer 1.9
+
+3 8:00 Temperature 23
+3 8:00 WaterVolume 0
+3 8:00 Light 50
+3 8:00 EXP_WaterVolume 0
+3 8:00 Moisture 30
+3 8:00 Fertilizer 1.8
+
+3 9:00 Temperature 23
+3 9:00 WaterVolume 40
+3 9:00 Light 50
+3 9:00 EXP_WaterVolume 40
+3 9:00 Moisture 25
+3 9:00 Fertilizer 1.5
+
+3 10:00 Temperature 23
+3 10:00 WaterVolume 40
+3 10:00 Light 50
+3 10:00 EXP_WaterVolume 40
+3 10:00 Moisture 28
+3 10:00 Fertilizer 1.4
+
+3 11:00 Temperature 24
+3 11:00 WaterVolume 40
+3 11:00 Light 60
+3 11:00 EXP_WaterVolume 40
+3 11:00 Moisture 29
+3 11:00 Fertilizer 2.0
+
+3 12:00 Temperature 25
+3 12:00 WaterVolume 0
+3 12:00 Light 80
+3 12:00 EXP_WaterVolume 0
+3 12:00 Moisture 32
+3 12:00 Fertilizer 2.5
+
+3 13:00 Temperature 24
+3 13:00 WaterVolume 0
+3 13:00 Light 70
+3 13:00 EXP_WaterVolume 0
+3 13:00 Moisture 30
+3 13:00 Fertilizer 2.1
+
+3 14:00 Temperature 24
+3 14:00 WaterVolume 40
+3 14:00 Light 70
+3 14:00 EXP_WaterVolume 40
+3 14:00 Moisture 29
+3 14:00 Fertilizer 1.6
+
+3 15:00 Temperature 24
+3 15:00 WaterVolume 40
+3 15:00 Light 70
+3 15:00 EXP_WaterVolume 40
+3 15:00 Moisture 28
+3 15:00 Fertilizer 1.7
+
+3 16:00 Temperature 24
+3 16:00 WaterVolume 40
+3 16:00 Light 65
+3 16:00 EXP_WaterVolume 40
+3 16:00 Moisture 28
+3 16:00 Fertilizer 1.2
+
+3 17:00 Temperature 24
+3 17:00 WaterVolume 40
+3 17:00 Light 60
+3 17:00 EXP_WaterVolume 40
+3 17:00 Moisture 29
+3 17:00 Fertilizer 1.1
+
+3 18:00 Temperature 23
+3 18:00 WaterVolume 0
+3 18:00 Light 50
+3 18:00 EXP_WaterVolume 0
+3 18:00 Moisture 33
+3 18:00 Fertilizer 2.6
+
+3 19:00 Temperature 22
+3 19:00 WaterVolume 0
+3 19:00 Light 30
+3 19:00 EXP_WaterVolume 0
+3 19:00 Moisture 32
+3 19:00 Fertilizer 1.8
+
+3 20:00 Temperature 21
+3 20:00 WaterVolume 0
+3 20:00 Light 10
+3 20:00 EXP_WaterVolume 0
+3 20:00 Moisture 30
+3 20:00 Fertilizer 2.1
+
+3 21:00 Temperature 21
+3 21:00 WaterVolume 40
+3 21:00 Light 10
+3 21:00 EXP_WaterVolume 40
+3 21:00 Moisture 26
+3 21:00 Fertilizer 2.3
+
+3 22:00 Temperature 21
+3 22:00 WaterVolume 40
+3 22:00 Light 10
+3 22:00 EXP_WaterVolume 40
+3 22:00 Moisture 25
+3 22:00 Fertilizer 1.8
+
+3 23:00 Temperature 21
+3 23:00 WaterVolume 40
+3 23:00 Light 10
+3 23:00 EXP_WaterVolume 40
+3 23:00 Moisture 25
+3 23:00 Fertilizer 2.1
+
+### Friday ###
+4 0:00 Temperature 24
+4 0:00 WaterVolume 40
+4 0:00 Light 10
+4 0:00 EXP_WaterVolume 40
+4 0:00 Moisture 29
+4 0:00 Fertilizer 2.0
+
+4 1:00 Temperature 24
+4 1:00 WaterVolume 0
+4 1:00 Light 11
+4 1:00 EXP_WaterVolume 0
+4 1:00 Moisture 33
+4 1:00 Fertilizer 2.0
+
+4 2:00 Temperature 24
+4 2:00 WaterVolume 0
+4 2:00 Light 13
+4 2:00 EXP_WaterVolume 0
+4 2:00 Moisture 33
+4 2:00 Fertilizer 2.2
+
+4 3:00 Temperature 24
+4 3:00 WaterVolume 0
+4 3:00 Light 15
+4 3:00 EXP_WaterVolume 0
+4 3:00 Moisture 33
+4 3:00 Fertilizer 1.4
+
+4 4:00 Temperature 25
+4 4:00 WaterVolume 0
+4 4:00 Light 20
+4 4:00 EXP_WaterVolume 0
+4 4:00 Moisture 30
+4 4:00 Fertilizer 1.5
+
+4 5:00 Temperature 25
+4 5:00 WaterVolume 40
+4 5:00 Light 25
+4 5:00 EXP_WaterVolume 40
+4 5:00 Moisture 29
+4 5:00 Fertilizer 1.4
+
+4 6:00 Temperature 26
+4 6:00 WaterVolume 0
+4 6:00 Light 40
+4 6:00 EXP_WaterVolume 0
+4 6:00 Moisture 32
+4 6:00 Fertilizer 1.9
+
+4 7:00 Temperature 26
+4 7:00 WaterVolume 40
+4 7:00 Light 45
+4 7:00 EXP_WaterVolume 40
+4 7:00 Moisture 27
+4 7:00 Fertilizer 1.7
+
+4 8:00 Temperature 26
+4 8:00 WaterVolume 40
+4 8:00 Light 50
+4 8:00 EXP_WaterVolume 40
+4 8:00 Moisture 27
+4 8:00 Fertilizer 2.2
+
+4 9:00 Temperature 26
+4 9:00 WaterVolume 0
+4 9:00 Light 50
+4 9:00 EXP_WaterVolume 0
+4 9:00 Moisture 31
+4 9:00 Fertilizer 2.7
+
+4 10:00 Temperature 26
+4 10:00 WaterVolume 0
+4 10:00 Light 50
+4 10:00 EXP_WaterVolume 0
+4 10:00 Moisture 30
+4 10:00 Fertilizer 2.8
+
+4 11:00 Temperature 27
+4 11:00 WaterVolume 40
+4 11:00 Light 60
+4 11:00 EXP_WaterVolume 40
+4 11:00 Moisture 29
+4 11:00 Fertilizer 1.6
+
+4 12:00 Temperature 28
+4 12:00 WaterVolume 0
+4 12:00 Light 80
+4 12:00 EXP_WaterVolume 0
+4 12:00 Moisture 32
+4 12:00 Fertilizer 2.9
+
+4 13:00 Temperature 27
+4 13:00 WaterVolume 0
+4 13:00 Light 70
+4 13:00 EXP_WaterVolume 0
+4 13:00 Moisture 31
+4 13:00 Fertilizer 1.2
+
+4 14:00 Temperature 27
+4 14:00 WaterVolume 0
+4 14:00 Light 70
+4 14:00 EXP_WaterVolume 0
+4 14:00 Moisture 30
+4 14:00 Fertilizer 2.7
+
+4 15:00 Temperature 27
+4 15:00 WaterVolume 40
+4 15:00 Light 70
+4 15:00 EXP_WaterVolume 40
+4 15:00 Moisture 25
+4 15:00 Fertilizer 1.5
+
+4 16:00 Temperature 27
+4 16:00 WaterVolume 40
+4 16:00 Light 65
+4 16:00 EXP_WaterVolume 40
+4 16:00 Moisture 27
+4 16:00 Fertilizer 1.4
+
+4 17:00 Temperature 27
+4 17:00 WaterVolume 40
+4 17:00 Light 60
+4 17:00 EXP_WaterVolume 40
+4 17:00 Moisture 28
+4 17:00 Fertilizer 1.0
+
+4 18:00 Temperature 26
+4 18:00 WaterVolume 0
+4 18:00 Light 50
+4 18:00 EXP_WaterVolume 0
+4 18:00 Moisture 30
+4 18:00 Fertilizer 2.1
+
+4 19:00 Temperature 25
+4 19:00 WaterVolume 0
+4 19:00 Light 30
+4 19:00 EXP_WaterVolume 0
+4 19:00 Moisture 30
+4 19:00 Fertilizer 2.2
+
+4 20:00 Temperature 24
+4 20:00 WaterVolume 40
+4 20:00 Light 10
+4 20:00 EXP_WaterVolume 40
+4 20:00 Moisture 27
+4 20:00 Fertilizer 2.6
+
+4 21:00 Temperature 24
+4 21:00 WaterVolume 40
+4 21:00 Light 10
+4 21:00 EXP_WaterVolume 40
+4 21:00 Moisture 27
+4 21:00 Fertilizer 2.1
+
+4 22:00 Temperature 24
+4 22:00 WaterVolume 40
+4 22:00 Light 10
+4 22:00 EXP_WaterVolume 40
+4 22:00 Moisture 29
+4 22:00 Fertilizer 1.2
+
+4 23:00 Temperature 24
+4 23:00 WaterVolume 40
+4 23:00 Light 10
+4 23:00 EXP_WaterVolume 40
+4 23:00 Moisture 28
+4 23:00 Fertilizer 1.2
+
+### Saturday ###
+5 0:00 Temperature 20
+5 0:00 WaterVolume 40
+5 0:00 Light 10
+5 0:00 EXP_WaterVolume 40
+5 0:00 Moisture 27
+5 0:00 Fertilizer 1.1
+
+5 1:00 Temperature 20
+5 1:00 WaterVolume 40
+5 1:00 Light 11
+5 1:00 EXP_WaterVolume 40
+5 1:00 Moisture 27
+5 1:00 Fertilizer 2.2
+
+5 2:00 Temperature 20
+5 2:00 WaterVolume 40
+5 2:00 Light 13
+5 2:00 EXP_WaterVolume 40
+5 2:00 Moisture 28
+5 2:00 Fertilizer 2.9
+
+5 3:00 Temperature 20
+5 3:00 WaterVolume 40
+5 3:00 Light 15
+5 3:00 EXP_WaterVolume 40
+5 3:00 Moisture 29
+5 3:00 Fertilizer 2.3
+
+5 4:00 Temperature 21
+5 4:00 WaterVolume 40
+5 4:00 Light 20
+5 4:00 EXP_WaterVolume 40
+5 4:00 Moisture 28
+5 4:00 Fertilizer 2.7
+
+5 5:00 Temperature 21
+5 5:00 WaterVolume 0
+5 5:00 Light 25
+5 5:00 EXP_WaterVolume 0
+5 5:00 Moisture 30
+5 5:00 Fertilizer 2.1
+
+5 6:00 Temperature 22
+5 6:00 WaterVolume 40
+5 6:00 Light 40
+5 6:00 EXP_WaterVolume 40
+5 6:00 Moisture 27
+5 6:00 Fertilizer 1.3
+
+5 7:00 Temperature 22
+5 7:00 WaterVolume 40
+5 7:00 Light 45
+5 7:00 EXP_WaterVolume 40
+5 7:00 Moisture 26
+5 7:00 Fertilizer 2.2
+
+5 8:00 Temperature 22
+5 8:00 WaterVolume 40
+5 8:00 Light 50
+5 8:00 EXP_WaterVolume 40
+5 8:00 Moisture 28
+5 8:00 Fertilizer 1.7
+
+5 9:00 Temperature 22
+5 9:00 WaterVolume 0
+5 9:00 Light 50
+5 9:00 EXP_WaterVolume 0
+5 9:00 Moisture 31
+5 9:00 Fertilizer 1.4
+
+5 10:00 Temperature 22
+5 10:00 WaterVolume 40
+5 10:00 Light 50
+5 10:00 EXP_WaterVolume 40
+5 10:00 Moisture 26
+5 10:00 Fertilizer 2.2
+
+5 11:00 Temperature 23
+5 11:00 WaterVolume 40
+5 11:00 Light 60
+5 11:00 EXP_WaterVolume 40
+5 11:00 Moisture 28
+5 11:00 Fertilizer 1.8
+
+5 12:00 Temperature 24
+5 12:00 WaterVolume 0
+5 12:00 Light 80
+5 12:00 EXP_WaterVolume 0
+5 12:00 Moisture 30
+5 12:00 Fertilizer 2.4
+
+5 13:00 Temperature 23
+5 13:00 WaterVolume 40
+5 13:00 Light 70
+5 13:00 EXP_WaterVolume 40
+5 13:00 Moisture 25
+5 13:00 Fertilizer 1.7
+
+5 14:00 Temperature 23
+5 14:00 WaterVolume 40
+5 14:00 Light 70
+5 14:00 EXP_WaterVolume 40
+5 14:00 Moisture 28
+5 14:00 Fertilizer 1.4
+
+5 15:00 Temperature 23
+5 15:00 WaterVolume 0
+5 15:00 Light 70
+5 15:00 EXP_WaterVolume 0
+5 15:00 Moisture 32
+5 15:00 Fertilizer 1.8
+
+5 16:00 Temperature 23
+5 16:00 WaterVolume 0
+5 16:00 Light 65
+5 16:00 EXP_WaterVolume 0
+5 16:00 Moisture 30
+5 16:00 Fertilizer 1.5
+
+5 17:00 Temperature 23
+5 17:00 WaterVolume 40
+5 17:00 Light 60
+5 17:00 EXP_WaterVolume 40
+5 17:00 Moisture 25
+5 17:00 Fertilizer 1.3
+
+5 18:00 Temperature 22
+5 18:00 WaterVolume 40
+5 18:00 Light 50
+5 18:00 EXP_WaterVolume 40
+5 18:00 Moisture 29
+5 18:00 Fertilizer 1.5
+
+5 19:00 Temperature 21
+5 19:00 WaterVolume 0
+5 19:00 Light 30
+5 19:00 EXP_WaterVolume 0
+5 19:00 Moisture 32
+5 19:00 Fertilizer 1.0
+
+5 20:00 Temperature 20
+5 20:00 WaterVolume 0
+5 20:00 Light 10
+5 20:00 EXP_WaterVolume 0
+5 20:00 Moisture 31
+5 20:00 Fertilizer 2.4
+
+5 21:00 Temperature 20
+5 21:00 WaterVolume 40
+5 21:00 Light 10
+5 21:00 EXP_WaterVolume 40
+5 21:00 Moisture 28
+5 21:00 Fertilizer 1.9
+
+5 22:00 Temperature 20
+5 22:00 WaterVolume 0
+5 22:00 Light 10
+5 22:00 EXP_WaterVolume 0
+5 22:00 Moisture 30
+5 22:00 Fertilizer 2.3
+
+5 23:00 Temperature 20
+5 23:00 WaterVolume 0
+5 23:00 Light 10
+5 23:00 EXP_WaterVolume 0
+5 23:00 Moisture 30
+5 23:00 Fertilizer 1.9
+
+### Sunday ###
+6 0:00 Temperature 17
+6 0:00 WaterVolume 40
+6 0:00 Light 10
+6 0:00 EXP_WaterVolume 40
+6 0:00 Moisture 27
+6 0:00 Fertilizer 2.5
+
+6 1:00 Temperature 17
+6 1:00 WaterVolume 0
+6 1:00 Light 11
+6 1:00 EXP_WaterVolume 0
+6 1:00 Moisture 31
+6 1:00 Fertilizer 2.8
+
+6 2:00 Temperature 17
+6 2:00 WaterVolume 40
+6 2:00 Light 13
+6 2:00 EXP_WaterVolume 40
+6 2:00 Moisture 26
+6 2:00 Fertilizer 1.7
+
+6 3:00 Temperature 17
+6 3:00 WaterVolume 40
+6 3:00 Light 15
+6 3:00 EXP_WaterVolume 40
+6 3:00 Moisture 28
+6 3:00 Fertilizer 1.8
+
+6 4:00 Temperature 18
+6 4:00 WaterVolume 0
+6 4:00 Light 20
+6 4:00 EXP_WaterVolume 0
+6 4:00 Moisture 32
+6 4:00 Fertilizer 1.9
+
+6 5:00 Temperature 18
+6 5:00 WaterVolume 0
+6 5:00 Light 25
+6 5:00 EXP_WaterVolume 0
+6 5:00 Moisture 30
+6 5:00 Fertilizer 2.8
+
+6 6:00 Temperature 19
+6 6:00 WaterVolume 40
+6 6:00 Light 40
+6 6:00 EXP_WaterVolume 40
+6 6:00 Moisture 27
+6 6:00 Fertilizer 2.2
+
+6 7:00 Temperature 19
+6 7:00 WaterVolume 40
+6 7:00 Light 45
+6 7:00 EXP_WaterVolume 40
+6 7:00 Moisture 27
+6 7:00 Fertilizer 1.7
+
+6 8:00 Temperature 19
+6 8:00 WaterVolume 40
+6 8:00 Light 50
+6 8:00 EXP_WaterVolume 40
+6 8:00 Moisture 27
+6 8:00 Fertilizer 1.5
+
+6 9:00 Temperature 19
+6 9:00 WaterVolume 40
+6 9:00 Light 50
+6 9:00 EXP_WaterVolume 40
+6 9:00 Moisture 28
+6 9:00 Fertilizer 1.0
+
+6 10:00 Temperature 19
+6 10:00 WaterVolume 40
+6 10:00 Light 50
+6 10:00 EXP_WaterVolume 40
+6 10:00 Moisture 28
+6 10:00 Fertilizer 1.6
+
+6 11:00 Temperature 20
+6 11:00 WaterVolume 40
+6 11:00 Light 60
+6 11:00 EXP_WaterVolume 40
+6 11:00 Moisture 29
+6 11:00 Fertilizer 1.2
+
+6 12:00 Temperature 21
+6 12:00 WaterVolume 0
+6 12:00 Light 80
+6 12:00 EXP_WaterVolume 0
+6 12:00 Moisture 33
+6 12:00 Fertilizer 1.4
+
+6 13:00 Temperature 20
+6 13:00 WaterVolume 0
+6 13:00 Light 70
+6 13:00 EXP_WaterVolume 0
+6 13:00 Moisture 33
+6 13:00 Fertilizer 1.3
+
+6 14:00 Temperature 20
+6 14:00 WaterVolume 0
+6 14:00 Light 70
+6 14:00 EXP_WaterVolume 0
+6 14:00 Moisture 31
+6 14:00 Fertilizer 2.0
+
+6 15:00 Temperature 20
+6 15:00 WaterVolume 40
+6 15:00 Light 70
+6 15:00 EXP_WaterVolume 40
+6 15:00 Moisture 26
+6 15:00 Fertilizer 1.4
+
+6 16:00 Temperature 20
+6 16:00 WaterVolume 0
+6 16:00 Light 65
+6 16:00 EXP_WaterVolume 0
+6 16:00 Moisture 30
+6 16:00 Fertilizer 2.7
+
+6 17:00 Temperature 20
+6 17:00 WaterVolume 40
+6 17:00 Light 60
+6 17:00 EXP_WaterVolume 40
+6 17:00 Moisture 29
+6 17:00 Fertilizer 1.5
+
+6 18:00 Temperature 19
+6 18:00 WaterVolume 0
+6 18:00 Light 50
+6 18:00 EXP_WaterVolume 0
+6 18:00 Moisture 32
+6 18:00 Fertilizer 2.0
+
+6 19:00 Temperature 18
+6 19:00 WaterVolume 40
+6 19:00 Light 30
+6 19:00 EXP_WaterVolume 40
+6 19:00 Moisture 28
+6 19:00 Fertilizer 1.1
+
+6 20:00 Temperature 17
+6 20:00 WaterVolume 40
+6 20:00 Light 10
+6 20:00 EXP_WaterVolume 40
+6 20:00 Moisture 27
+6 20:00 Fertilizer 2.7
+
+6 21:00 Temperature 17
+6 21:00 WaterVolume 0
+6 21:00 Light 10
+6 21:00 EXP_WaterVolume 0
+6 21:00 Moisture 30
+6 21:00 Fertilizer 2.4
+
+6 22:00 Temperature 17
+6 22:00 WaterVolume 80
+6 22:00 Light 10
+6 22:00 EXP_WaterVolume 80
+6 22:00 Moisture 0
+6 22:00 Fertilizer 2.2
+
+6 23:00 Temperature 17
+6 23:00 WaterVolume 80
+6 23:00 Light 10
+6 23:00 EXP_WaterVolume 80
+6 23:00 Moisture 3
+6 23:00 Fertilizer 2.0
+
+
+#### Week 1 ####
+### Monday ###
+7 0:00 BEGIN_EXPECTATIONS
+7 0:00 Temperature 23
+7 0:00 WaterVolume 0
+7 0:00 Light 10
+7 0:00 EXP_WaterVolume 80
+7 0:00 Moisture 8
+7 0:00 Fertilizer 1.1
+7 0:00 END_EXPECTATIONS
+7 0:01 WaterVolume 80
+
+7 1:00 BEGIN_EXPECTATIONS
+7 1:00 Temperature 23
+7 1:00 WaterVolume 0
+7 1:00 Light 11
+7 1:00 EXP_WaterVolume 60
+7 1:00 Moisture 13
+7 1:00 Fertilizer 2.8
+7 1:00 END_EXPECTATIONS
+7 1:01 WaterVolume 60
+
+7 2:00 BEGIN_EXPECTATIONS
+7 2:00 Temperature 23
+7 2:00 WaterVolume 0
+7 2:00 Light 13
+7 2:00 EXP_WaterVolume 60
+7 2:00 Moisture 15
+7 2:00 Fertilizer 1.9
+7 2:00 END_EXPECTATIONS
+7 2:01 WaterVolume 60
+
+7 3:00 BEGIN_EXPECTATIONS
+7 3:00 Temperature 23
+7 3:00 WaterVolume 0
+7 3:00 Light 15
+7 3:00 EXP_WaterVolume 40
+7 3:00 Moisture 20
+7 3:00 Fertilizer 2.3
+7 3:00 END_EXPECTATIONS
+7 3:01 WaterVolume 40
+
+7 4:00 BEGIN_EXPECTATIONS
+7 4:00 Temperature 24
+7 4:00 WaterVolume 0
+7 4:00 Light 20
+7 4:00 EXP_WaterVolume 40
+7 4:00 Moisture 24
+7 4:00 Fertilizer 1.3
+7 4:00 END_EXPECTATIONS
+7 4:01 WaterVolume 40
+
+7 5:00 BEGIN_EXPECTATIONS
+7 5:00 Temperature 24
+7 5:00 WaterVolume 0
+7 5:00 Light 25
+7 5:00 EXP_WaterVolume 40
+7 5:00 Moisture 23
+7 5:00 Fertilizer 2.5
+7 5:00 END_EXPECTATIONS
+7 5:01 WaterVolume 40
+
+7 6:00 BEGIN_EXPECTATIONS
+7 6:00 Temperature 25
+7 6:00 WaterVolume 0
+7 6:00 Light 40
+7 6:00 EXP_WaterVolume 40
+7 6:00 Moisture 23
+7 6:00 Fertilizer 2.5
+7 6:00 END_EXPECTATIONS
+7 6:01 WaterVolume 40
+
+7 7:00 BEGIN_EXPECTATIONS
+7 7:00 Temperature 25
+7 7:00 WaterVolume 0
+7 7:00 Light 45
+7 7:00 EXP_WaterVolume 40
+7 7:00 Moisture 22
+7 7:00 Fertilizer 1.4
+7 7:00 END_EXPECTATIONS
+7 7:01 WaterVolume 40
+
+7 8:00 BEGIN_EXPECTATIONS
+7 8:00 Temperature 25
+7 8:00 WaterVolume 0
+7 8:00 Light 50
+7 8:00 EXP_WaterVolume 40
+7 8:00 Moisture 25
+7 8:00 Fertilizer 2.9
+7 8:00 END_EXPECTATIONS
+7 8:01 WaterVolume 40
+
+7 9:00 BEGIN_EXPECTATIONS
+7 9:00 Temperature 25
+7 9:00 WaterVolume 0
+7 9:00 Light 50
+7 9:00 EXP_WaterVolume 40
+7 9:00 Moisture 27
+7 9:00 Fertilizer 1.2
+7 9:00 END_EXPECTATIONS
+7 9:01 WaterVolume 40
+
+7 10:00 BEGIN_EXPECTATIONS
+7 10:00 Temperature 25
+7 10:00 WaterVolume 0
+7 10:00 Light 50
+7 10:00 EXP_WaterVolume 0
+7 10:00 Moisture 30
+7 10:00 Fertilizer 1.8
+7 10:00 END_EXPECTATIONS
+7 10:01 WaterVolume 0
+
+7 11:00 BEGIN_EXPECTATIONS
+7 11:00 Temperature 26
+7 11:00 WaterVolume 0
+7 11:00 Light 60
+7 11:00 EXP_WaterVolume 40
+7 11:00 Moisture 26
+7 11:00 Fertilizer 1.9
+7 11:00 END_EXPECTATIONS
+7 11:01 WaterVolume 40
+
+7 12:00 BEGIN_EXPECTATIONS
+7 12:00 Temperature 27
+7 12:00 WaterVolume 0
+7 12:00 Light 80
+7 12:00 EXP_WaterVolume 40
+7 12:00 Moisture 28
+7 12:00 Fertilizer 2.3
+7 12:00 END_EXPECTATIONS
+7 12:01 WaterVolume 40
+
+7 13:00 BEGIN_EXPECTATIONS
+7 13:00 Temperature 26
+7 13:00 WaterVolume 0
+7 13:00 Light 70
+7 13:00 EXP_WaterVolume 40
+7 13:00 Moisture 28
+7 13:00 Fertilizer 1.2
+7 13:00 END_EXPECTATIONS
+7 13:01 WaterVolume 40
+
+7 14:00 BEGIN_EXPECTATIONS
+7 14:00 Temperature 26
+7 14:00 WaterVolume 0
+7 14:00 Light 70
+7 14:00 EXP_WaterVolume 0
+7 14:00 Moisture 30
+7 14:00 Fertilizer 1.6
+7 14:00 END_EXPECTATIONS
+7 14:01 WaterVolume 0
+
+7 15:00 BEGIN_EXPECTATIONS
+7 15:00 Temperature 26
+7 15:00 WaterVolume 0
+7 15:00 Light 70
+7 15:00 EXP_WaterVolume 40
+7 15:00 Moisture 29
+7 15:00 Fertilizer 2.2
+7 15:00 END_EXPECTATIONS
+7 15:01 WaterVolume 40
+
+7 16:00 BEGIN_EXPECTATIONS
+7 16:00 Temperature 26
+7 16:00 WaterVolume 0
+7 16:00 Light 65
+7 16:00 EXP_WaterVolume 0
+7 16:00 Moisture 30
+7 16:00 Fertilizer 2.5
+7 16:00 END_EXPECTATIONS
+7 16:01 WaterVolume 0
+
+7 17:00 BEGIN_EXPECTATIONS
+7 17:00 Temperature 26
+7 17:00 WaterVolume 0
+7 17:00 Light 60
+7 17:00 EXP_WaterVolume 0
+7 17:00 Moisture 30
+7 17:00 Fertilizer 1.6
+7 17:00 END_EXPECTATIONS
+7 17:01 WaterVolume 0
+
+7 18:00 BEGIN_EXPECTATIONS
+7 18:00 Temperature 25
+7 18:00 WaterVolume 0
+7 18:00 Light 50
+7 18:00 EXP_WaterVolume 40
+7 18:00 Moisture 25
+7 18:00 Fertilizer 1.3
+7 18:00 END_EXPECTATIONS
+7 18:01 WaterVolume 40
+
+7 19:00 BEGIN_EXPECTATIONS
+7 19:00 Temperature 24
+7 19:00 WaterVolume 0
+7 19:00 Light 30
+7 19:00 EXP_WaterVolume 40
+7 19:00 Moisture 24
+7 19:00 Fertilizer 1.2
+7 19:00 END_EXPECTATIONS
+7 19:01 WaterVolume 40
+
+7 20:00 BEGIN_EXPECTATIONS
+7 20:00 Temperature 23
+7 20:00 WaterVolume 0
+7 20:00 Light 10
+7 20:00 EXP_WaterVolume 40
+7 20:00 Moisture 25
+7 20:00 Fertilizer 1.9
+7 20:00 END_EXPECTATIONS
+7 20:01 WaterVolume 40
+
+7 21:00 BEGIN_EXPECTATIONS
+7 21:00 Temperature 23
+7 21:00 WaterVolume 0
+7 21:00 Light 10
+7 21:00 EXP_WaterVolume 40
+7 21:00 Moisture 24
+7 21:00 Fertilizer 1.6
+7 21:00 END_EXPECTATIONS
+7 21:01 WaterVolume 40
+
+7 22:00 BEGIN_EXPECTATIONS
+7 22:00 Temperature 23
+7 22:00 WaterVolume 0
+7 22:00 Light 10
+7 22:00 EXP_WaterVolume 40
+7 22:00 Moisture 23
+7 22:00 Fertilizer 2.1
+7 22:00 END_EXPECTATIONS
+7 22:01 WaterVolume 40
+
+7 23:00 BEGIN_EXPECTATIONS
+7 23:00 Temperature 23
+7 23:00 WaterVolume 0
+7 23:00 Light 10
+7 23:00 EXP_WaterVolume 40
+7 23:00 Moisture 25
+7 23:00 Fertilizer 2.2
+7 23:00 END_EXPECTATIONS
+7 23:01 WaterVolume 40
+
+### Tuesday ###
+8 0:00 BEGIN_EXPECTATIONS
+8 0:00 Temperature 17
+8 0:00 WaterVolume 0
+8 0:00 Light 10
+8 0:00 EXP_WaterVolume 40
+8 0:00 Moisture 25
+8 0:00 Fertilizer 2.9
+8 0:00 END_EXPECTATIONS
+8 0:01 WaterVolume 40
+
+8 1:00 BEGIN_EXPECTATIONS
+8 1:00 Temperature 17
+8 1:00 WaterVolume 0
+8 1:00 Light 11
+8 1:00 EXP_WaterVolume 40
+8 1:00 Moisture 26
+8 1:00 Fertilizer 1.2
+8 1:00 END_EXPECTATIONS
+8 1:01 WaterVolume 40
+
+8 2:00 BEGIN_EXPECTATIONS
+8 2:00 Temperature 17
+8 2:00 WaterVolume 0
+8 2:00 Light 13
+8 2:00 EXP_WaterVolume 40
+8 2:00 Moisture 25
+8 2:00 Fertilizer 2.3
+8 2:00 END_EXPECTATIONS
+8 2:01 WaterVolume 40
+
+8 3:00 BEGIN_EXPECTATIONS
+8 3:00 Temperature 17
+8 3:00 WaterVolume 0
+8 3:00 Light 15
+8 3:00 EXP_WaterVolume 40
+8 3:00 Moisture 28
+8 3:00 Fertilizer 2.1
+8 3:00 END_EXPECTATIONS
+8 3:01 WaterVolume 40
+
+8 4:00 BEGIN_EXPECTATIONS
+8 4:00 Temperature 18
+8 4:00 WaterVolume 0
+8 4:00 Light 20
+8 4:00 EXP_WaterVolume 0
+8 4:00 Moisture 32
+8 4:00 Fertilizer 1.9
+8 4:00 END_EXPECTATIONS
+8 4:01 WaterVolume 0
+
+8 5:00 BEGIN_EXPECTATIONS
+8 5:00 Temperature 18
+8 5:00 WaterVolume 0
+8 5:00 Light 25
+8 5:00 EXP_WaterVolume 40
+8 5:00 Moisture 28
+8 5:00 Fertilizer 2.7
+8 5:00 END_EXPECTATIONS
+8 5:01 WaterVolume 40
+
+8 6:00 BEGIN_EXPECTATIONS
+8 6:00 Temperature 19
+8 6:00 WaterVolume 0
+8 6:00 Light 40
+8 6:00 EXP_WaterVolume 40
+8 6:00 Moisture 27
+8 6:00 Fertilizer 2.3
+8 6:00 END_EXPECTATIONS
+8 6:01 WaterVolume 40
+
+8 7:00 BEGIN_EXPECTATIONS
+8 7:00 Temperature 19
+8 7:00 WaterVolume 0
+8 7:00 Light 45
+8 7:00 EXP_WaterVolume 40
+8 7:00 Moisture 27
+8 7:00 Fertilizer 1.4
+8 7:00 END_EXPECTATIONS
+8 7:01 WaterVolume 40
+
+8 8:00 BEGIN_EXPECTATIONS
+8 8:00 Temperature 19
+8 8:00 WaterVolume 0
+8 8:00 Light 50
+8 8:00 EXP_WaterVolume 40
+8 8:00 Moisture 26
+8 8:00 Fertilizer 2.5
+8 8:00 END_EXPECTATIONS
+8 8:01 WaterVolume 40
+
+8 9:00 BEGIN_EXPECTATIONS
+8 9:00 Temperature 19
+8 9:00 WaterVolume 0
+8 9:00 Light 50
+8 9:00 EXP_WaterVolume 40
+8 9:00 Moisture 27
+8 9:00 Fertilizer 1.2
+8 9:00 END_EXPECTATIONS
+8 9:01 WaterVolume 40
+
+8 10:00 BEGIN_EXPECTATIONS
+8 10:00 Temperature 19
+8 10:00 WaterVolume 0
+8 10:00 Light 50
+8 10:00 EXP_WaterVolume 40
+8 10:00 Moisture 28
+8 10:00 Fertilizer 1.8
+8 10:00 END_EXPECTATIONS
+8 10:01 WaterVolume 40
+
+8 11:00 BEGIN_EXPECTATIONS
+8 11:00 Temperature 20
+8 11:00 WaterVolume 0
+8 11:00 Light 60
+8 11:00 EXP_WaterVolume 40
+8 11:00 Moisture 27
+8 11:00 Fertilizer 2.8
+8 11:00 END_EXPECTATIONS
+8 11:01 WaterVolume 40
+
+8 12:00 BEGIN_EXPECTATIONS
+8 12:00 Temperature 21
+8 12:00 WaterVolume 0
+8 12:00 Light 80
+8 12:00 EXP_WaterVolume 0
+8 12:00 Moisture 31
+8 12:00 Fertilizer 1.7
+8 12:00 END_EXPECTATIONS
+8 12:01 WaterVolume 0
+
+8 13:00 BEGIN_EXPECTATIONS
+8 13:00 Temperature 20
+8 13:00 WaterVolume 0
+8 13:00 Light 70
+8 13:00 EXP_WaterVolume 40
+8 13:00 Moisture 29
+8 13:00 Fertilizer 1.3
+8 13:00 END_EXPECTATIONS
+8 13:01 WaterVolume 40
+
+8 14:00 BEGIN_EXPECTATIONS
+8 14:00 Temperature 20
+8 14:00 WaterVolume 0
+8 14:00 Light 70
+8 14:00 EXP_WaterVolume 0
+8 14:00 Moisture 31
+8 14:00 Fertilizer 2.8
+8 14:00 END_EXPECTATIONS
+8 14:01 WaterVolume 0
+
+8 15:00 BEGIN_EXPECTATIONS
+8 15:00 Temperature 20
+8 15:00 WaterVolume 0
+8 15:00 Light 70
+8 15:00 EXP_WaterVolume 40
+8 15:00 Moisture 28
+8 15:00 Fertilizer 1.2
+8 15:00 END_EXPECTATIONS
+8 15:01 WaterVolume 40
+
+8 16:00 BEGIN_EXPECTATIONS
+8 16:00 Temperature 20
+8 16:00 WaterVolume 0
+8 16:00 Light 65
+8 16:00 EXP_WaterVolume 40
+8 16:00 Moisture 29
+8 16:00 Fertilizer 1.6
+8 16:00 END_EXPECTATIONS
+8 16:01 WaterVolume 40
+
+8 17:00 BEGIN_EXPECTATIONS
+8 17:00 Temperature 20
+8 17:00 WaterVolume 0
+8 17:00 Light 60
+8 17:00 EXP_WaterVolume 40
+8 17:00 Moisture 29
+8 17:00 Fertilizer 2.7
+8 17:00 END_EXPECTATIONS
+8 17:01 WaterVolume 40
+
+8 18:00 BEGIN_EXPECTATIONS
+8 18:00 Temperature 19
+8 18:00 WaterVolume 0
+8 18:00 Light 50
+8 18:00 EXP_WaterVolume 0
+8 18:00 Moisture 50
+8 18:00 Fertilizer 1.6
+8 18:00 END_EXPECTATIONS
+8 18:01 WaterVolume 0
+
+8 19:00 BEGIN_EXPECTATIONS
+8 19:00 Temperature 18
+8 19:00 WaterVolume 0
+8 19:00 Light 30
+8 19:00 EXP_WaterVolume 0
+8 19:00 Moisture 48
+8 19:00 Fertilizer 1.4
+8 19:00 END_EXPECTATIONS
+8 19:01 WaterVolume 0
+
+8 20:00 BEGIN_EXPECTATIONS
+8 20:00 Temperature 17
+8 20:00 WaterVolume 0
+8 20:00 Light 10
+8 20:00 EXP_WaterVolume 0
+8 20:00 Moisture 43
+8 20:00 Fertilizer 2.2
+8 20:00 END_EXPECTATIONS
+8 20:01 WaterVolume 0
+
+8 21:00 BEGIN_EXPECTATIONS
+8 21:00 Temperature 17
+8 21:00 WaterVolume 0
+8 21:00 Light 10
+8 21:00 EXP_WaterVolume 80
+8 21:00 Moisture 0
+8 21:00 Fertilizer 1.3
+8 21:00 END_EXPECTATIONS
+8 21:01 WaterVolume 80
+
+8 22:00 BEGIN_EXPECTATIONS
+8 22:00 Temperature 17
+8 22:00 WaterVolume 0
+8 22:00 Light 10
+8 22:00 EXP_WaterVolume 80
+8 22:00 Moisture 3
+8 22:00 Fertilizer 2.6
+8 22:00 END_EXPECTATIONS
+8 22:01 WaterVolume 80
+
+8 23:00 BEGIN_EXPECTATIONS
+8 23:00 Temperature 17
+8 23:00 WaterVolume 0
+8 23:00 Light 10
+8 23:00 EXP_WaterVolume 80
+8 23:00 Moisture 9
+8 23:00 Fertilizer 2.6
+8 23:00 END_EXPECTATIONS
+8 23:01 WaterVolume 80
+
+### Wednesday ###
+9 0:00 BEGIN_EXPECTATIONS
+9 0:00 Temperature 18
+9 0:00 WaterVolume 0
+9 0:00 Light 10
+9 0:00 EXP_WaterVolume 60
+9 0:00 Moisture 16
+9 0:00 Fertilizer 1.2
+9 0:00 END_EXPECTATIONS
+9 0:01 WaterVolume 60
+
+9 1:00 BEGIN_EXPECTATIONS
+9 1:00 Temperature 18
+9 1:00 WaterVolume 0
+9 1:00 Light 11
+9 1:00 EXP_WaterVolume 40
+9 1:00 Moisture 22
+9 1:00 Fertilizer 1.9
+9 1:00 END_EXPECTATIONS
+9 1:01 WaterVolume 40
+
+9 2:00 BEGIN_EXPECTATIONS
+9 2:00 Temperature 18
+9 2:00 WaterVolume 0
+9 2:00 Light 13
+9 2:00 EXP_WaterVolume 40
+9 2:00 Moisture 22
+9 2:00 Fertilizer 2.2
+9 2:00 END_EXPECTATIONS
+9 2:01 WaterVolume 40
+
+9 3:00 BEGIN_EXPECTATIONS
+9 3:00 Temperature 18
+9 3:00 WaterVolume 0
+9 3:00 Light 15
+9 3:00 EXP_WaterVolume 40
+9 3:00 Moisture 22
+9 3:00 Fertilizer 1.4
+9 3:00 END_EXPECTATIONS
+9 3:01 WaterVolume 40
+
+9 4:00 BEGIN_EXPECTATIONS
+9 4:00 Temperature 19
+9 4:00 WaterVolume 0
+9 4:00 Light 20
+9 4:00 EXP_WaterVolume 40
+9 4:00 Moisture 23
+9 4:00 Fertilizer 2.4
+9 4:00 END_EXPECTATIONS
+9 4:01 WaterVolume 40
+
+9 5:00 BEGIN_EXPECTATIONS
+9 5:00 Temperature 19
+9 5:00 WaterVolume 0
+9 5:00 Light 25
+9 5:00 EXP_WaterVolume 40
+9 5:00 Moisture 26
+9 5:00 Fertilizer 2.8
+9 5:00 END_EXPECTATIONS
+9 5:01 WaterVolume 40
+
+9 6:00 BEGIN_EXPECTATIONS
+9 6:00 Temperature 20
+9 6:00 WaterVolume 0
+9 6:00 Light 40
+9 6:00 EXP_WaterVolume 0
+9 6:00 Moisture 30
+9 6:00 Fertilizer 1.9
+9 6:00 END_EXPECTATIONS
+9 6:01 WaterVolume 0
+
+9 7:00 BEGIN_EXPECTATIONS
+9 7:00 Temperature 20
+9 7:00 WaterVolume 0
+9 7:00 Light 45
+9 7:00 EXP_WaterVolume 40
+9 7:00 Moisture 27
+9 7:00 Fertilizer 1.6
+9 7:00 END_EXPECTATIONS
+9 7:01 WaterVolume 40
+
+9 8:00 BEGIN_EXPECTATIONS
+9 8:00 Temperature 20
+9 8:00 WaterVolume 0
+9 8:00 Light 50
+9 8:00 EXP_WaterVolume 40
+9 8:00 Moisture 26
+9 8:00 Fertilizer 1.9
+9 8:00 END_EXPECTATIONS
+9 8:01 WaterVolume 40
+
+9 9:00 BEGIN_EXPECTATIONS
+9 9:00 Temperature 20
+9 9:00 WaterVolume 0
+9 9:00 Light 50
+9 9:00 EXP_WaterVolume 80
+9 9:00 Moisture 0
+9 9:00 Fertilizer 1.9
+9 9:00 END_EXPECTATIONS
+9 9:01 WaterVolume 80
+
+9 10:00 BEGIN_EXPECTATIONS
+9 10:00 Temperature 20
+9 10:00 WaterVolume 0
+9 10:00 Light 50
+9 10:00 EXP_WaterVolume 80
+9 10:00 Moisture 8
+9 10:00 Fertilizer 2.1
+9 10:00 END_EXPECTATIONS
+9 10:01 WaterVolume 80
+
+9 11:00 BEGIN_EXPECTATIONS
+9 11:00 Temperature 21
+9 11:00 WaterVolume 0
+9 11:00 Light 60
+9 11:00 EXP_WaterVolume 60
+9 11:00 Moisture 11
+9 11:00 Fertilizer 1.6
+9 11:00 END_EXPECTATIONS
+9 11:01 WaterVolume 60
+
+9 12:00 BEGIN_EXPECTATIONS
+9 12:00 Temperature 22
+9 12:00 WaterVolume 0
+9 12:00 Light 80
+9 12:00 EXP_WaterVolume 60
+9 12:00 Moisture 13
+9 12:00 Fertilizer 2.0
+9 12:00 END_EXPECTATIONS
+9 12:01 WaterVolume 60
+
+9 13:00 BEGIN_EXPECTATIONS
+9 13:00 Temperature 21
+9 13:00 WaterVolume 0
+9 13:00 Light 70
+9 13:00 EXP_WaterVolume 60
+9 13:00 Moisture 19
+9 13:00 Fertilizer 2.2
+9 13:00 END_EXPECTATIONS
+9 13:01 WaterVolume 60
+
+9 14:00 BEGIN_EXPECTATIONS
+9 14:00 Temperature 21
+9 14:00 WaterVolume 0
+9 14:00 Light 70
+9 14:00 EXP_WaterVolume 40
+9 14:00 Moisture 23
+9 14:00 Fertilizer 1.6
+9 14:00 END_EXPECTATIONS
+9 14:01 WaterVolume 40
+
+9 15:00 BEGIN_EXPECTATIONS
+9 15:00 Temperature 21
+9 15:00 WaterVolume 0
+9 15:00 Light 70
+9 15:00 EXP_WaterVolume 80
+9 15:00 Moisture 0
+9 15:00 Fertilizer 1.1
+9 15:00 END_EXPECTATIONS
+9 15:01 WaterVolume 80
+
+9 16:00 BEGIN_EXPECTATIONS
+9 16:00 Temperature 21
+9 16:00 WaterVolume 0
+9 16:00 Light 65
+9 16:00 EXP_WaterVolume 80
+9 16:00 Moisture 3
+9 16:00 Fertilizer 1.9
+9 16:00 END_EXPECTATIONS
+9 16:01 WaterVolume 80
+
+9 17:00 BEGIN_EXPECTATIONS
+9 17:00 Temperature 21
+9 17:00 WaterVolume 0
+9 17:00 Light 60
+9 17:00 EXP_WaterVolume 80
+9 17:00 Moisture 9
+9 17:00 Fertilizer 2.9
+9 17:00 END_EXPECTATIONS
+9 17:01 WaterVolume 80
+
+9 18:00 BEGIN_EXPECTATIONS
+9 18:00 Temperature 20
+9 18:00 WaterVolume 0
+9 18:00 Light 50
+9 18:00 EXP_WaterVolume 60
+9 18:00 Moisture 13
+9 18:00 Fertilizer 2.0
+9 18:00 END_EXPECTATIONS
+9 18:01 WaterVolume 60
+
+9 19:00 BEGIN_EXPECTATIONS
+9 19:00 Temperature 19
+9 19:00 WaterVolume 0
+9 19:00 Light 30
+9 19:00 EXP_WaterVolume 60
+9 19:00 Moisture 18
+9 19:00 Fertilizer 1.4
+9 19:00 END_EXPECTATIONS
+9 19:01 WaterVolume 60
+
+9 20:00 BEGIN_EXPECTATIONS
+9 20:00 Temperature 18
+9 20:00 WaterVolume 0
+9 20:00 Light 10
+9 20:00 EXP_WaterVolume 40
+9 20:00 Moisture 23
+9 20:00 Fertilizer 1.3
+9 20:00 END_EXPECTATIONS
+9 20:01 WaterVolume 40
+
+9 21:00 BEGIN_EXPECTATIONS
+9 21:00 Temperature 18
+9 21:00 WaterVolume 0
+9 21:00 Light 10
+9 21:00 EXP_WaterVolume 40
+9 21:00 Moisture 27
+9 21:00 Fertilizer 1.6
+9 21:00 END_EXPECTATIONS
+9 21:01 WaterVolume 40
+
+9 22:00 BEGIN_EXPECTATIONS
+9 22:00 Temperature 18
+9 22:00 WaterVolume 0
+9 22:00 Light 10
+9 22:00 EXP_WaterVolume 40
+9 22:00 Moisture 26
+9 22:00 Fertilizer 2.5
+9 22:00 END_EXPECTATIONS
+9 22:01 WaterVolume 40
+
+9 23:00 BEGIN_EXPECTATIONS
+9 23:00 Temperature 18
+9 23:00 WaterVolume 0
+9 23:00 Light 10
+9 23:00 EXP_WaterVolume 40
+9 23:00 Moisture 28
+9 23:00 Fertilizer 1.5
+9 23:00 END_EXPECTATIONS
+9 23:01 WaterVolume 40
+
+### Thursday ###
+10 0:00 BEGIN_EXPECTATIONS
+10 0:00 Temperature 24
+10 0:00 WaterVolume 0
+10 0:00 Light 10
+10 0:00 EXP_WaterVolume 40
+10 0:00 Moisture 27
+10 0:00 Fertilizer 2.4
+10 0:00 END_EXPECTATIONS
+10 0:01 WaterVolume 40
+
+10 1:00 BEGIN_EXPECTATIONS
+10 1:00 Temperature 24
+10 1:00 WaterVolume 0
+10 1:00 Light 11
+10 1:00 EXP_WaterVolume 40
+10 1:00 Moisture 29
+10 1:00 Fertilizer 2.2
+10 1:00 END_EXPECTATIONS
+10 1:01 WaterVolume 40
+
+10 2:00 BEGIN_EXPECTATIONS
+10 2:00 Temperature 24
+10 2:00 WaterVolume 0
+10 2:00 Light 13
+10 2:00 EXP_WaterVolume 40
+10 2:00 Moisture 28
+10 2:00 Fertilizer 1.6
+10 2:00 END_EXPECTATIONS
+10 2:01 WaterVolume 40
+
+10 3:00 BEGIN_EXPECTATIONS
+10 3:00 Temperature 24
+10 3:00 WaterVolume 0
+10 3:00 Light 15
+10 3:00 EXP_WaterVolume 40
+10 3:00 Moisture 29
+10 3:00 Fertilizer 2.4
+10 3:00 END_EXPECTATIONS
+10 3:01 WaterVolume 40
+
+10 4:00 BEGIN_EXPECTATIONS
+10 4:00 Temperature 25
+10 4:00 WaterVolume 0
+10 4:00 Light 20
+10 4:00 EXP_WaterVolume 40
+10 4:00 Moisture 29
+10 4:00 Fertilizer 1.2
+10 4:00 END_EXPECTATIONS
+10 4:01 WaterVolume 40
+
+10 5:00 BEGIN_EXPECTATIONS
+10 5:00 Temperature 25
+10 5:00 WaterVolume 0
+10 5:00 Light 25
+10 5:00 EXP_WaterVolume 0
+10 5:00 Moisture 30
+10 5:00 Fertilizer 2.5
+10 5:00 END_EXPECTATIONS
+10 5:01 WaterVolume 0
+
+10 6:00 BEGIN_EXPECTATIONS
+10 6:00 Temperature 26
+10 6:00 WaterVolume 0
+10 6:00 Light 40
+10 6:00 EXP_WaterVolume 40
+10 6:00 Moisture 28
+10 6:00 Fertilizer 2.2
+10 6:00 END_EXPECTATIONS
+10 6:01 WaterVolume 40
+
+10 7:00 BEGIN_EXPECTATIONS
+10 7:00 Temperature 26
+10 7:00 WaterVolume 0
+10 7:00 Light 45
+10 7:00 EXP_WaterVolume 40
+10 7:00 Moisture 28
+10 7:00 Fertilizer 2.8
+10 7:00 END_EXPECTATIONS
+10 7:01 WaterVolume 40
+
+10 8:00 BEGIN_EXPECTATIONS
+10 8:00 Temperature 26
+10 8:00 WaterVolume 0
+10 8:00 Light 50
+10 8:00 EXP_WaterVolume 0
+10 8:00 Moisture 31
+10 8:00 Fertilizer 1.1
+10 8:00 END_EXPECTATIONS
+10 8:01 WaterVolume 0
+
+10 9:00 BEGIN_EXPECTATIONS
+10 9:00 Temperature 26
+10 9:00 WaterVolume 0
+10 9:00 Light 50
+10 9:00 EXP_WaterVolume 40
+10 9:00 Moisture 27
+10 9:00 Fertilizer 2.7
+10 9:00 END_EXPECTATIONS
+10 9:01 WaterVolume 40
+
+10 10:00 BEGIN_EXPECTATIONS
+10 10:00 Temperature 26
+10 10:00 WaterVolume 0
+10 10:00 Light 50
+10 10:00 EXP_WaterVolume 0
+10 10:00 Moisture 30
+10 10:00 Fertilizer 2.3
+10 10:00 END_EXPECTATIONS
+10 10:01 WaterVolume 0
+
+10 11:00 BEGIN_EXPECTATIONS
+10 11:00 Temperature 27
+10 11:00 WaterVolume 0
+10 11:00 Light 60
+10 11:00 EXP_WaterVolume 0
+10 11:00 Moisture 30
+10 11:00 Fertilizer 2.9
+10 11:00 END_EXPECTATIONS
+10 11:01 WaterVolume 0
+
+10 12:00 BEGIN_EXPECTATIONS
+10 12:00 Temperature 28
+10 12:00 WaterVolume 0
+10 12:00 Light 80
+10 12:00 EXP_WaterVolume 40
+10 12:00 Moisture 27
+10 12:00 Fertilizer 1.6
+10 12:00 END_EXPECTATIONS
+10 12:01 WaterVolume 40
+
+10 13:00 BEGIN_EXPECTATIONS
+10 13:00 Temperature 27
+10 13:00 WaterVolume 0
+10 13:00 Light 70
+10 13:00 EXP_WaterVolume 40
+10 13:00 Moisture 27
+10 13:00 Fertilizer 1.6
+10 13:00 END_EXPECTATIONS
+10 13:01 WaterVolume 40
+
+10 14:00 BEGIN_EXPECTATIONS
+10 14:00 Temperature 27
+10 14:00 WaterVolume 0
+10 14:00 Light 70
+10 14:00 EXP_WaterVolume 40
+10 14:00 Moisture 27
+10 14:00 Fertilizer 1.3
+10 14:00 END_EXPECTATIONS
+10 14:01 WaterVolume 40
+
+10 15:00 BEGIN_EXPECTATIONS
+10 15:00 Temperature 27
+10 15:00 WaterVolume 0
+10 15:00 Light 70
+10 15:00 EXP_WaterVolume 0
+10 15:00 Moisture 30
+10 15:00 Fertilizer 1.9
+10 15:00 END_EXPECTATIONS
+10 15:01 WaterVolume 0
+
+10 16:00 BEGIN_EXPECTATIONS
+10 16:00 Temperature 27
+10 16:00 WaterVolume 0
+10 16:00 Light 65
+10 16:00 EXP_WaterVolume 40
+10 16:00 Moisture 27
+10 16:00 Fertilizer 1.2
+10 16:00 END_EXPECTATIONS
+10 16:01 WaterVolume 40
+
+10 17:00 BEGIN_EXPECTATIONS
+10 17:00 Temperature 27
+10 17:00 WaterVolume 0
+10 17:00 Light 60
+10 17:00 EXP_WaterVolume 40
+10 17:00 Moisture 28
+10 17:00 Fertilizer 1.4
+10 17:00 END_EXPECTATIONS
+10 17:01 WaterVolume 40
+
+10 18:00 BEGIN_EXPECTATIONS
+10 18:00 Temperature 26
+10 18:00 WaterVolume 0
+10 18:00 Light 50
+10 18:00 EXP_WaterVolume 0
+10 18:00 Moisture 32
+10 18:00 Fertilizer 2.8
+10 18:00 END_EXPECTATIONS
+10 18:01 WaterVolume 0
+
+10 19:00 BEGIN_EXPECTATIONS
+10 19:00 Temperature 25
+10 19:00 WaterVolume 0
+10 19:00 Light 30
+10 19:00 EXP_WaterVolume 0
+10 19:00 Moisture 30
+10 19:00 Fertilizer 2.2
+10 19:00 END_EXPECTATIONS
+10 19:01 WaterVolume 0
+
+10 20:00 BEGIN_EXPECTATIONS
+10 20:00 Temperature 24
+10 20:00 WaterVolume 0
+10 20:00 Light 10
+10 20:00 EXP_WaterVolume 40
+10 20:00 Moisture 28
+10 20:00 Fertilizer 1.5
+10 20:00 END_EXPECTATIONS
+10 20:01 WaterVolume 40
+
+10 21:00 BEGIN_EXPECTATIONS
+10 21:00 Temperature 24
+10 21:00 WaterVolume 0
+10 21:00 Light 10
+10 21:00 EXP_WaterVolume 0
+10 21:00 Moisture 32
+10 21:00 Fertilizer 1.7
+10 21:00 END_EXPECTATIONS
+10 21:01 WaterVolume 0
+
+10 22:00 BEGIN_EXPECTATIONS
+10 22:00 Temperature 24
+10 22:00 WaterVolume 0
+10 22:00 Light 10
+10 22:00 EXP_WaterVolume 0
+10 22:00 Moisture 30
+10 22:00 Fertilizer 1.3
+10 22:00 END_EXPECTATIONS
+10 22:01 WaterVolume 0
+
+10 23:00 BEGIN_EXPECTATIONS
+10 23:00 Temperature 24
+10 23:00 WaterVolume 0
+10 23:00 Light 10
+10 23:00 EXP_WaterVolume 40
+10 23:00 Moisture 26
+10 23:00 Fertilizer 2.5
+10 23:00 END_EXPECTATIONS
+10 23:01 WaterVolume 40
+
+### Friday ###
+11 0:00 BEGIN_EXPECTATIONS
+11 0:00 Temperature 19
+11 0:00 WaterVolume 0
+11 0:00 Light 10
+11 0:00 EXP_WaterVolume 40
+11 0:00 Moisture 28
+11 0:00 Fertilizer 2.6
+11 0:00 END_EXPECTATIONS
+11 0:01 WaterVolume 40
+
+11 1:00 BEGIN_EXPECTATIONS
+11 1:00 Temperature 19
+11 1:00 WaterVolume 0
+11 1:00 Light 11
+11 1:00 EXP_WaterVolume 0
+11 1:00 Moisture 30
+11 1:00 Fertilizer 1.5
+11 1:00 END_EXPECTATIONS
+11 1:01 WaterVolume 0
+
+11 2:00 BEGIN_EXPECTATIONS
+11 2:00 Temperature 19
+11 2:00 WaterVolume 0
+11 2:00 Light 13
+11 2:00 EXP_WaterVolume 40
+11 2:00 Moisture 29
+11 2:00 Fertilizer 2.4
+11 2:00 END_EXPECTATIONS
+11 2:01 WaterVolume 40
+
+11 3:00 BEGIN_EXPECTATIONS
+11 3:00 Temperature 19
+11 3:00 WaterVolume 0
+11 3:00 Light 15
+11 3:00 EXP_WaterVolume 0
+11 3:00 Moisture 33
+11 3:00 Fertilizer 1.3
+11 3:00 END_EXPECTATIONS
+11 3:01 WaterVolume 0
+
+11 4:00 BEGIN_EXPECTATIONS
+11 4:00 Temperature 20
+11 4:00 WaterVolume 0
+11 4:00 Light 20
+11 4:00 EXP_WaterVolume 40
+11 4:00 Moisture 29
+11 4:00 Fertilizer 1.2
+11 4:00 END_EXPECTATIONS
+11 4:01 WaterVolume 40
+
+11 5:00 BEGIN_EXPECTATIONS
+11 5:00 Temperature 20
+11 5:00 WaterVolume 0
+11 5:00 Light 25
+11 5:00 EXP_WaterVolume 40
+11 5:00 Moisture 28
+11 5:00 Fertilizer 2.3
+11 5:00 END_EXPECTATIONS
+11 5:01 WaterVolume 40
+
+11 6:00 BEGIN_EXPECTATIONS
+11 6:00 Temperature 21
+11 6:00 WaterVolume 0
+11 6:00 Light 40
+11 6:00 EXP_WaterVolume 0
+11 6:00 Moisture 30
+11 6:00 Fertilizer 1.1
+11 6:00 END_EXPECTATIONS
+11 6:01 WaterVolume 0
+
+11 7:00 BEGIN_EXPECTATIONS
+11 7:00 Temperature 21
+11 7:00 WaterVolume 0
+11 7:00 Light 45
+11 7:00 EXP_WaterVolume 40
+11 7:00 Moisture 28
+11 7:00 Fertilizer 1.4
+11 7:00 END_EXPECTATIONS
+11 7:01 WaterVolume 40
+
+11 8:00 BEGIN_EXPECTATIONS
+11 8:00 Temperature 21
+11 8:00 WaterVolume 0
+11 8:00 Light 50
+11 8:00 EXP_WaterVolume 40
+11 8:00 Moisture 27
+11 8:00 Fertilizer 2.9
+11 8:00 END_EXPECTATIONS
+11 8:01 WaterVolume 40
+
+11 9:00 BEGIN_EXPECTATIONS
+11 9:00 Temperature 21
+11 9:00 WaterVolume 0
+11 9:00 Light 50
+11 9:00 EXP_WaterVolume 40
+11 9:00 Moisture 29
+11 9:00 Fertilizer 1.0
+11 9:00 END_EXPECTATIONS
+11 9:01 WaterVolume 40
+
+11 10:00 BEGIN_EXPECTATIONS
+11 10:00 Temperature 21
+11 10:00 WaterVolume 0
+11 10:00 Light 50
+11 10:00 EXP_WaterVolume 40
+11 10:00 Moisture 29
+11 10:00 Fertilizer 1.2
+11 10:00 END_EXPECTATIONS
+11 10:01 WaterVolume 40
+
+11 11:00 BEGIN_EXPECTATIONS
+11 11:00 Temperature 22
+11 11:00 WaterVolume 0
+11 11:00 Light 60
+11 11:00 EXP_WaterVolume 40
+11 11:00 Moisture 28
+11 11:00 Fertilizer 2.6
+11 11:00 END_EXPECTATIONS
+11 11:01 WaterVolume 40
+
+11 12:00 BEGIN_EXPECTATIONS
+11 12:00 Temperature 23
+11 12:00 WaterVolume 0
+11 12:00 Light 80
+11 12:00 EXP_WaterVolume 40
+11 12:00 Moisture 28
+11 12:00 Fertilizer 1.8
+11 12:00 END_EXPECTATIONS
+11 12:01 WaterVolume 40
+
+11 13:00 BEGIN_EXPECTATIONS
+11 13:00 Temperature 22
+11 13:00 WaterVolume 0
+11 13:00 Light 70
+11 13:00 EXP_WaterVolume 40
+11 13:00 Moisture 29
+11 13:00 Fertilizer 1.5
+11 13:00 END_EXPECTATIONS
+11 13:01 WaterVolume 40
+
+11 14:00 BEGIN_EXPECTATIONS
+11 14:00 Temperature 22
+11 14:00 WaterVolume 0
+11 14:00 Light 70
+11 14:00 EXP_WaterVolume 40
+11 14:00 Moisture 29
+11 14:00 Fertilizer 2.2
+11 14:00 END_EXPECTATIONS
+11 14:01 WaterVolume 40
+
+11 15:00 BEGIN_EXPECTATIONS
+11 15:00 Temperature 22
+11 15:00 WaterVolume 0
+11 15:00 Light 70
+11 15:00 EXP_WaterVolume 80
+11 15:00 Moisture 0
+11 15:00 Fertilizer 1.5
+11 15:00 END_EXPECTATIONS
+11 15:01 WaterVolume 80
+
+11 16:00 BEGIN_EXPECTATIONS
+11 16:00 Temperature 22
+11 16:00 WaterVolume 0
+11 16:00 Light 65
+11 16:00 EXP_WaterVolume 80
+11 16:00 Moisture 3
+11 16:00 Fertilizer 1.7
+11 16:00 END_EXPECTATIONS
+11 16:01 WaterVolume 80
+
+11 17:00 BEGIN_EXPECTATIONS
+11 17:00 Temperature 22
+11 17:00 WaterVolume 0
+11 17:00 Light 60
+11 17:00 EXP_WaterVolume 60
+11 17:00 Moisture 10
+11 17:00 Fertilizer 1.2
+11 17:00 END_EXPECTATIONS
+11 17:01 WaterVolume 60
+
+11 18:00 BEGIN_EXPECTATIONS
+11 18:00 Temperature 21
+11 18:00 WaterVolume 0
+11 18:00 Light 50
+11 18:00 EXP_WaterVolume 60
+11 18:00 Moisture 13
+11 18:00 Fertilizer 1.2
+11 18:00 END_EXPECTATIONS
+11 18:01 WaterVolume 60
+
+11 19:00 BEGIN_EXPECTATIONS
+11 19:00 Temperature 20
+11 19:00 WaterVolume 0
+11 19:00 Light 30
+11 19:00 EXP_WaterVolume 60
+11 19:00 Moisture 15
+11 19:00 Fertilizer 2.2
+11 19:00 END_EXPECTATIONS
+11 19:01 WaterVolume 60
+
+11 20:00 BEGIN_EXPECTATIONS
+11 20:00 Temperature 19
+11 20:00 WaterVolume 0
+11 20:00 Light 10
+11 20:00 EXP_WaterVolume 60
+11 20:00 Moisture 18
+11 20:00 Fertilizer 2.5
+11 20:00 END_EXPECTATIONS
+11 20:01 WaterVolume 60
+
+11 21:00 BEGIN_EXPECTATIONS
+11 21:00 Temperature 19
+11 21:00 WaterVolume 0
+11 21:00 Light 10
+11 21:00 EXP_WaterVolume 40
+11 21:00 Moisture 20
+11 21:00 Fertilizer 2.8
+11 21:00 END_EXPECTATIONS
+11 21:01 WaterVolume 40
+
+11 22:00 BEGIN_EXPECTATIONS
+11 22:00 Temperature 19
+11 22:00 WaterVolume 0
+11 22:00 Light 10
+11 22:00 EXP_WaterVolume 40
+11 22:00 Moisture 20
+11 22:00 Fertilizer 2.7
+11 22:00 END_EXPECTATIONS
+11 22:01 WaterVolume 40
+
+11 23:00 BEGIN_EXPECTATIONS
+11 23:00 Temperature 19
+11 23:00 WaterVolume 0
+11 23:00 Light 10
+11 23:00 EXP_WaterVolume 40
+11 23:00 Moisture 20
+11 23:00 Fertilizer 2.0
+11 23:00 END_EXPECTATIONS
+11 23:01 WaterVolume 40
+
+### Saturday ###
+12 0:00 BEGIN_EXPECTATIONS
+12 0:00 Temperature 23
+12 0:00 WaterVolume 0
+12 0:00 Light 10
+12 0:00 EXP_WaterVolume 40
+12 0:00 Moisture 20
+12 0:00 Fertilizer 1.0
+12 0:00 END_EXPECTATIONS
+12 0:01 WaterVolume 40
+
+12 1:00 BEGIN_EXPECTATIONS
+12 1:00 Temperature 23
+12 1:00 WaterVolume 0
+12 1:00 Light 11
+12 1:00 EXP_WaterVolume 60
+12 1:00 Moisture 19
+12 1:00 Fertilizer 1.8
+12 1:00 END_EXPECTATIONS
+12 1:01 WaterVolume 60
+
+12 2:00 BEGIN_EXPECTATIONS
+12 2:00 Temperature 23
+12 2:00 WaterVolume 0
+12 2:00 Light 13
+12 2:00 EXP_WaterVolume 40
+12 2:00 Moisture 24
+12 2:00 Fertilizer 2.9
+12 2:00 END_EXPECTATIONS
+12 2:01 WaterVolume 40
+
+12 3:00 BEGIN_EXPECTATIONS
+12 3:00 Temperature 23
+12 3:00 WaterVolume 0
+12 3:00 Light 15
+12 3:00 EXP_WaterVolume 40
+12 3:00 Moisture 24
+12 3:00 Fertilizer 1.0
+12 3:00 END_EXPECTATIONS
+12 3:01 WaterVolume 40
+
+12 4:00 BEGIN_EXPECTATIONS
+12 4:00 Temperature 24
+12 4:00 WaterVolume 0
+12 4:00 Light 20
+12 4:00 EXP_WaterVolume 40
+12 4:00 Moisture 26
+12 4:00 Fertilizer 2.5
+12 4:00 END_EXPECTATIONS
+12 4:01 WaterVolume 40
+
+12 5:00 BEGIN_EXPECTATIONS
+12 5:00 Temperature 24
+12 5:00 WaterVolume 0
+12 5:00 Light 25
+12 5:00 EXP_WaterVolume 40
+12 5:00 Moisture 25
+12 5:00 Fertilizer 2.2
+12 5:00 END_EXPECTATIONS
+12 5:01 WaterVolume 40
+
+12 6:00 BEGIN_EXPECTATIONS
+12 6:00 Temperature 25
+12 6:00 WaterVolume 0
+12 6:00 Light 40
+12 6:00 EXP_WaterVolume 40
+12 6:00 Moisture 24
+12 6:00 Fertilizer 1.4
+12 6:00 END_EXPECTATIONS
+12 6:01 WaterVolume 40
+
+12 7:00 BEGIN_EXPECTATIONS
+12 7:00 Temperature 25
+12 7:00 WaterVolume 0
+12 7:00 Light 45
+12 7:00 EXP_WaterVolume 40
+12 7:00 Moisture 23
+12 7:00 Fertilizer 1.3
+12 7:00 END_EXPECTATIONS
+12 7:01 WaterVolume 40
+
+12 8:00 BEGIN_EXPECTATIONS
+12 8:00 Temperature 25
+12 8:00 WaterVolume 0
+12 8:00 Light 50
+12 8:00 EXP_WaterVolume 40
+12 8:00 Moisture 23
+12 8:00 Fertilizer 1.6
+12 8:00 END_EXPECTATIONS
+12 8:01 WaterVolume 40
+
+12 9:00 BEGIN_EXPECTATIONS
+12 9:00 Temperature 25
+12 9:00 WaterVolume 0
+12 9:00 Light 50
+12 9:00 EXP_WaterVolume 40
+12 9:00 Moisture 24
+12 9:00 Fertilizer 1.7
+12 9:00 END_EXPECTATIONS
+12 9:01 WaterVolume 40
+
+12 10:00 BEGIN_EXPECTATIONS
+12 10:00 Temperature 25
+12 10:00 WaterVolume 0
+12 10:00 Light 50
+12 10:00 EXP_WaterVolume 40
+12 10:00 Moisture 27
+12 10:00 Fertilizer 1.4
+12 10:00 END_EXPECTATIONS
+12 10:01 WaterVolume 40
+
+12 11:00 BEGIN_EXPECTATIONS
+12 11:00 Temperature 26
+12 11:00 WaterVolume 0
+12 11:00 Light 60
+12 11:00 EXP_WaterVolume 40
+12 11:00 Moisture 28
+12 11:00 Fertilizer 2.3
+12 11:00 END_EXPECTATIONS
+12 11:01 WaterVolume 40
+
+12 12:00 BEGIN_EXPECTATIONS
+12 12:00 Temperature 27
+12 12:00 WaterVolume 0
+12 12:00 Light 80
+12 12:00 EXP_WaterVolume 0
+12 12:00 Moisture 30
+12 12:00 Fertilizer 2.7
+12 12:00 END_EXPECTATIONS
+12 12:01 WaterVolume 0
+
+12 13:00 BEGIN_EXPECTATIONS
+12 13:00 Temperature 26
+12 13:00 WaterVolume 0
+12 13:00 Light 70
+12 13:00 EXP_WaterVolume 40
+12 13:00 Moisture 26
+12 13:00 Fertilizer 2.3
+12 13:00 END_EXPECTATIONS
+12 13:01 WaterVolume 40
+
+12 14:00 BEGIN_EXPECTATIONS
+12 14:00 Temperature 26
+12 14:00 WaterVolume 0
+12 14:00 Light 70
+12 14:00 EXP_WaterVolume 40
+12 14:00 Moisture 26
+12 14:00 Fertilizer 1.8
+12 14:00 END_EXPECTATIONS
+12 14:01 WaterVolume 40
+
+12 15:00 BEGIN_EXPECTATIONS
+12 15:00 Temperature 26
+12 15:00 WaterVolume 0
+12 15:00 Light 70
+12 15:00 EXP_WaterVolume 40
+12 15:00 Moisture 25
+12 15:00 Fertilizer 1.9
+12 15:00 END_EXPECTATIONS
+12 15:01 WaterVolume 40
+
+12 16:00 BEGIN_EXPECTATIONS
+12 16:00 Temperature 26
+12 16:00 WaterVolume 0
+12 16:00 Light 65
+12 16:00 EXP_WaterVolume 40
+12 16:00 Moisture 25
+12 16:00 Fertilizer 1.3
+12 16:00 END_EXPECTATIONS
+12 16:01 WaterVolume 40
+
+12 17:00 BEGIN_EXPECTATIONS
+12 17:00 Temperature 26
+12 17:00 WaterVolume 0
+12 17:00 Light 60
+12 17:00 EXP_WaterVolume 40
+12 17:00 Moisture 24
+12 17:00 Fertilizer 1.0
+12 17:00 END_EXPECTATIONS
+12 17:01 WaterVolume 40
+
+12 18:00 BEGIN_EXPECTATIONS
+12 18:00 Temperature 25
+12 18:00 WaterVolume 0
+12 18:00 Light 50
+12 18:00 EXP_WaterVolume 40
+12 18:00 Moisture 24
+12 18:00 Fertilizer 1.0
+12 18:00 END_EXPECTATIONS
+12 18:01 WaterVolume 40
+
+12 19:00 BEGIN_EXPECTATIONS
+12 19:00 Temperature 24
+12 19:00 WaterVolume 0
+12 19:00 Light 30
+12 19:00 EXP_WaterVolume 40
+12 19:00 Moisture 27
+12 19:00 Fertilizer 2.2
+12 19:00 END_EXPECTATIONS
+12 19:01 WaterVolume 40
+
+12 20:00 BEGIN_EXPECTATIONS
+12 20:00 Temperature 23
+12 20:00 WaterVolume 0
+12 20:00 Light 10
+12 20:00 EXP_WaterVolume 40
+12 20:00 Moisture 26
+12 20:00 Fertilizer 2.0
+12 20:00 END_EXPECTATIONS
+12 20:01 WaterVolume 40
+
+12 21:00 BEGIN_EXPECTATIONS
+12 21:00 Temperature 23
+12 21:00 WaterVolume 0
+12 21:00 Light 10
+12 21:00 EXP_WaterVolume 40
+12 21:00 Moisture 25
+12 21:00 Fertilizer 1.7
+12 21:00 END_EXPECTATIONS
+12 21:01 WaterVolume 40
+
+12 22:00 BEGIN_EXPECTATIONS
+12 22:00 Temperature 23
+12 22:00 WaterVolume 0
+12 22:00 Light 10
+12 22:00 EXP_WaterVolume 40
+12 22:00 Moisture 27
+12 22:00 Fertilizer 1.9
+12 22:00 END_EXPECTATIONS
+12 22:01 WaterVolume 40
+
+12 23:00 BEGIN_EXPECTATIONS
+12 23:00 Temperature 23
+12 23:00 WaterVolume 0
+12 23:00 Light 10
+12 23:00 EXP_WaterVolume 40
+12 23:00 Moisture 28
+12 23:00 Fertilizer 2.4
+12 23:00 END_EXPECTATIONS
+12 23:01 WaterVolume 40
+
+### Sunday ###
+13 0:00 BEGIN_EXPECTATIONS
+13 0:00 Temperature 24
+13 0:00 WaterVolume 0
+13 0:00 Light 10
+13 0:00 EXP_WaterVolume 40
+13 0:00 Moisture 29
+13 0:00 Fertilizer 2.4
+13 0:00 END_EXPECTATIONS
+13 0:01 WaterVolume 40
+
+13 1:00 BEGIN_EXPECTATIONS
+13 1:00 Temperature 24
+13 1:00 WaterVolume 0
+13 1:00 Light 11
+13 1:00 EXP_WaterVolume 0
+13 1:00 Moisture 32
+13 1:00 Fertilizer 1.0
+13 1:00 END_EXPECTATIONS
+13 1:01 WaterVolume 0
+
+13 2:00 BEGIN_EXPECTATIONS
+13 2:00 Temperature 24
+13 2:00 WaterVolume 0
+13 2:00 Light 13
+13 2:00 EXP_WaterVolume 0
+13 2:00 Moisture 30
+13 2:00 Fertilizer 1.2
+13 2:00 END_EXPECTATIONS
+13 2:01 WaterVolume 0
+
+13 3:00 BEGIN_EXPECTATIONS
+13 3:00 Temperature 24
+13 3:00 WaterVolume 0
+13 3:00 Light 15
+13 3:00 EXP_WaterVolume 40
+13 3:00 Moisture 26
+13 3:00 Fertilizer 1.0
+13 3:00 END_EXPECTATIONS
+13 3:01 WaterVolume 40
+
+13 4:00 BEGIN_EXPECTATIONS
+13 4:00 Temperature 25
+13 4:00 WaterVolume 0
+13 4:00 Light 20
+13 4:00 EXP_WaterVolume 40
+13 4:00 Moisture 26
+13 4:00 Fertilizer 1.1
+13 4:00 END_EXPECTATIONS
+13 4:01 WaterVolume 40
+
+13 5:00 BEGIN_EXPECTATIONS
+13 5:00 Temperature 25
+13 5:00 WaterVolume 0
+13 5:00 Light 25
+13 5:00 EXP_WaterVolume 40
+13 5:00 Moisture 29
+13 5:00 Fertilizer 2.5
+13 5:00 END_EXPECTATIONS
+13 5:01 WaterVolume 40
+
+13 6:00 BEGIN_EXPECTATIONS
+13 6:00 Temperature 26
+13 6:00 WaterVolume 0
+13 6:00 Light 40
+13 6:00 EXP_WaterVolume 0
+13 6:00 Moisture 31
+13 6:00 Fertilizer 1.8
+13 6:00 END_EXPECTATIONS
+13 6:01 WaterVolume 0
+
+13 7:00 BEGIN_EXPECTATIONS
+13 7:00 Temperature 26
+13 7:00 WaterVolume 0
+13 7:00 Light 45
+13 7:00 EXP_WaterVolume 40
+13 7:00 Moisture 26
+13 7:00 Fertilizer 1.8
+13 7:00 END_EXPECTATIONS
+13 7:01 WaterVolume 40
+
+13 8:00 BEGIN_EXPECTATIONS
+13 8:00 Temperature 26
+13 8:00 WaterVolume 0
+13 8:00 Light 50
+13 8:00 EXP_WaterVolume 40
+13 8:00 Moisture 25
+13 8:00 Fertilizer 1.8
+13 8:00 END_EXPECTATIONS
+13 8:01 WaterVolume 40
+
+13 9:00 BEGIN_EXPECTATIONS
+13 9:00 Temperature 26
+13 9:00 WaterVolume 0
+13 9:00 Light 50
+13 9:00 EXP_WaterVolume 40
+13 9:00 Moisture 29
+13 9:00 Fertilizer 1.2
+13 9:00 END_EXPECTATIONS
+13 9:01 WaterVolume 40
+
+13 10:00 BEGIN_EXPECTATIONS
+13 10:00 Temperature 26
+13 10:00 WaterVolume 0
+13 10:00 Light 50
+13 10:00 EXP_WaterVolume 40
+13 10:00 Moisture 29
+13 10:00 Fertilizer 1.8
+13 10:00 END_EXPECTATIONS
+13 10:01 WaterVolume 40
+
+13 11:00 BEGIN_EXPECTATIONS
+13 11:00 Temperature 27
+13 11:00 WaterVolume 0
+13 11:00 Light 60
+13 11:00 EXP_WaterVolume 0
+13 11:00 Moisture 31
+13 11:00 Fertilizer 2.0
+13 11:00 END_EXPECTATIONS
+13 11:01 WaterVolume 0
+
+13 12:00 BEGIN_EXPECTATIONS
+13 12:00 Temperature 28
+13 12:00 WaterVolume 0
+13 12:00 Light 80
+13 12:00 EXP_WaterVolume 40
+13 12:00 Moisture 27
+13 12:00 Fertilizer 2.6
+13 12:00 END_EXPECTATIONS
+13 12:01 WaterVolume 40
+
+13 13:00 BEGIN_EXPECTATIONS
+13 13:00 Temperature 27
+13 13:00 WaterVolume 0
+13 13:00 Light 70
+13 13:00 EXP_WaterVolume 40
+13 13:00 Moisture 28
+13 13:00 Fertilizer 2.7
+13 13:00 END_EXPECTATIONS
+13 13:01 WaterVolume 40
+
+13 14:00 BEGIN_EXPECTATIONS
+13 14:00 Temperature 27
+13 14:00 WaterVolume 0
+13 14:00 Light 70
+13 14:00 EXP_WaterVolume 80
+13 14:00 Moisture 0
+13 14:00 Fertilizer 2.8
+13 14:00 END_EXPECTATIONS
+13 14:01 WaterVolume 80
+
+13 15:00 BEGIN_EXPECTATIONS
+13 15:00 Temperature 27
+13 15:00 WaterVolume 0
+13 15:00 Light 70
+13 15:00 EXP_WaterVolume 80
+13 15:00 Moisture 5
+13 15:00 Fertilizer 1.0
+13 15:00 END_EXPECTATIONS
+13 15:01 WaterVolume 80
+
+13 16:00 BEGIN_EXPECTATIONS
+13 16:00 Temperature 27
+13 16:00 WaterVolume 0
+13 16:00 Light 65
+13 16:00 EXP_WaterVolume 80
+13 16:00 Moisture 8
+13 16:00 Fertilizer 1.6
+13 16:00 END_EXPECTATIONS
+13 16:01 WaterVolume 80
+
+13 17:00 BEGIN_EXPECTATIONS
+13 17:00 Temperature 27
+13 17:00 WaterVolume 0
+13 17:00 Light 60
+13 17:00 EXP_WaterVolume 60
+13 17:00 Moisture 11
+13 17:00 Fertilizer 2.5
+13 17:00 END_EXPECTATIONS
+13 17:01 WaterVolume 60
+
+13 18:00 BEGIN_EXPECTATIONS
+13 18:00 Temperature 26
+13 18:00 WaterVolume 0
+13 18:00 Light 50
+13 18:00 EXP_WaterVolume 60
+13 18:00 Moisture 15
+13 18:00 Fertilizer 1.5
+13 18:00 END_EXPECTATIONS
+13 18:01 WaterVolume 60
+
+13 19:00 BEGIN_EXPECTATIONS
+13 19:00 Temperature 25
+13 19:00 WaterVolume 0
+13 19:00 Light 30
+13 19:00 EXP_WaterVolume 40
+13 19:00 Moisture 20
+13 19:00 Fertilizer 2.9
+13 19:00 END_EXPECTATIONS
+13 19:01 WaterVolume 40
+
+13 20:00 BEGIN_EXPECTATIONS
+13 20:00 Temperature 24
+13 20:00 WaterVolume 0
+13 20:00 Light 10
+13 20:00 EXP_WaterVolume 40
+13 20:00 Moisture 23
+13 20:00 Fertilizer 1.4
+13 20:00 END_EXPECTATIONS
+13 20:01 WaterVolume 40
+
+13 21:00 BEGIN_EXPECTATIONS
+13 21:00 Temperature 24
+13 21:00 WaterVolume 0
+13 21:00 Light 10
+13 21:00 EXP_WaterVolume 40
+13 21:00 Moisture 23
+13 21:00 Fertilizer 2.8
+13 21:00 END_EXPECTATIONS
+13 21:01 WaterVolume 40
+
+13 22:00 BEGIN_EXPECTATIONS
+13 22:00 Temperature 24
+13 22:00 WaterVolume 0
+13 22:00 Light 10
+13 22:00 EXP_WaterVolume 40
+13 22:00 Moisture 26
+13 22:00 Fertilizer 1.7
+13 22:00 END_EXPECTATIONS
+13 22:01 WaterVolume 40
+
+13 23:00 BEGIN_EXPECTATIONS
+13 23:00 Temperature 24
+13 23:00 WaterVolume 0
+13 23:00 Light 10
+13 23:00 EXP_WaterVolume 40
+13 23:00 Moisture 27
+13 23:00 Fertilizer 1.2
+13 23:00 END_EXPECTATIONS
+13 23:01 WaterVolume 40
+
+
+#### Week 2 ####
+### Monday ###
+14 0:00 BEGIN_EXPECTATIONS
+14 0:00 Temperature 19
+14 0:00 WaterVolume 0
+14 0:00 Light 10
+14 0:00 EXP_WaterVolume 0
+14 0:00 Moisture 31
+14 0:00 Fertilizer 2.6
+14 0:00 END_EXPECTATIONS
+14 0:01 WaterVolume 0
+
+14 1:00 BEGIN_EXPECTATIONS
+14 1:00 Temperature 19
+14 1:00 WaterVolume 0
+14 1:00 Light 11
+14 1:00 EXP_WaterVolume 0
+14 1:00 Moisture 30
+14 1:00 Fertilizer 1.5
+14 1:00 END_EXPECTATIONS
+14 1:01 WaterVolume 0
+
+14 2:00 BEGIN_EXPECTATIONS
+14 2:00 Temperature 19
+14 2:00 WaterVolume 0
+14 2:00 Light 13
+14 2:00 EXP_WaterVolume 40
+14 2:00 Moisture 28
+14 2:00 Fertilizer 1.3
+14 2:00 END_EXPECTATIONS
+14 2:01 WaterVolume 40
+
+14 3:00 BEGIN_EXPECTATIONS
+14 3:00 Temperature 19
+14 3:00 WaterVolume 0
+14 3:00 Light 15
+14 3:00 EXP_WaterVolume 40
+14 3:00 Moisture 28
+14 3:00 Fertilizer 2.3
+14 3:00 END_EXPECTATIONS
+14 3:01 WaterVolume 40
+
+14 4:00 BEGIN_EXPECTATIONS
+14 4:00 Temperature 20
+14 4:00 WaterVolume 0
+14 4:00 Light 20
+14 4:00 EXP_WaterVolume 0
+14 4:00 Moisture 31
+14 4:00 Fertilizer 2.0
+14 4:00 END_EXPECTATIONS
+14 4:01 WaterVolume 0
+
+14 5:00 BEGIN_EXPECTATIONS
+14 5:00 Temperature 20
+14 5:00 WaterVolume 0
+14 5:00 Light 25
+14 5:00 EXP_WaterVolume 40
+14 5:00 Moisture 29
+14 5:00 Fertilizer 2.6
+14 5:00 END_EXPECTATIONS
+14 5:01 WaterVolume 40
+
+14 6:00 BEGIN_EXPECTATIONS
+14 6:00 Temperature 21
+14 6:00 WaterVolume 0
+14 6:00 Light 40
+14 6:00 EXP_WaterVolume 0
+14 6:00 Moisture 30
+14 6:00 Fertilizer 1.2
+14 6:00 END_EXPECTATIONS
+14 6:01 WaterVolume 0
+
+14 7:00 BEGIN_EXPECTATIONS
+14 7:00 Temperature 21
+14 7:00 WaterVolume 0
+14 7:00 Light 45
+14 7:00 EXP_WaterVolume 40
+14 7:00 Moisture 27
+14 7:00 Fertilizer 1.5
+14 7:00 END_EXPECTATIONS
+14 7:01 WaterVolume 40
+
+14 8:00 BEGIN_EXPECTATIONS
+14 8:00 Temperature 21
+14 8:00 WaterVolume 0
+14 8:00 Light 50
+14 8:00 EXP_WaterVolume 0
+14 8:00 Moisture 31
+14 8:00 Fertilizer 1.3
+14 8:00 END_EXPECTATIONS
+14 8:01 WaterVolume 0
+
+14 9:00 BEGIN_EXPECTATIONS
+14 9:00 Temperature 21
+14 9:00 WaterVolume 0
+14 9:00 Light 50
+14 9:00 EXP_WaterVolume 0
+14 9:00 Moisture 31
+14 9:00 Fertilizer 2.9
+14 9:00 END_EXPECTATIONS
+14 9:01 WaterVolume 0
+
+14 10:00 BEGIN_EXPECTATIONS
+14 10:00 Temperature 21
+14 10:00 WaterVolume 0
+14 10:00 Light 50
+14 10:00 EXP_WaterVolume 0
+14 10:00 Moisture 31
+14 10:00 Fertilizer 1.3
+14 10:00 END_EXPECTATIONS
+14 10:01 WaterVolume 0
+
+14 11:00 BEGIN_EXPECTATIONS
+14 11:00 Temperature 22
+14 11:00 WaterVolume 0
+14 11:00 Light 60
+14 11:00 EXP_WaterVolume 0
+14 11:00 Moisture 30
+14 11:00 Fertilizer 2.1
+14 11:00 END_EXPECTATIONS
+14 11:01 WaterVolume 0
+
+14 12:00 BEGIN_EXPECTATIONS
+14 12:00 Temperature 23
+14 12:00 WaterVolume 0
+14 12:00 Light 80
+14 12:00 EXP_WaterVolume 0
+14 12:00 Moisture 30
+14 12:00 Fertilizer 2.4
+14 12:00 END_EXPECTATIONS
+14 12:01 WaterVolume 0
+
+14 13:00 BEGIN_EXPECTATIONS
+14 13:00 Temperature 22
+14 13:00 WaterVolume 0
+14 13:00 Light 70
+14 13:00 EXP_WaterVolume 0
+14 13:00 Moisture 30
+14 13:00 Fertilizer 1.5
+14 13:00 END_EXPECTATIONS
+14 13:01 WaterVolume 0
+
+14 14:00 BEGIN_EXPECTATIONS
+14 14:00 Temperature 22
+14 14:00 WaterVolume 0
+14 14:00 Light 70
+14 14:00 EXP_WaterVolume 40
+14 14:00 Moisture 26
+14 14:00 Fertilizer 2.4
+14 14:00 END_EXPECTATIONS
+14 14:01 WaterVolume 40
+
+14 15:00 BEGIN_EXPECTATIONS
+14 15:00 Temperature 22
+14 15:00 WaterVolume 0
+14 15:00 Light 70
+14 15:00 EXP_WaterVolume 40
+14 15:00 Moisture 25
+14 15:00 Fertilizer 1.7
+14 15:00 END_EXPECTATIONS
+14 15:01 WaterVolume 40
+
+14 16:00 BEGIN_EXPECTATIONS
+14 16:00 Temperature 22
+14 16:00 WaterVolume 0
+14 16:00 Light 65
+14 16:00 EXP_WaterVolume 40
+14 16:00 Moisture 29
+14 16:00 Fertilizer 2.7
+14 16:00 END_EXPECTATIONS
+14 16:01 WaterVolume 40
+
+14 17:00 BEGIN_EXPECTATIONS
+14 17:00 Temperature 22
+14 17:00 WaterVolume 0
+14 17:00 Light 60
+14 17:00 EXP_WaterVolume 40
+14 17:00 Moisture 28
+14 17:00 Fertilizer 1.2
+14 17:00 END_EXPECTATIONS
+14 17:01 WaterVolume 40
+
+14 18:00 BEGIN_EXPECTATIONS
+14 18:00 Temperature 21
+14 18:00 WaterVolume 0
+14 18:00 Light 50
+14 18:00 EXP_WaterVolume 40
+14 18:00 Moisture 27
+14 18:00 Fertilizer 1.1
+14 18:00 END_EXPECTATIONS
+14 18:01 WaterVolume 40
+
+14 19:00 BEGIN_EXPECTATIONS
+14 19:00 Temperature 20
+14 19:00 WaterVolume 0
+14 19:00 Light 30
+14 19:00 EXP_WaterVolume 40
+14 19:00 Moisture 26
+14 19:00 Fertilizer 2.8
+14 19:00 END_EXPECTATIONS
+14 19:01 WaterVolume 40
+
+14 20:00 BEGIN_EXPECTATIONS
+14 20:00 Temperature 19
+14 20:00 WaterVolume 0
+14 20:00 Light 10
+14 20:00 EXP_WaterVolume 40
+14 20:00 Moisture 29
+14 20:00 Fertilizer 2.2
+14 20:00 END_EXPECTATIONS
+14 20:01 WaterVolume 40
+
+14 21:00 BEGIN_EXPECTATIONS
+14 21:00 Temperature 19
+14 21:00 WaterVolume 0
+14 21:00 Light 10
+14 21:00 EXP_WaterVolume 0
+14 21:00 Moisture 31
+14 21:00 Fertilizer 1.6
+14 21:00 END_EXPECTATIONS
+14 21:01 WaterVolume 0
+
+14 22:00 BEGIN_EXPECTATIONS
+14 22:00 Temperature 19
+14 22:00 WaterVolume 0
+14 22:00 Light 10
+14 22:00 EXP_WaterVolume 40
+14 22:00 Moisture 27
+14 22:00 Fertilizer 1.1
+14 22:00 END_EXPECTATIONS
+14 22:01 WaterVolume 40
+
+14 23:00 BEGIN_EXPECTATIONS
+14 23:00 Temperature 19
+14 23:00 WaterVolume 0
+14 23:00 Light 10
+14 23:00 EXP_WaterVolume 40
+14 23:00 Moisture 29
+14 23:00 Fertilizer 1.6
+14 23:00 END_EXPECTATIONS
+14 23:01 WaterVolume 40
+
+### Tuesday ###
+15 0:00 BEGIN_EXPECTATIONS
+15 0:00 Temperature 18
+15 0:00 WaterVolume 0
+15 0:00 Light 10
+15 0:00 EXP_WaterVolume 0
+15 0:00 Moisture 31
+15 0:00 Fertilizer 1.3
+15 0:00 END_EXPECTATIONS
+15 0:01 WaterVolume 0
+
+15 1:00 BEGIN_EXPECTATIONS
+15 1:00 Temperature 18
+15 1:00 WaterVolume 0
+15 1:00 Light 11
+15 1:00 EXP_WaterVolume 40
+15 1:00 Moisture 29
+15 1:00 Fertilizer 2.6
+15 1:00 END_EXPECTATIONS
+15 1:01 WaterVolume 40
+
+15 2:00 BEGIN_EXPECTATIONS
+15 2:00 Temperature 18
+15 2:00 WaterVolume 0
+15 2:00 Light 13
+15 2:00 EXP_WaterVolume 0
+15 2:00 Moisture 32
+15 2:00 Fertilizer 1.0
+15 2:00 END_EXPECTATIONS
+15 2:01 WaterVolume 0
+
+15 3:00 BEGIN_EXPECTATIONS
+15 3:00 Temperature 18
+15 3:00 WaterVolume 0
+15 3:00 Light 15
+15 3:00 EXP_WaterVolume 40
+15 3:00 Moisture 29
+15 3:00 Fertilizer 1.5
+15 3:00 END_EXPECTATIONS
+15 3:01 WaterVolume 40
+
+15 4:00 BEGIN_EXPECTATIONS
+15 4:00 Temperature 19
+15 4:00 WaterVolume 0
+15 4:00 Light 20
+15 4:00 EXP_WaterVolume 0
+15 4:00 Moisture 32
+15 4:00 Fertilizer 2.6
+15 4:00 END_EXPECTATIONS
+15 4:01 WaterVolume 0
+
+15 5:00 BEGIN_EXPECTATIONS
+15 5:00 Temperature 19
+15 5:00 WaterVolume 0
+15 5:00 Light 25
+15 5:00 EXP_WaterVolume 40
+15 5:00 Moisture 29
+15 5:00 Fertilizer 1.2
+15 5:00 END_EXPECTATIONS
+15 5:01 WaterVolume 40
+
+15 6:00 BEGIN_EXPECTATIONS
+15 6:00 Temperature 20
+15 6:00 WaterVolume 0
+15 6:00 Light 40
+15 6:00 EXP_WaterVolume 0
+15 6:00 Moisture 30
+15 6:00 Fertilizer 1.8
+15 6:00 END_EXPECTATIONS
+15 6:01 WaterVolume 0
+
+15 7:00 BEGIN_EXPECTATIONS
+15 7:00 Temperature 20
+15 7:00 WaterVolume 0
+15 7:00 Light 45
+15 7:00 EXP_WaterVolume 40
+15 7:00 Moisture 29
+15 7:00 Fertilizer 1.1
+15 7:00 END_EXPECTATIONS
+15 7:01 WaterVolume 40
+
+15 8:00 BEGIN_EXPECTATIONS
+15 8:00 Temperature 20
+15 8:00 WaterVolume 0
+15 8:00 Light 50
+15 8:00 EXP_WaterVolume 0
+15 8:00 Moisture 50
+15 8:00 Fertilizer 1.2
+15 8:00 END_EXPECTATIONS
+15 8:01 WaterVolume 0
+
+15 9:00 BEGIN_EXPECTATIONS
+15 9:00 Temperature 20
+15 9:00 WaterVolume 0
+15 9:00 Light 50
+15 9:00 EXP_WaterVolume 0
+15 9:00 Moisture 49
+15 9:00 Fertilizer 2.6
+15 9:00 END_EXPECTATIONS
+15 9:01 WaterVolume 0
+
+15 10:00 BEGIN_EXPECTATIONS
+15 10:00 Temperature 20
+15 10:00 WaterVolume 0
+15 10:00 Light 50
+15 10:00 EXP_WaterVolume 0
+15 10:00 Moisture 47
+15 10:00 Fertilizer 1.6
+15 10:00 END_EXPECTATIONS
+15 10:01 WaterVolume 0
+
+15 11:00 BEGIN_EXPECTATIONS
+15 11:00 Temperature 21
+15 11:00 WaterVolume 0
+15 11:00 Light 60
+15 11:00 EXP_WaterVolume 0
+15 11:00 Moisture 43
+15 11:00 Fertilizer 2.4
+15 11:00 END_EXPECTATIONS
+15 11:01 WaterVolume 0
+
+15 12:00 BEGIN_EXPECTATIONS
+15 12:00 Temperature 22
+15 12:00 WaterVolume 0
+15 12:00 Light 80
+15 12:00 EXP_WaterVolume 0
+15 12:00 Moisture 41
+15 12:00 Fertilizer 1.0
+15 12:00 END_EXPECTATIONS
+15 12:01 WaterVolume 0
+
+15 13:00 BEGIN_EXPECTATIONS
+15 13:00 Temperature 21
+15 13:00 WaterVolume 0
+15 13:00 Light 70
+15 13:00 EXP_WaterVolume 0
+15 13:00 Moisture 36
+15 13:00 Fertilizer 1.3
+15 13:00 END_EXPECTATIONS
+15 13:01 WaterVolume 0
+
+15 14:00 BEGIN_EXPECTATIONS
+15 14:00 Temperature 21
+15 14:00 WaterVolume 0
+15 14:00 Light 70
+15 14:00 EXP_WaterVolume 0
+15 14:00 Moisture 36
+15 14:00 Fertilizer 2.4
+15 14:00 END_EXPECTATIONS
+15 14:01 WaterVolume 0
+
+15 15:00 BEGIN_EXPECTATIONS
+15 15:00 Temperature 21
+15 15:00 WaterVolume 0
+15 15:00 Light 70
+15 15:00 EXP_WaterVolume 0
+15 15:00 Moisture 35
+15 15:00 Fertilizer 1.2
+15 15:00 END_EXPECTATIONS
+15 15:01 WaterVolume 0
+
+15 16:00 BEGIN_EXPECTATIONS
+15 16:00 Temperature 21
+15 16:00 WaterVolume 0
+15 16:00 Light 65
+15 16:00 EXP_WaterVolume 0
+15 16:00 Moisture 33
+15 16:00 Fertilizer 1.7
+15 16:00 END_EXPECTATIONS
+15 16:01 WaterVolume 0
+
+15 17:00 BEGIN_EXPECTATIONS
+15 17:00 Temperature 21
+15 17:00 WaterVolume 0
+15 17:00 Light 60
+15 17:00 EXP_WaterVolume 40
+15 17:00 Moisture 29
+15 17:00 Fertilizer 1.0
+15 17:00 END_EXPECTATIONS
+15 17:01 WaterVolume 40
+
+15 18:00 BEGIN_EXPECTATIONS
+15 18:00 Temperature 20
+15 18:00 WaterVolume 0
+15 18:00 Light 50
+15 18:00 EXP_WaterVolume 0
+15 18:00 Moisture 32
+15 18:00 Fertilizer 1.9
+15 18:00 END_EXPECTATIONS
+15 18:01 WaterVolume 0
+
+15 19:00 BEGIN_EXPECTATIONS
+15 19:00 Temperature 19
+15 19:00 WaterVolume 0
+15 19:00 Light 30
+15 19:00 EXP_WaterVolume 40
+15 19:00 Moisture 27
+15 19:00 Fertilizer 2.3
+15 19:00 END_EXPECTATIONS
+15 19:01 WaterVolume 40
+
+15 20:00 BEGIN_EXPECTATIONS
+15 20:00 Temperature 18
+15 20:00 WaterVolume 0
+15 20:00 Light 10
+15 20:00 EXP_WaterVolume 40
+15 20:00 Moisture 26
+15 20:00 Fertilizer 2.1
+15 20:00 END_EXPECTATIONS
+15 20:01 WaterVolume 40
+
+15 21:00 BEGIN_EXPECTATIONS
+15 21:00 Temperature 18
+15 21:00 WaterVolume 0
+15 21:00 Light 10
+15 21:00 EXP_WaterVolume 0
+15 21:00 Moisture 30
+15 21:00 Fertilizer 2.7
+15 21:00 END_EXPECTATIONS
+15 21:01 WaterVolume 0
+
+15 22:00 BEGIN_EXPECTATIONS
+15 22:00 Temperature 18
+15 22:00 WaterVolume 0
+15 22:00 Light 10
+15 22:00 EXP_WaterVolume 0
+15 22:00 Moisture 30
+15 22:00 Fertilizer 1.5
+15 22:00 END_EXPECTATIONS
+15 22:01 WaterVolume 0
+
+15 23:00 BEGIN_EXPECTATIONS
+15 23:00 Temperature 18
+15 23:00 WaterVolume 0
+15 23:00 Light 10
+15 23:00 EXP_WaterVolume 40
+15 23:00 Moisture 27
+15 23:00 Fertilizer 1.0
+15 23:00 END_EXPECTATIONS
+15 23:01 WaterVolume 40
+
+### Wednesday ###
+16 0:00 BEGIN_EXPECTATIONS
+16 0:00 Temperature 15
+16 0:00 WaterVolume 0
+16 0:00 Light 10
+16 0:00 EXP_WaterVolume 0
+16 0:00 Moisture 50
+16 0:00 Fertilizer 1.5
+16 0:00 END_EXPECTATIONS
+16 0:01 WaterVolume 0
+
+16 1:00 BEGIN_EXPECTATIONS
+16 1:00 Temperature 15
+16 1:00 WaterVolume 0
+16 1:00 Light 11
+16 1:00 EXP_WaterVolume 0
+16 1:00 Moisture 47
+16 1:00 Fertilizer 2.6
+16 1:00 END_EXPECTATIONS
+16 1:01 WaterVolume 0
+
+16 2:00 BEGIN_EXPECTATIONS
+16 2:00 Temperature 15
+16 2:00 WaterVolume 0
+16 2:00 Light 13
+16 2:00 EXP_WaterVolume 0
+16 2:00 Moisture 47
+16 2:00 Fertilizer 2.9
+16 2:00 END_EXPECTATIONS
+16 2:01 WaterVolume 0
+
+16 3:00 BEGIN_EXPECTATIONS
+16 3:00 Temperature 15
+16 3:00 WaterVolume 0
+16 3:00 Light 15
+16 3:00 EXP_WaterVolume 0
+16 3:00 Moisture 42
+16 3:00 Fertilizer 1.1
+16 3:00 END_EXPECTATIONS
+16 3:01 WaterVolume 0
+
+16 4:00 BEGIN_EXPECTATIONS
+16 4:00 Temperature 16
+16 4:00 WaterVolume 0
+16 4:00 Light 20
+16 4:00 EXP_WaterVolume 0
+16 4:00 Moisture 40
+16 4:00 Fertilizer 2.1
+16 4:00 END_EXPECTATIONS
+16 4:01 WaterVolume 0
+
+16 5:00 BEGIN_EXPECTATIONS
+16 5:00 Temperature 16
+16 5:00 WaterVolume 0
+16 5:00 Light 25
+16 5:00 EXP_WaterVolume 0
+16 5:00 Moisture 35
+16 5:00 Fertilizer 2.1
+16 5:00 END_EXPECTATIONS
+16 5:01 WaterVolume 0
+
+16 6:00 BEGIN_EXPECTATIONS
+16 6:00 Temperature 17
+16 6:00 WaterVolume 0
+16 6:00 Light 40
+16 6:00 EXP_WaterVolume 0
+16 6:00 Moisture 32
+16 6:00 Fertilizer 1.8
+16 6:00 END_EXPECTATIONS
+16 6:01 WaterVolume 0
+
+16 7:00 BEGIN_EXPECTATIONS
+16 7:00 Temperature 17
+16 7:00 WaterVolume 0
+16 7:00 Light 45
+16 7:00 EXP_WaterVolume 0
+16 7:00 Moisture 32
+16 7:00 Fertilizer 2.2
+16 7:00 END_EXPECTATIONS
+16 7:01 WaterVolume 0
+
+16 8:00 BEGIN_EXPECTATIONS
+16 8:00 Temperature 17
+16 8:00 WaterVolume 0
+16 8:00 Light 50
+16 8:00 EXP_WaterVolume 0
+16 8:00 Moisture 32
+16 8:00 Fertilizer 2.9
+16 8:00 END_EXPECTATIONS
+16 8:01 WaterVolume 0
+
+16 9:00 BEGIN_EXPECTATIONS
+16 9:00 Temperature 17
+16 9:00 WaterVolume 0
+16 9:00 Light 50
+16 9:00 EXP_WaterVolume 0
+16 9:00 Moisture 32
+16 9:00 Fertilizer 2.8
+16 9:00 END_EXPECTATIONS
+16 9:01 WaterVolume 0
+
+16 10:00 BEGIN_EXPECTATIONS
+16 10:00 Temperature 17
+16 10:00 WaterVolume 0
+16 10:00 Light 50
+16 10:00 EXP_WaterVolume 40
+16 10:00 Moisture 27
+16 10:00 Fertilizer 2.5
+16 10:00 END_EXPECTATIONS
+16 10:01 WaterVolume 40
+
+16 11:00 BEGIN_EXPECTATIONS
+16 11:00 Temperature 18
+16 11:00 WaterVolume 0
+16 11:00 Light 60
+16 11:00 EXP_WaterVolume 40
+16 11:00 Moisture 28
+16 11:00 Fertilizer 2.8
+16 11:00 END_EXPECTATIONS
+16 11:01 WaterVolume 40
+
+16 12:00 BEGIN_EXPECTATIONS
+16 12:00 Temperature 19
+16 12:00 WaterVolume 0
+16 12:00 Light 80
+16 12:00 EXP_WaterVolume 0
+16 12:00 Moisture 32
+16 12:00 Fertilizer 1.7
+16 12:00 END_EXPECTATIONS
+16 12:01 WaterVolume 0
+
+16 13:00 BEGIN_EXPECTATIONS
+16 13:00 Temperature 18
+16 13:00 WaterVolume 0
+16 13:00 Light 70
+16 13:00 EXP_WaterVolume 0
+16 13:00 Moisture 30
+16 13:00 Fertilizer 1.0
+16 13:00 END_EXPECTATIONS
+16 13:01 WaterVolume 0
+
+16 14:00 BEGIN_EXPECTATIONS
+16 14:00 Temperature 18
+16 14:00 WaterVolume 0
+16 14:00 Light 70
+16 14:00 EXP_WaterVolume 40
+16 14:00 Moisture 27
+16 14:00 Fertilizer 1.8
+16 14:00 END_EXPECTATIONS
+16 14:01 WaterVolume 40
+
+16 15:00 BEGIN_EXPECTATIONS
+16 15:00 Temperature 18
+16 15:00 WaterVolume 0
+16 15:00 Light 70
+16 15:00 EXP_WaterVolume 40
+16 15:00 Moisture 27
+16 15:00 Fertilizer 1.0
+16 15:00 END_EXPECTATIONS
+16 15:01 WaterVolume 40
+
+16 16:00 BEGIN_EXPECTATIONS
+16 16:00 Temperature 18
+16 16:00 WaterVolume 0
+16 16:00 Light 65
+16 16:00 EXP_WaterVolume 40
+16 16:00 Moisture 29
+16 16:00 Fertilizer 2.5
+16 16:00 END_EXPECTATIONS
+16 16:01 WaterVolume 40
+
+16 17:00 BEGIN_EXPECTATIONS
+16 17:00 Temperature 18
+16 17:00 WaterVolume 0
+16 17:00 Light 60
+16 17:00 EXP_WaterVolume 0
+16 17:00 Moisture 33
+16 17:00 Fertilizer 1.9
+16 17:00 END_EXPECTATIONS
+16 17:01 WaterVolume 0
+
+16 18:00 BEGIN_EXPECTATIONS
+16 18:00 Temperature 17
+16 18:00 WaterVolume 0
+16 18:00 Light 50
+16 18:00 EXP_WaterVolume 40
+16 18:00 Moisture 29
+16 18:00 Fertilizer 1.5
+16 18:00 END_EXPECTATIONS
+16 18:01 WaterVolume 40
+
+16 19:00 BEGIN_EXPECTATIONS
+16 19:00 Temperature 16
+16 19:00 WaterVolume 0
+16 19:00 Light 30
+16 19:00 EXP_WaterVolume 40
+16 19:00 Moisture 29
+16 19:00 Fertilizer 1.2
+16 19:00 END_EXPECTATIONS
+16 19:01 WaterVolume 40
+
+16 20:00 BEGIN_EXPECTATIONS
+16 20:00 Temperature 15
+16 20:00 WaterVolume 0
+16 20:00 Light 10
+16 20:00 EXP_WaterVolume 40
+16 20:00 Moisture 28
+16 20:00 Fertilizer 2.1
+16 20:00 END_EXPECTATIONS
+16 20:01 WaterVolume 40
+
+16 21:00 BEGIN_EXPECTATIONS
+16 21:00 Temperature 15
+16 21:00 WaterVolume 0
+16 21:00 Light 10
+16 21:00 EXP_WaterVolume 0
+16 21:00 Moisture 32
+16 21:00 Fertilizer 1.8
+16 21:00 END_EXPECTATIONS
+16 21:01 WaterVolume 0
+
+16 22:00 BEGIN_EXPECTATIONS
+16 22:00 Temperature 15
+16 22:00 WaterVolume 0
+16 22:00 Light 10
+16 22:00 EXP_WaterVolume 40
+16 22:00 Moisture 28
+16 22:00 Fertilizer 1.7
+16 22:00 END_EXPECTATIONS
+16 22:01 WaterVolume 40
+
+16 23:00 BEGIN_EXPECTATIONS
+16 23:00 Temperature 15
+16 23:00 WaterVolume 0
+16 23:00 Light 10
+16 23:00 EXP_WaterVolume 0
+16 23:00 Moisture 50
+16 23:00 Fertilizer 1.6
+16 23:00 END_EXPECTATIONS
+16 23:01 WaterVolume 0
+
+### Thursday ###
+17 0:00 BEGIN_EXPECTATIONS
+17 0:00 Temperature 23
+17 0:00 WaterVolume 0
+17 0:00 Light 10
+17 0:00 EXP_WaterVolume 0
+17 0:00 Moisture 49
+17 0:00 Fertilizer 1.1
+17 0:00 END_EXPECTATIONS
+17 0:01 WaterVolume 0
+
+17 1:00 BEGIN_EXPECTATIONS
+17 1:00 Temperature 23
+17 1:00 WaterVolume 0
+17 1:00 Light 11
+17 1:00 EXP_WaterVolume 0
+17 1:00 Moisture 46
+17 1:00 Fertilizer 2.5
+17 1:00 END_EXPECTATIONS
+17 1:01 WaterVolume 0
+
+17 2:00 BEGIN_EXPECTATIONS
+17 2:00 Temperature 23
+17 2:00 WaterVolume 0
+17 2:00 Light 13
+17 2:00 EXP_WaterVolume 0
+17 2:00 Moisture 44
+17 2:00 Fertilizer 2.1
+17 2:00 END_EXPECTATIONS
+17 2:01 WaterVolume 0
+
+17 3:00 BEGIN_EXPECTATIONS
+17 3:00 Temperature 23
+17 3:00 WaterVolume 0
+17 3:00 Light 15
+17 3:00 EXP_WaterVolume 0
+17 3:00 Moisture 41
+17 3:00 Fertilizer 2.3
+17 3:00 END_EXPECTATIONS
+17 3:01 WaterVolume 0
+
+17 4:00 BEGIN_EXPECTATIONS
+17 4:00 Temperature 24
+17 4:00 WaterVolume 0
+17 4:00 Light 20
+17 4:00 EXP_WaterVolume 0
+17 4:00 Moisture 41
+17 4:00 Fertilizer 1.2
+17 4:00 END_EXPECTATIONS
+17 4:01 WaterVolume 0
+
+17 5:00 BEGIN_EXPECTATIONS
+17 5:00 Temperature 24
+17 5:00 WaterVolume 0
+17 5:00 Light 25
+17 5:00 EXP_WaterVolume 0
+17 5:00 Moisture 38
+17 5:00 Fertilizer 1.7
+17 5:00 END_EXPECTATIONS
+17 5:01 WaterVolume 0
+
+17 6:00 BEGIN_EXPECTATIONS
+17 6:00 Temperature 25
+17 6:00 WaterVolume 0
+17 6:00 Light 40
+17 6:00 EXP_WaterVolume 0
+17 6:00 Moisture 37
+17 6:00 Fertilizer 2.9
+17 6:00 END_EXPECTATIONS
+17 6:01 WaterVolume 0
+
+17 7:00 BEGIN_EXPECTATIONS
+17 7:00 Temperature 25
+17 7:00 WaterVolume 0
+17 7:00 Light 45
+17 7:00 EXP_WaterVolume 0
+17 7:00 Moisture 32
+17 7:00 Fertilizer 2.7
+17 7:00 END_EXPECTATIONS
+17 7:01 WaterVolume 0
+
+17 8:00 BEGIN_EXPECTATIONS
+17 8:00 Temperature 25
+17 8:00 WaterVolume 0
+17 8:00 Light 50
+17 8:00 EXP_WaterVolume 40
+17 8:00 Moisture 29
+17 8:00 Fertilizer 2.1
+17 8:00 END_EXPECTATIONS
+17 8:01 WaterVolume 40
+
+17 9:00 BEGIN_EXPECTATIONS
+17 9:00 Temperature 25
+17 9:00 WaterVolume 0
+17 9:00 Light 50
+17 9:00 EXP_WaterVolume 0
+17 9:00 Moisture 33
+17 9:00 Fertilizer 2.7
+17 9:00 END_EXPECTATIONS
+17 9:01 WaterVolume 0
+
+17 10:00 BEGIN_EXPECTATIONS
+17 10:00 Temperature 25
+17 10:00 WaterVolume 0
+17 10:00 Light 50
+17 10:00 EXP_WaterVolume 40
+17 10:00 Moisture 28
+17 10:00 Fertilizer 1.6
+17 10:00 END_EXPECTATIONS
+17 10:01 WaterVolume 40
+
+17 11:00 BEGIN_EXPECTATIONS
+17 11:00 Temperature 26
+17 11:00 WaterVolume 0
+17 11:00 Light 60
+17 11:00 EXP_WaterVolume 40
+17 11:00 Moisture 27
+17 11:00 Fertilizer 1.8
+17 11:00 END_EXPECTATIONS
+17 11:01 WaterVolume 40
+
+17 12:00 BEGIN_EXPECTATIONS
+17 12:00 Temperature 27
+17 12:00 WaterVolume 0
+17 12:00 Light 80
+17 12:00 EXP_WaterVolume 40
+17 12:00 Moisture 27
+17 12:00 Fertilizer 2.9
+17 12:00 END_EXPECTATIONS
+17 12:01 WaterVolume 40
+
+17 13:00 BEGIN_EXPECTATIONS
+17 13:00 Temperature 26
+17 13:00 WaterVolume 0
+17 13:00 Light 70
+17 13:00 EXP_WaterVolume 40
+17 13:00 Moisture 26
+17 13:00 Fertilizer 1.9
+17 13:00 END_EXPECTATIONS
+17 13:01 WaterVolume 40
+
+17 14:00 BEGIN_EXPECTATIONS
+17 14:00 Temperature 26
+17 14:00 WaterVolume 0
+17 14:00 Light 70
+17 14:00 EXP_WaterVolume 40
+17 14:00 Moisture 25
+17 14:00 Fertilizer 2.6
+17 14:00 END_EXPECTATIONS
+17 14:01 WaterVolume 40
+
+17 15:00 BEGIN_EXPECTATIONS
+17 15:00 Temperature 26
+17 15:00 WaterVolume 0
+17 15:00 Light 70
+17 15:00 EXP_WaterVolume 40
+17 15:00 Moisture 26
+17 15:00 Fertilizer 2.5
+17 15:00 END_EXPECTATIONS
+17 15:01 WaterVolume 40
+
+17 16:00 BEGIN_EXPECTATIONS
+17 16:00 Temperature 26
+17 16:00 WaterVolume 0
+17 16:00 Light 65
+17 16:00 EXP_WaterVolume 40
+17 16:00 Moisture 25
+17 16:00 Fertilizer 2.8
+17 16:00 END_EXPECTATIONS
+17 16:01 WaterVolume 40
+
+17 17:00 BEGIN_EXPECTATIONS
+17 17:00 Temperature 26
+17 17:00 WaterVolume 0
+17 17:00 Light 60
+17 17:00 EXP_WaterVolume 40
+17 17:00 Moisture 29
+17 17:00 Fertilizer 1.0
+17 17:00 END_EXPECTATIONS
+17 17:01 WaterVolume 40
+
+17 18:00 BEGIN_EXPECTATIONS
+17 18:00 Temperature 25
+17 18:00 WaterVolume 0
+17 18:00 Light 50
+17 18:00 EXP_WaterVolume 0
+17 18:00 Moisture 33
+17 18:00 Fertilizer 2.0
+17 18:00 END_EXPECTATIONS
+17 18:01 WaterVolume 0
+
+17 19:00 BEGIN_EXPECTATIONS
+17 19:00 Temperature 24
+17 19:00 WaterVolume 0
+17 19:00 Light 30
+17 19:00 EXP_WaterVolume 40
+17 19:00 Moisture 28
+17 19:00 Fertilizer 2.8
+17 19:00 END_EXPECTATIONS
+17 19:01 WaterVolume 40
+
+17 20:00 BEGIN_EXPECTATIONS
+17 20:00 Temperature 23
+17 20:00 WaterVolume 0
+17 20:00 Light 10
+17 20:00 EXP_WaterVolume 0
+17 20:00 Moisture 31
+17 20:00 Fertilizer 1.9
+17 20:00 END_EXPECTATIONS
+17 20:01 WaterVolume 0
+
+17 21:00 BEGIN_EXPECTATIONS
+17 21:00 Temperature 23
+17 21:00 WaterVolume 0
+17 21:00 Light 10
+17 21:00 EXP_WaterVolume 40
+17 21:00 Moisture 27
+17 21:00 Fertilizer 2.1
+17 21:00 END_EXPECTATIONS
+17 21:01 WaterVolume 40
+
+17 22:00 BEGIN_EXPECTATIONS
+17 22:00 Temperature 23
+17 22:00 WaterVolume 0
+17 22:00 Light 10
+17 22:00 EXP_WaterVolume 40
+17 22:00 Moisture 26
+17 22:00 Fertilizer 1.5
+17 22:00 END_EXPECTATIONS
+17 22:01 WaterVolume 40
+
+17 23:00 BEGIN_EXPECTATIONS
+17 23:00 Temperature 23
+17 23:00 WaterVolume 0
+17 23:00 Light 10
+17 23:00 EXP_WaterVolume 40
+17 23:00 Moisture 27
+17 23:00 Fertilizer 2.2
+17 23:00 END_EXPECTATIONS
+17 23:01 WaterVolume 40
+
+### Friday ###
+18 0:00 BEGIN_EXPECTATIONS
+18 0:00 Temperature 18
+18 0:00 WaterVolume 0
+18 0:00 Light 10
+18 0:00 EXP_WaterVolume 0
+18 0:00 Moisture 30
+18 0:00 Fertilizer 1.1
+18 0:00 END_EXPECTATIONS
+18 0:01 WaterVolume 0
+
+18 1:00 BEGIN_EXPECTATIONS
+18 1:00 Temperature 18
+18 1:00 WaterVolume 0
+18 1:00 Light 11
+18 1:00 EXP_WaterVolume 40
+18 1:00 Moisture 25
+18 1:00 Fertilizer 2.8
+18 1:00 END_EXPECTATIONS
+18 1:01 WaterVolume 40
+
+18 2:00 BEGIN_EXPECTATIONS
+18 2:00 Temperature 18
+18 2:00 WaterVolume 0
+18 2:00 Light 13
+18 2:00 EXP_WaterVolume 40
+18 2:00 Moisture 29
+18 2:00 Fertilizer 1.5
+18 2:00 END_EXPECTATIONS
+18 2:01 WaterVolume 40
+
+18 3:00 BEGIN_EXPECTATIONS
+18 3:00 Temperature 18
+18 3:00 WaterVolume 0
+18 3:00 Light 15
+18 3:00 EXP_WaterVolume 40
+18 3:00 Moisture 29
+18 3:00 Fertilizer 1.6
+18 3:00 END_EXPECTATIONS
+18 3:01 WaterVolume 40
+
+18 4:00 BEGIN_EXPECTATIONS
+18 4:00 Temperature 19
+18 4:00 WaterVolume 0
+18 4:00 Light 20
+18 4:00 EXP_WaterVolume 0
+18 4:00 Moisture 33
+18 4:00 Fertilizer 1.3
+18 4:00 END_EXPECTATIONS
+18 4:01 WaterVolume 0
+
+18 5:00 BEGIN_EXPECTATIONS
+18 5:00 Temperature 19
+18 5:00 WaterVolume 0
+18 5:00 Light 25
+18 5:00 EXP_WaterVolume 0
+18 5:00 Moisture 30
+18 5:00 Fertilizer 1.7
+18 5:00 END_EXPECTATIONS
+18 5:01 WaterVolume 0
+
+18 6:00 BEGIN_EXPECTATIONS
+18 6:00 Temperature 20
+18 6:00 WaterVolume 0
+18 6:00 Light 40
+18 6:00 EXP_WaterVolume 40
+18 6:00 Moisture 28
+18 6:00 Fertilizer 1.0
+18 6:00 END_EXPECTATIONS
+18 6:01 WaterVolume 40
+
+18 7:00 BEGIN_EXPECTATIONS
+18 7:00 Temperature 20
+18 7:00 WaterVolume 0
+18 7:00 Light 45
+18 7:00 EXP_WaterVolume 40
+18 7:00 Moisture 27
+18 7:00 Fertilizer 1.6
+18 7:00 END_EXPECTATIONS
+18 7:01 WaterVolume 40
+
+18 8:00 BEGIN_EXPECTATIONS
+18 8:00 Temperature 20
+18 8:00 WaterVolume 0
+18 8:00 Light 50
+18 8:00 EXP_WaterVolume 0
+18 8:00 Moisture 31
+18 8:00 Fertilizer 1.8
+18 8:00 END_EXPECTATIONS
+18 8:01 WaterVolume 0
+
+18 9:00 BEGIN_EXPECTATIONS
+18 9:00 Temperature 20
+18 9:00 WaterVolume 0
+18 9:00 Light 50
+18 9:00 EXP_WaterVolume 0
+18 9:00 Moisture 30
+18 9:00 Fertilizer 2.7
+18 9:00 END_EXPECTATIONS
+18 9:01 WaterVolume 0
+
+18 10:00 BEGIN_EXPECTATIONS
+18 10:00 Temperature 20
+18 10:00 WaterVolume 0
+18 10:00 Light 50
+18 10:00 EXP_WaterVolume 40
+18 10:00 Moisture 27
+18 10:00 Fertilizer 2.2
+18 10:00 END_EXPECTATIONS
+18 10:01 WaterVolume 40
+
+18 11:00 BEGIN_EXPECTATIONS
+18 11:00 Temperature 21
+18 11:00 WaterVolume 0
+18 11:00 Light 60
+18 11:00 EXP_WaterVolume 40
+18 11:00 Moisture 29
+18 11:00 Fertilizer 2.4
+18 11:00 END_EXPECTATIONS
+18 11:01 WaterVolume 40
+
+18 12:00 BEGIN_EXPECTATIONS
+18 12:00 Temperature 22
+18 12:00 WaterVolume 0
+18 12:00 Light 80
+18 12:00 EXP_WaterVolume 0
+18 12:00 Moisture 33
+18 12:00 Fertilizer 1.4
+18 12:00 END_EXPECTATIONS
+18 12:01 WaterVolume 0
+
+18 13:00 BEGIN_EXPECTATIONS
+18 13:00 Temperature 21
+18 13:00 WaterVolume 0
+18 13:00 Light 70
+18 13:00 EXP_WaterVolume 0
+18 13:00 Moisture 31
+18 13:00 Fertilizer 2.9
+18 13:00 END_EXPECTATIONS
+18 13:01 WaterVolume 0
+
+18 14:00 BEGIN_EXPECTATIONS
+18 14:00 Temperature 21
+18 14:00 WaterVolume 0
+18 14:00 Light 70
+18 14:00 EXP_WaterVolume 40
+18 14:00 Moisture 26
+18 14:00 Fertilizer 2.0
+18 14:00 END_EXPECTATIONS
+18 14:01 WaterVolume 40
+
+18 15:00 BEGIN_EXPECTATIONS
+18 15:00 Temperature 21
+18 15:00 WaterVolume 0
+18 15:00 Light 70
+18 15:00 EXP_WaterVolume 40
+18 15:00 Moisture 28
+18 15:00 Fertilizer 1.9
+18 15:00 END_EXPECTATIONS
+18 15:01 WaterVolume 40
+
+18 16:00 BEGIN_EXPECTATIONS
+18 16:00 Temperature 21
+18 16:00 WaterVolume 0
+18 16:00 Light 65
+18 16:00 EXP_WaterVolume 40
+18 16:00 Moisture 27
+18 16:00 Fertilizer 2.0
+18 16:00 END_EXPECTATIONS
+18 16:01 WaterVolume 40
+
+18 17:00 BEGIN_EXPECTATIONS
+18 17:00 Temperature 21
+18 17:00 WaterVolume 0
+18 17:00 Light 60
+18 17:00 EXP_WaterVolume 40
+18 17:00 Moisture 26
+18 17:00 Fertilizer 2.0
+18 17:00 END_EXPECTATIONS
+18 17:01 WaterVolume 40
+
+18 18:00 BEGIN_EXPECTATIONS
+18 18:00 Temperature 20
+18 18:00 WaterVolume 0
+18 18:00 Light 50
+18 18:00 EXP_WaterVolume 40
+18 18:00 Moisture 27
+18 18:00 Fertilizer 1.7
+18 18:00 END_EXPECTATIONS
+18 18:01 WaterVolume 40
+
+18 19:00 BEGIN_EXPECTATIONS
+18 19:00 Temperature 19
+18 19:00 WaterVolume 0
+18 19:00 Light 30
+18 19:00 EXP_WaterVolume 0
+18 19:00 Moisture 30
+18 19:00 Fertilizer 2.2
+18 19:00 END_EXPECTATIONS
+18 19:01 WaterVolume 0
+
+18 20:00 BEGIN_EXPECTATIONS
+18 20:00 Temperature 18
+18 20:00 WaterVolume 0
+18 20:00 Light 10
+18 20:00 EXP_WaterVolume 40
+18 20:00 Moisture 26
+18 20:00 Fertilizer 2.1
+18 20:00 END_EXPECTATIONS
+18 20:01 WaterVolume 40
+
+18 21:00 BEGIN_EXPECTATIONS
+18 21:00 Temperature 18
+18 21:00 WaterVolume 0
+18 21:00 Light 10
+18 21:00 EXP_WaterVolume 40
+18 21:00 Moisture 29
+18 21:00 Fertilizer 1.4
+18 21:00 END_EXPECTATIONS
+18 21:01 WaterVolume 40
+
+18 22:00 BEGIN_EXPECTATIONS
+18 22:00 Temperature 18
+18 22:00 WaterVolume 0
+18 22:00 Light 10
+18 22:00 EXP_WaterVolume 40
+18 22:00 Moisture 29
+18 22:00 Fertilizer 1.7
+18 22:00 END_EXPECTATIONS
+18 22:01 WaterVolume 40
+
+18 23:00 BEGIN_EXPECTATIONS
+18 23:00 Temperature 18
+18 23:00 WaterVolume 0
+18 23:00 Light 10
+18 23:00 EXP_WaterVolume 0
+18 23:00 Moisture 33
+18 23:00 Fertilizer 1.3
+18 23:00 END_EXPECTATIONS
+18 23:01 WaterVolume 0
+
+### Saturday ###
+19 0:00 BEGIN_EXPECTATIONS
+19 0:00 Temperature 19
+19 0:00 WaterVolume 0
+19 0:00 Light 10
+19 0:00 EXP_WaterVolume 0
+19 0:00 Moisture 30
+19 0:00 Fertilizer 2.4
+19 0:00 END_EXPECTATIONS
+19 0:01 WaterVolume 0
+
+19 1:00 BEGIN_EXPECTATIONS
+19 1:00 Temperature 19
+19 1:00 WaterVolume 0
+19 1:00 Light 11
+19 1:00 EXP_WaterVolume 0
+19 1:00 Moisture 30
+19 1:00 Fertilizer 1.8
+19 1:00 END_EXPECTATIONS
+19 1:01 WaterVolume 0
+
+19 2:00 BEGIN_EXPECTATIONS
+19 2:00 Temperature 19
+19 2:00 WaterVolume 0
+19 2:00 Light 13
+19 2:00 EXP_WaterVolume 40
+19 2:00 Moisture 26
+19 2:00 Fertilizer 2.1
+19 2:00 END_EXPECTATIONS
+19 2:01 WaterVolume 40
+
+19 3:00 BEGIN_EXPECTATIONS
+19 3:00 Temperature 19
+19 3:00 WaterVolume 0
+19 3:00 Light 15
+19 3:00 EXP_WaterVolume 40
+19 3:00 Moisture 26
+19 3:00 Fertilizer 2.5
+19 3:00 END_EXPECTATIONS
+19 3:01 WaterVolume 40
+
+19 4:00 BEGIN_EXPECTATIONS
+19 4:00 Temperature 20
+19 4:00 WaterVolume 0
+19 4:00 Light 20
+19 4:00 EXP_WaterVolume 40
+19 4:00 Moisture 26
+19 4:00 Fertilizer 1.4
+19 4:00 END_EXPECTATIONS
+19 4:01 WaterVolume 40
+
+19 5:00 BEGIN_EXPECTATIONS
+19 5:00 Temperature 20
+19 5:00 WaterVolume 0
+19 5:00 Light 25
+19 5:00 EXP_WaterVolume 40
+19 5:00 Moisture 28
+19 5:00 Fertilizer 2.2
+19 5:00 END_EXPECTATIONS
+19 5:01 WaterVolume 40
+
+19 6:00 BEGIN_EXPECTATIONS
+19 6:00 Temperature 21
+19 6:00 WaterVolume 0
+19 6:00 Light 40
+19 6:00 EXP_WaterVolume 40
+19 6:00 Moisture 28
+19 6:00 Fertilizer 2.9
+19 6:00 END_EXPECTATIONS
+19 6:01 WaterVolume 40
+
+19 7:00 BEGIN_EXPECTATIONS
+19 7:00 Temperature 21
+19 7:00 WaterVolume 0
+19 7:00 Light 45
+19 7:00 EXP_WaterVolume 0
+19 7:00 Moisture 31
+19 7:00 Fertilizer 1.2
+19 7:00 END_EXPECTATIONS
+19 7:01 WaterVolume 0
+
+19 8:00 BEGIN_EXPECTATIONS
+19 8:00 Temperature 21
+19 8:00 WaterVolume 0
+19 8:00 Light 50
+19 8:00 EXP_WaterVolume 0
+19 8:00 Moisture 30
+19 8:00 Fertilizer 2.8
+19 8:00 END_EXPECTATIONS
+19 8:01 WaterVolume 0
+
+19 9:00 BEGIN_EXPECTATIONS
+19 9:00 Temperature 21
+19 9:00 WaterVolume 0
+19 9:00 Light 50
+19 9:00 EXP_WaterVolume 40
+19 9:00 Moisture 27
+19 9:00 Fertilizer 1.8
+19 9:00 END_EXPECTATIONS
+19 9:01 WaterVolume 40
+
+19 10:00 BEGIN_EXPECTATIONS
+19 10:00 Temperature 21
+19 10:00 WaterVolume 0
+19 10:00 Light 50
+19 10:00 EXP_WaterVolume 0
+19 10:00 Moisture 31
+19 10:00 Fertilizer 1.3
+19 10:00 END_EXPECTATIONS
+19 10:01 WaterVolume 0
+
+19 11:00 BEGIN_EXPECTATIONS
+19 11:00 Temperature 22
+19 11:00 WaterVolume 0
+19 11:00 Light 60
+19 11:00 EXP_WaterVolume 40
+19 11:00 Moisture 29
+19 11:00 Fertilizer 2.2
+19 11:00 END_EXPECTATIONS
+19 11:01 WaterVolume 40
+
+19 12:00 BEGIN_EXPECTATIONS
+19 12:00 Temperature 23
+19 12:00 WaterVolume 0
+19 12:00 Light 80
+19 12:00 EXP_WaterVolume 0
+19 12:00 Moisture 30
+19 12:00 Fertilizer 2.8
+19 12:00 END_EXPECTATIONS
+19 12:01 WaterVolume 0
+
+19 13:00 BEGIN_EXPECTATIONS
+19 13:00 Temperature 22
+19 13:00 WaterVolume 0
+19 13:00 Light 70
+19 13:00 EXP_WaterVolume 40
+19 13:00 Moisture 28
+19 13:00 Fertilizer 1.0
+19 13:00 END_EXPECTATIONS
+19 13:01 WaterVolume 40
+
+19 14:00 BEGIN_EXPECTATIONS
+19 14:00 Temperature 22
+19 14:00 WaterVolume 0
+19 14:00 Light 70
+19 14:00 EXP_WaterVolume 40
+19 14:00 Moisture 29
+19 14:00 Fertilizer 2.9
+19 14:00 END_EXPECTATIONS
+19 14:01 WaterVolume 40
+
+19 15:00 BEGIN_EXPECTATIONS
+19 15:00 Temperature 22
+19 15:00 WaterVolume 0
+19 15:00 Light 70
+19 15:00 EXP_WaterVolume 0
+19 15:00 Moisture 32
+19 15:00 Fertilizer 2.4
+19 15:00 END_EXPECTATIONS
+19 15:01 WaterVolume 0
+
+19 16:00 BEGIN_EXPECTATIONS
+19 16:00 Temperature 22
+19 16:00 WaterVolume 0
+19 16:00 Light 65
+19 16:00 EXP_WaterVolume 0
+19 16:00 Moisture 30
+19 16:00 Fertilizer 1.0
+19 16:00 END_EXPECTATIONS
+19 16:01 WaterVolume 0
+
+19 17:00 BEGIN_EXPECTATIONS
+19 17:00 Temperature 22
+19 17:00 WaterVolume 0
+19 17:00 Light 60
+19 17:00 EXP_WaterVolume 40
+19 17:00 Moisture 25
+19 17:00 Fertilizer 2.3
+19 17:00 END_EXPECTATIONS
+19 17:01 WaterVolume 40
+
+19 18:00 BEGIN_EXPECTATIONS
+19 18:00 Temperature 21
+19 18:00 WaterVolume 0
+19 18:00 Light 50
+19 18:00 EXP_WaterVolume 40
+19 18:00 Moisture 25
+19 18:00 Fertilizer 1.9
+19 18:00 END_EXPECTATIONS
+19 18:01 WaterVolume 40
+
+19 19:00 BEGIN_EXPECTATIONS
+19 19:00 Temperature 20
+19 19:00 WaterVolume 0
+19 19:00 Light 30
+19 19:00 EXP_WaterVolume 40
+19 19:00 Moisture 27
+19 19:00 Fertilizer 1.6
+19 19:00 END_EXPECTATIONS
+19 19:01 WaterVolume 40
+
+19 20:00 BEGIN_EXPECTATIONS
+19 20:00 Temperature 19
+19 20:00 WaterVolume 0
+19 20:00 Light 10
+19 20:00 EXP_WaterVolume 40
+19 20:00 Moisture 26
+19 20:00 Fertilizer 1.5
+19 20:00 END_EXPECTATIONS
+19 20:01 WaterVolume 40
+
+19 21:00 BEGIN_EXPECTATIONS
+19 21:00 Temperature 19
+19 21:00 WaterVolume 0
+19 21:00 Light 10
+19 21:00 EXP_WaterVolume 40
+19 21:00 Moisture 27
+19 21:00 Fertilizer 2.8
+19 21:00 END_EXPECTATIONS
+19 21:01 WaterVolume 40
+
+19 22:00 BEGIN_EXPECTATIONS
+19 22:00 Temperature 19
+19 22:00 WaterVolume 0
+19 22:00 Light 10
+19 22:00 EXP_WaterVolume 40
+19 22:00 Moisture 29
+19 22:00 Fertilizer 2.7
+19 22:00 END_EXPECTATIONS
+19 22:01 WaterVolume 40
+
+19 23:00 BEGIN_EXPECTATIONS
+19 23:00 Temperature 19
+19 23:00 WaterVolume 0
+19 23:00 Light 10
+19 23:00 EXP_WaterVolume 40
+19 23:00 Moisture 28
+19 23:00 Fertilizer 1.8
+19 23:00 END_EXPECTATIONS
+19 23:01 WaterVolume 40
+
+### Sunday ###
+20 0:00 BEGIN_EXPECTATIONS
+20 0:00 Temperature 21
+20 0:00 WaterVolume 0
+20 0:00 Light 10
+20 0:00 EXP_WaterVolume 40
+20 0:00 Moisture 27
+20 0:00 Fertilizer 2.4
+20 0:00 END_EXPECTATIONS
+20 0:01 WaterVolume 40
+
+20 1:00 BEGIN_EXPECTATIONS
+20 1:00 Temperature 21
+20 1:00 WaterVolume 0
+20 1:00 Light 11
+20 1:00 EXP_WaterVolume 40
+20 1:00 Moisture 28
+20 1:00 Fertilizer 1.9
+20 1:00 END_EXPECTATIONS
+20 1:01 WaterVolume 40
+
+20 2:00 BEGIN_EXPECTATIONS
+20 2:00 Temperature 21
+20 2:00 WaterVolume 0
+20 2:00 Light 13
+20 2:00 EXP_WaterVolume 0
+20 2:00 Moisture 32
+20 2:00 Fertilizer 1.8
+20 2:00 END_EXPECTATIONS
+20 2:01 WaterVolume 0
+
+20 3:00 BEGIN_EXPECTATIONS
+20 3:00 Temperature 21
+20 3:00 WaterVolume 0
+20 3:00 Light 15
+20 3:00 EXP_WaterVolume 0
+20 3:00 Moisture 31
+20 3:00 Fertilizer 1.1
+20 3:00 END_EXPECTATIONS
+20 3:01 WaterVolume 0
+
+20 4:00 BEGIN_EXPECTATIONS
+20 4:00 Temperature 22
+20 4:00 WaterVolume 0
+20 4:00 Light 20
+20 4:00 EXP_WaterVolume 40
+20 4:00 Moisture 26
+20 4:00 Fertilizer 2.9
+20 4:00 END_EXPECTATIONS
+20 4:01 WaterVolume 40
+
+20 5:00 BEGIN_EXPECTATIONS
+20 5:00 Temperature 22
+20 5:00 WaterVolume 0
+20 5:00 Light 25
+20 5:00 EXP_WaterVolume 40
+20 5:00 Moisture 25
+20 5:00 Fertilizer 2.1
+20 5:00 END_EXPECTATIONS
+20 5:01 WaterVolume 40
+
+20 6:00 BEGIN_EXPECTATIONS
+20 6:00 Temperature 23
+20 6:00 WaterVolume 0
+20 6:00 Light 40
+20 6:00 EXP_WaterVolume 40
+20 6:00 Moisture 24
+20 6:00 Fertilizer 1.2
+20 6:00 END_EXPECTATIONS
+20 6:01 WaterVolume 40
+
+20 7:00 BEGIN_EXPECTATIONS
+20 7:00 Temperature 23
+20 7:00 WaterVolume 0
+20 7:00 Light 45
+20 7:00 EXP_WaterVolume 40
+20 7:00 Moisture 25
+20 7:00 Fertilizer 1.1
+20 7:00 END_EXPECTATIONS
+20 7:01 WaterVolume 40
+
+20 8:00 BEGIN_EXPECTATIONS
+20 8:00 Temperature 23
+20 8:00 WaterVolume 0
+20 8:00 Light 50
+20 8:00 EXP_WaterVolume 40
+20 8:00 Moisture 24
+20 8:00 Fertilizer 2.5
+20 8:00 END_EXPECTATIONS
+20 8:01 WaterVolume 40
+
+20 9:00 BEGIN_EXPECTATIONS
+20 9:00 Temperature 23
+20 9:00 WaterVolume 0
+20 9:00 Light 50
+20 9:00 EXP_WaterVolume 40
+20 9:00 Moisture 24
+20 9:00 Fertilizer 2.9
+20 9:00 END_EXPECTATIONS
+20 9:01 WaterVolume 40
+
+20 10:00 BEGIN_EXPECTATIONS
+20 10:00 Temperature 23
+20 10:00 WaterVolume 0
+20 10:00 Light 50
+20 10:00 EXP_WaterVolume 40
+20 10:00 Moisture 27
+20 10:00 Fertilizer 1.0
+20 10:00 END_EXPECTATIONS
+20 10:01 WaterVolume 40
+
+20 11:00 BEGIN_EXPECTATIONS
+20 11:00 Temperature 24
+20 11:00 WaterVolume 0
+20 11:00 Light 60
+20 11:00 EXP_WaterVolume 40
+20 11:00 Moisture 26
+20 11:00 Fertilizer 2.6
+20 11:00 END_EXPECTATIONS
+20 11:01 WaterVolume 40
+
+20 12:00 BEGIN_EXPECTATIONS
+20 12:00 Temperature 25
+20 12:00 WaterVolume 0
+20 12:00 Light 80
+20 12:00 EXP_WaterVolume 40
+20 12:00 Moisture 29
+20 12:00 Fertilizer 1.3
+20 12:00 END_EXPECTATIONS
+20 12:01 WaterVolume 40
+
+20 13:00 BEGIN_EXPECTATIONS
+20 13:00 Temperature 24
+20 13:00 WaterVolume 0
+20 13:00 Light 70
+20 13:00 EXP_WaterVolume 40
+20 13:00 Moisture 28
+20 13:00 Fertilizer 1.2
+20 13:00 END_EXPECTATIONS
+20 13:01 WaterVolume 40
+
+20 14:00 BEGIN_EXPECTATIONS
+20 14:00 Temperature 24
+20 14:00 WaterVolume 0
+20 14:00 Light 70
+20 14:00 EXP_WaterVolume 40
+20 14:00 Moisture 28
+20 14:00 Fertilizer 2.7
+20 14:00 END_EXPECTATIONS
+20 14:01 WaterVolume 40
+
+20 15:00 BEGIN_EXPECTATIONS
+20 15:00 Temperature 24
+20 15:00 WaterVolume 0
+20 15:00 Light 70
+20 15:00 EXP_WaterVolume 40
+20 15:00 Moisture 29
+20 15:00 Fertilizer 2.5
+20 15:00 END_EXPECTATIONS
+20 15:01 WaterVolume 40
+
+20 16:00 BEGIN_EXPECTATIONS
+20 16:00 Temperature 24
+20 16:00 WaterVolume 0
+20 16:00 Light 65
+20 16:00 EXP_WaterVolume 0
+20 16:00 Moisture 31
+20 16:00 Fertilizer 2.0
+20 16:00 END_EXPECTATIONS
+20 16:01 WaterVolume 0
+
+20 17:00 BEGIN_EXPECTATIONS
+20 17:00 Temperature 24
+20 17:00 WaterVolume 0
+20 17:00 Light 60
+20 17:00 EXP_WaterVolume 40
+20 17:00 Moisture 27
+20 17:00 Fertilizer 2.6
+20 17:00 END_EXPECTATIONS
+20 17:01 WaterVolume 40
+
+20 18:00 BEGIN_EXPECTATIONS
+20 18:00 Temperature 23
+20 18:00 WaterVolume 0
+20 18:00 Light 50
+20 18:00 EXP_WaterVolume 40
+20 18:00 Moisture 28
+20 18:00 Fertilizer 1.5
+20 18:00 END_EXPECTATIONS
+20 18:01 WaterVolume 40
+
+20 19:00 BEGIN_EXPECTATIONS
+20 19:00 Temperature 22
+20 19:00 WaterVolume 0
+20 19:00 Light 30
+20 19:00 EXP_WaterVolume 0
+20 19:00 Moisture 31
+20 19:00 Fertilizer 1.6
+20 19:00 END_EXPECTATIONS
+20 19:01 WaterVolume 0
+
+20 20:00 BEGIN_EXPECTATIONS
+20 20:00 Temperature 21
+20 20:00 WaterVolume 0
+20 20:00 Light 10
+20 20:00 EXP_WaterVolume 0
+20 20:00 Moisture 31
+20 20:00 Fertilizer 1.4
+20 20:00 END_EXPECTATIONS
+20 20:01 WaterVolume 0
+
+20 21:00 BEGIN_EXPECTATIONS
+20 21:00 Temperature 21
+20 21:00 WaterVolume 0
+20 21:00 Light 10
+20 21:00 EXP_WaterVolume 40
+20 21:00 Moisture 28
+20 21:00 Fertilizer 1.4
+20 21:00 END_EXPECTATIONS
+20 21:01 WaterVolume 40
+
+20 22:00 BEGIN_EXPECTATIONS
+20 22:00 Temperature 21
+20 22:00 WaterVolume 0
+20 22:00 Light 10
+20 22:00 EXP_WaterVolume 0
+20 22:00 Moisture 30
+20 22:00 Fertilizer 2.0
+20 22:00 END_EXPECTATIONS
+20 22:01 WaterVolume 0
+
+20 23:00 BEGIN_EXPECTATIONS
+20 23:00 Temperature 21
+20 23:00 WaterVolume 0
+20 23:00 Light 10
+20 23:00 EXP_WaterVolume 0
+20 23:00 Moisture 30
+20 23:00 Fertilizer 2.4
+20 23:00 END_EXPECTATIONS
+20 23:01 WaterVolume 0
+
+
+#### Week 3 ####
+### Monday ###
+21 0:00 BEGIN_EXPECTATIONS
+21 0:00 Temperature 22
+21 0:00 WaterVolume 0
+21 0:00 Light 10
+21 0:00 EXP_WaterVolume 40
+21 0:00 Moisture 29
+21 0:00 Fertilizer 1.2
+21 0:00 END_EXPECTATIONS
+21 0:01 WaterVolume 40
+
+21 1:00 BEGIN_EXPECTATIONS
+21 1:00 Temperature 22
+21 1:00 WaterVolume 0
+21 1:00 Light 11
+21 1:00 EXP_WaterVolume 0
+21 1:00 Moisture 33
+21 1:00 Fertilizer 1.5
+21 1:00 END_EXPECTATIONS
+21 1:01 WaterVolume 0
+
+21 2:00 BEGIN_EXPECTATIONS
+21 2:00 Temperature 22
+21 2:00 WaterVolume 0
+21 2:00 Light 13
+21 2:00 EXP_WaterVolume 40
+21 2:00 Moisture 28
+21 2:00 Fertilizer 2.3
+21 2:00 END_EXPECTATIONS
+21 2:01 WaterVolume 40
+
+21 3:00 BEGIN_EXPECTATIONS
+21 3:00 Temperature 22
+21 3:00 WaterVolume 0
+21 3:00 Light 15
+21 3:00 EXP_WaterVolume 40
+21 3:00 Moisture 27
+21 3:00 Fertilizer 1.3
+21 3:00 END_EXPECTATIONS
+21 3:01 WaterVolume 40
+
+21 4:00 BEGIN_EXPECTATIONS
+21 4:00 Temperature 23
+21 4:00 WaterVolume 0
+21 4:00 Light 20
+21 4:00 EXP_WaterVolume 40
+21 4:00 Moisture 27
+21 4:00 Fertilizer 1.2
+21 4:00 END_EXPECTATIONS
+21 4:01 WaterVolume 40
+
+21 5:00 BEGIN_EXPECTATIONS
+21 5:00 Temperature 23
+21 5:00 WaterVolume 0
+21 5:00 Light 25
+21 5:00 EXP_WaterVolume 40
+21 5:00 Moisture 29
+21 5:00 Fertilizer 1.7
+21 5:00 END_EXPECTATIONS
+21 5:01 WaterVolume 40
+
+21 6:00 BEGIN_EXPECTATIONS
+21 6:00 Temperature 24
+21 6:00 WaterVolume 0
+21 6:00 Light 40
+21 6:00 EXP_WaterVolume 0
+21 6:00 Moisture 31
+21 6:00 Fertilizer 1.7
+21 6:00 END_EXPECTATIONS
+21 6:01 WaterVolume 0
+
+21 7:00 BEGIN_EXPECTATIONS
+21 7:00 Temperature 24
+21 7:00 WaterVolume 0
+21 7:00 Light 45
+21 7:00 EXP_WaterVolume 40
+21 7:00 Moisture 26
+21 7:00 Fertilizer 1.1
+21 7:00 END_EXPECTATIONS
+21 7:01 WaterVolume 40
+
+21 8:00 BEGIN_EXPECTATIONS
+21 8:00 Temperature 24
+21 8:00 WaterVolume 0
+21 8:00 Light 50
+21 8:00 EXP_WaterVolume 0
+21 8:00 Moisture 30
+21 8:00 Fertilizer 1.3
+21 8:00 END_EXPECTATIONS
+21 8:01 WaterVolume 0
+
+21 9:00 BEGIN_EXPECTATIONS
+21 9:00 Temperature 24
+21 9:00 WaterVolume 0
+21 9:00 Light 50
+21 9:00 EXP_WaterVolume 40
+21 9:00 Moisture 29
+21 9:00 Fertilizer 1.1
+21 9:00 END_EXPECTATIONS
+21 9:01 WaterVolume 40
+
+21 10:00 BEGIN_EXPECTATIONS
+21 10:00 Temperature 24
+21 10:00 WaterVolume 0
+21 10:00 Light 50
+21 10:00 EXP_WaterVolume 0
+21 10:00 Moisture 30
+21 10:00 Fertilizer 1.5
+21 10:00 END_EXPECTATIONS
+21 10:01 WaterVolume 0
+
+21 11:00 BEGIN_EXPECTATIONS
+21 11:00 Temperature 25
+21 11:00 WaterVolume 0
+21 11:00 Light 60
+21 11:00 EXP_WaterVolume 40
+21 11:00 Moisture 26
+21 11:00 Fertilizer 1.0
+21 11:00 END_EXPECTATIONS
+21 11:01 WaterVolume 40
+
+21 12:00 BEGIN_EXPECTATIONS
+21 12:00 Temperature 26
+21 12:00 WaterVolume 0
+21 12:00 Light 80
+21 12:00 EXP_WaterVolume 40
+21 12:00 Moisture 29
+21 12:00 Fertilizer 1.7
+21 12:00 END_EXPECTATIONS
+21 12:01 WaterVolume 40
+
+21 13:00 BEGIN_EXPECTATIONS
+21 13:00 Temperature 25
+21 13:00 WaterVolume 0
+21 13:00 Light 70
+21 13:00 EXP_WaterVolume 0
+21 13:00 Moisture 32
+21 13:00 Fertilizer 2.7
+21 13:00 END_EXPECTATIONS
+21 13:01 WaterVolume 0
+
+21 14:00 BEGIN_EXPECTATIONS
+21 14:00 Temperature 25
+21 14:00 WaterVolume 0
+21 14:00 Light 70
+21 14:00 EXP_WaterVolume 40
+21 14:00 Moisture 29
+21 14:00 Fertilizer 1.2
+21 14:00 END_EXPECTATIONS
+21 14:01 WaterVolume 40
+
+21 15:00 BEGIN_EXPECTATIONS
+21 15:00 Temperature 25
+21 15:00 WaterVolume 0
+21 15:00 Light 70
+21 15:00 EXP_WaterVolume 0
+21 15:00 Moisture 32
+21 15:00 Fertilizer 2.0
+21 15:00 END_EXPECTATIONS
+21 15:01 WaterVolume 0
+
+21 16:00 BEGIN_EXPECTATIONS
+21 16:00 Temperature 25
+21 16:00 WaterVolume 0
+21 16:00 Light 65
+21 16:00 EXP_WaterVolume 0
+21 16:00 Moisture 31
+21 16:00 Fertilizer 2.4
+21 16:00 END_EXPECTATIONS
+21 16:01 WaterVolume 0
+
+21 17:00 BEGIN_EXPECTATIONS
+21 17:00 Temperature 25
+21 17:00 WaterVolume 0
+21 17:00 Light 60
+21 17:00 EXP_WaterVolume 0
+21 17:00 Moisture 31
+21 17:00 Fertilizer 1.8
+21 17:00 END_EXPECTATIONS
+21 17:01 WaterVolume 0
+
+21 18:00 BEGIN_EXPECTATIONS
+21 18:00 Temperature 24
+21 18:00 WaterVolume 0
+21 18:00 Light 50
+21 18:00 EXP_WaterVolume 0
+21 18:00 Moisture 31
+21 18:00 Fertilizer 2.9
+21 18:00 END_EXPECTATIONS
+21 18:01 WaterVolume 0
+
+21 19:00 BEGIN_EXPECTATIONS
+21 19:00 Temperature 23
+21 19:00 WaterVolume 0
+21 19:00 Light 30
+21 19:00 EXP_WaterVolume 0
+21 19:00 Moisture 30
+21 19:00 Fertilizer 1.4
+21 19:00 END_EXPECTATIONS
+21 19:01 WaterVolume 0
+
+21 20:00 BEGIN_EXPECTATIONS
+21 20:00 Temperature 22
+21 20:00 WaterVolume 0
+21 20:00 Light 10
+21 20:00 EXP_WaterVolume 40
+21 20:00 Moisture 27
+21 20:00 Fertilizer 2.4
+21 20:00 END_EXPECTATIONS
+21 20:01 WaterVolume 40
+
+21 21:00 BEGIN_EXPECTATIONS
+21 21:00 Temperature 22
+21 21:00 WaterVolume 0
+21 21:00 Light 10
+21 21:00 EXP_WaterVolume 0
+21 21:00 Moisture 30
+21 21:00 Fertilizer 2.4
+21 21:00 END_EXPECTATIONS
+21 21:01 WaterVolume 0
+
+21 22:00 BEGIN_EXPECTATIONS
+21 22:00 Temperature 22
+21 22:00 WaterVolume 0
+21 22:00 Light 10
+21 22:00 EXP_WaterVolume 0
+21 22:00 Moisture 30
+21 22:00 Fertilizer 2.9
+21 22:00 END_EXPECTATIONS
+21 22:01 WaterVolume 0
+
+21 23:00 BEGIN_EXPECTATIONS
+21 23:00 Temperature 22
+21 23:00 WaterVolume 0
+21 23:00 Light 10
+21 23:00 EXP_WaterVolume 40
+21 23:00 Moisture 29
+21 23:00 Fertilizer 2.7
+21 23:00 END_EXPECTATIONS
+21 23:01 WaterVolume 40
+
+### Tuesday ###
+22 0:00 BEGIN_EXPECTATIONS
+22 0:00 Temperature 17
+22 0:00 WaterVolume 0
+22 0:00 Light 10
+22 0:00 EXP_WaterVolume 0
+22 0:00 Moisture 50
+22 0:00 Fertilizer 2.7
+22 0:00 END_EXPECTATIONS
+22 0:01 WaterVolume 0
+
+22 1:00 BEGIN_EXPECTATIONS
+22 1:00 Temperature 17
+22 1:00 WaterVolume 0
+22 1:00 Light 11
+22 1:00 EXP_WaterVolume 0
+22 1:00 Moisture 49
+22 1:00 Fertilizer 2.1
+22 1:00 END_EXPECTATIONS
+22 1:01 WaterVolume 0
+
+22 2:00 BEGIN_EXPECTATIONS
+22 2:00 Temperature 17
+22 2:00 WaterVolume 0
+22 2:00 Light 13
+22 2:00 EXP_WaterVolume 0
+22 2:00 Moisture 45
+22 2:00 Fertilizer 1.5
+22 2:00 END_EXPECTATIONS
+22 2:01 WaterVolume 0
+
+22 3:00 BEGIN_EXPECTATIONS
+22 3:00 Temperature 17
+22 3:00 WaterVolume 0
+22 3:00 Light 15
+22 3:00 EXP_WaterVolume 0
+22 3:00 Moisture 45
+22 3:00 Fertilizer 2.9
+22 3:00 END_EXPECTATIONS
+22 3:01 WaterVolume 0
+
+22 4:00 BEGIN_EXPECTATIONS
+22 4:00 Temperature 18
+22 4:00 WaterVolume 0
+22 4:00 Light 20
+22 4:00 EXP_WaterVolume 0
+22 4:00 Moisture 40
+22 4:00 Fertilizer 1.4
+22 4:00 END_EXPECTATIONS
+22 4:01 WaterVolume 0
+
+22 5:00 BEGIN_EXPECTATIONS
+22 5:00 Temperature 18
+22 5:00 WaterVolume 0
+22 5:00 Light 25
+22 5:00 EXP_WaterVolume 0
+22 5:00 Moisture 39
+22 5:00 Fertilizer 1.8
+22 5:00 END_EXPECTATIONS
+22 5:01 WaterVolume 0
+
+22 6:00 BEGIN_EXPECTATIONS
+22 6:00 Temperature 19
+22 6:00 WaterVolume 0
+22 6:00 Light 40
+22 6:00 EXP_WaterVolume 0
+22 6:00 Moisture 35
+22 6:00 Fertilizer 2.8
+22 6:00 END_EXPECTATIONS
+22 6:01 WaterVolume 0
+
+22 7:00 BEGIN_EXPECTATIONS
+22 7:00 Temperature 19
+22 7:00 WaterVolume 0
+22 7:00 Light 45
+22 7:00 EXP_WaterVolume 0
+22 7:00 Moisture 30
+22 7:00 Fertilizer 1.5
+22 7:00 END_EXPECTATIONS
+22 7:01 WaterVolume 0
+
+22 8:00 BEGIN_EXPECTATIONS
+22 8:00 Temperature 19
+22 8:00 WaterVolume 0
+22 8:00 Light 50
+22 8:00 EXP_WaterVolume 40
+22 8:00 Moisture 25
+22 8:00 Fertilizer 1.7
+22 8:00 END_EXPECTATIONS
+22 8:01 WaterVolume 40
+
+22 9:00 BEGIN_EXPECTATIONS
+22 9:00 Temperature 19
+22 9:00 WaterVolume 0
+22 9:00 Light 50
+22 9:00 EXP_WaterVolume 40
+22 9:00 Moisture 25
+22 9:00 Fertilizer 2.5
+22 9:00 END_EXPECTATIONS
+22 9:01 WaterVolume 40
+
+22 10:00 BEGIN_EXPECTATIONS
+22 10:00 Temperature 19
+22 10:00 WaterVolume 0
+22 10:00 Light 50
+22 10:00 EXP_WaterVolume 40
+22 10:00 Moisture 27
+22 10:00 Fertilizer 1.5
+22 10:00 END_EXPECTATIONS
+22 10:01 WaterVolume 40
+
+22 11:00 BEGIN_EXPECTATIONS
+22 11:00 Temperature 20
+22 11:00 WaterVolume 0
+22 11:00 Light 60
+22 11:00 EXP_WaterVolume 40
+22 11:00 Moisture 26
+22 11:00 Fertilizer 2.8
+22 11:00 END_EXPECTATIONS
+22 11:01 WaterVolume 40
+
+22 12:00 BEGIN_EXPECTATIONS
+22 12:00 Temperature 21
+22 12:00 WaterVolume 0
+22 12:00 Light 80
+22 12:00 EXP_WaterVolume 0
+22 12:00 Moisture 30
+22 12:00 Fertilizer 1.3
+22 12:00 END_EXPECTATIONS
+22 12:01 WaterVolume 0
+
+22 13:00 BEGIN_EXPECTATIONS
+22 13:00 Temperature 20
+22 13:00 WaterVolume 0
+22 13:00 Light 70
+22 13:00 EXP_WaterVolume 40
+22 13:00 Moisture 25
+22 13:00 Fertilizer 2.0
+22 13:00 END_EXPECTATIONS
+22 13:01 WaterVolume 40
+
+22 14:00 BEGIN_EXPECTATIONS
+22 14:00 Temperature 20
+22 14:00 WaterVolume 0
+22 14:00 Light 70
+22 14:00 EXP_WaterVolume 80
+22 14:00 Moisture 0
+22 14:00 Fertilizer 2.0
+22 14:00 END_EXPECTATIONS
+22 14:01 WaterVolume 80
+
+22 15:00 BEGIN_EXPECTATIONS
+22 15:00 Temperature 20
+22 15:00 WaterVolume 0
+22 15:00 Light 70
+22 15:00 EXP_WaterVolume 80
+22 15:00 Moisture 3
+22 15:00 Fertilizer 2.7
+22 15:00 END_EXPECTATIONS
+22 15:01 WaterVolume 80
+
+22 16:00 BEGIN_EXPECTATIONS
+22 16:00 Temperature 20
+22 16:00 WaterVolume 0
+22 16:00 Light 65
+22 16:00 EXP_WaterVolume 80
+22 16:00 Moisture 6
+22 16:00 Fertilizer 2.3
+22 16:00 END_EXPECTATIONS
+22 16:01 WaterVolume 80
+
+22 17:00 BEGIN_EXPECTATIONS
+22 17:00 Temperature 20
+22 17:00 WaterVolume 0
+22 17:00 Light 60
+22 17:00 EXP_WaterVolume 60
+22 17:00 Moisture 13
+22 17:00 Fertilizer 2.8
+22 17:00 END_EXPECTATIONS
+22 17:01 WaterVolume 60
+
+22 18:00 BEGIN_EXPECTATIONS
+22 18:00 Temperature 19
+22 18:00 WaterVolume 0
+22 18:00 Light 50
+22 18:00 EXP_WaterVolume 60
+22 18:00 Moisture 19
+22 18:00 Fertilizer 1.7
+22 18:00 END_EXPECTATIONS
+22 18:01 WaterVolume 60
+
+22 19:00 BEGIN_EXPECTATIONS
+22 19:00 Temperature 18
+22 19:00 WaterVolume 0
+22 19:00 Light 30
+22 19:00 EXP_WaterVolume 40
+22 19:00 Moisture 25
+22 19:00 Fertilizer 2.3
+22 19:00 END_EXPECTATIONS
+22 19:01 WaterVolume 40
+
+22 20:00 BEGIN_EXPECTATIONS
+22 20:00 Temperature 17
+22 20:00 WaterVolume 0
+22 20:00 Light 10
+22 20:00 EXP_WaterVolume 40
+22 20:00 Moisture 28
+22 20:00 Fertilizer 2.1
+22 20:00 END_EXPECTATIONS
+22 20:01 WaterVolume 40
+
+22 21:00 BEGIN_EXPECTATIONS
+22 21:00 Temperature 17
+22 21:00 WaterVolume 0
+22 21:00 Light 10
+22 21:00 EXP_WaterVolume 40
+22 21:00 Moisture 28
+22 21:00 Fertilizer 1.8
+22 21:00 END_EXPECTATIONS
+22 21:01 WaterVolume 40
+
+22 22:00 BEGIN_EXPECTATIONS
+22 22:00 Temperature 17
+22 22:00 WaterVolume 0
+22 22:00 Light 10
+22 22:00 EXP_WaterVolume 0
+22 22:00 Moisture 32
+22 22:00 Fertilizer 2.9
+22 22:00 END_EXPECTATIONS
+22 22:01 WaterVolume 0
+
+22 23:00 BEGIN_EXPECTATIONS
+22 23:00 Temperature 17
+22 23:00 WaterVolume 0
+22 23:00 Light 10
+22 23:00 EXP_WaterVolume 0
+22 23:00 Moisture 31
+22 23:00 Fertilizer 1.4
+22 23:00 END_EXPECTATIONS
+22 23:01 WaterVolume 0
+
+### Wednesday ###
+23 0:00 BEGIN_EXPECTATIONS
+23 0:00 Temperature 20
+23 0:00 WaterVolume 0
+23 0:00 Light 10
+23 0:00 EXP_WaterVolume 40
+23 0:00 Moisture 28
+23 0:00 Fertilizer 1.6
+23 0:00 END_EXPECTATIONS
+23 0:01 WaterVolume 40
+
+23 1:00 BEGIN_EXPECTATIONS
+23 1:00 Temperature 20
+23 1:00 WaterVolume 0
+23 1:00 Light 11
+23 1:00 EXP_WaterVolume 40
+23 1:00 Moisture 29
+23 1:00 Fertilizer 1.6
+23 1:00 END_EXPECTATIONS
+23 1:01 WaterVolume 40
+
+23 2:00 BEGIN_EXPECTATIONS
+23 2:00 Temperature 20
+23 2:00 WaterVolume 0
+23 2:00 Light 13
+23 2:00 EXP_WaterVolume 0
+23 2:00 Moisture 30
+23 2:00 Fertilizer 1.0
+23 2:00 END_EXPECTATIONS
+23 2:01 WaterVolume 0
+
+23 3:00 BEGIN_EXPECTATIONS
+23 3:00 Temperature 20
+23 3:00 WaterVolume 0
+23 3:00 Light 15
+23 3:00 EXP_WaterVolume 40
+23 3:00 Moisture 28
+23 3:00 Fertilizer 2.4
+23 3:00 END_EXPECTATIONS
+23 3:01 WaterVolume 40
+
+23 4:00 BEGIN_EXPECTATIONS
+23 4:00 Temperature 21
+23 4:00 WaterVolume 0
+23 4:00 Light 20
+23 4:00 EXP_WaterVolume 40
+23 4:00 Moisture 28
+23 4:00 Fertilizer 1.4
+23 4:00 END_EXPECTATIONS
+23 4:01 WaterVolume 40
+
+23 5:00 BEGIN_EXPECTATIONS
+23 5:00 Temperature 21
+23 5:00 WaterVolume 0
+23 5:00 Light 25
+23 5:00 EXP_WaterVolume 0
+23 5:00 Moisture 30
+23 5:00 Fertilizer 2.0
+23 5:00 END_EXPECTATIONS
+23 5:01 WaterVolume 0
+
+23 6:00 BEGIN_EXPECTATIONS
+23 6:00 Temperature 22
+23 6:00 WaterVolume 0
+23 6:00 Light 40
+23 6:00 EXP_WaterVolume 40
+23 6:00 Moisture 28
+23 6:00 Fertilizer 1.6
+23 6:00 END_EXPECTATIONS
+23 6:01 WaterVolume 40
+
+23 7:00 BEGIN_EXPECTATIONS
+23 7:00 Temperature 22
+23 7:00 WaterVolume 0
+23 7:00 Light 45
+23 7:00 EXP_WaterVolume 0
+23 7:00 Moisture 31
+23 7:00 Fertilizer 1.8
+23 7:00 END_EXPECTATIONS
+23 7:01 WaterVolume 0
+
+23 8:00 BEGIN_EXPECTATIONS
+23 8:00 Temperature 22
+23 8:00 WaterVolume 0
+23 8:00 Light 50
+23 8:00 EXP_WaterVolume 40
+23 8:00 Moisture 28
+23 8:00 Fertilizer 1.3
+23 8:00 END_EXPECTATIONS
+23 8:01 WaterVolume 40
+
+23 9:00 BEGIN_EXPECTATIONS
+23 9:00 Temperature 22
+23 9:00 WaterVolume 0
+23 9:00 Light 50
+23 9:00 EXP_WaterVolume 0
+23 9:00 Moisture 32
+23 9:00 Fertilizer 1.5
+23 9:00 END_EXPECTATIONS
+23 9:01 WaterVolume 0
+
+23 10:00 BEGIN_EXPECTATIONS
+23 10:00 Temperature 22
+23 10:00 WaterVolume 0
+23 10:00 Light 50
+23 10:00 EXP_WaterVolume 0
+23 10:00 Moisture 31
+23 10:00 Fertilizer 1.0
+23 10:00 END_EXPECTATIONS
+23 10:01 WaterVolume 0
+
+23 11:00 BEGIN_EXPECTATIONS
+23 11:00 Temperature 23
+23 11:00 WaterVolume 0
+23 11:00 Light 60
+23 11:00 EXP_WaterVolume 40
+23 11:00 Moisture 28
+23 11:00 Fertilizer 2.2
+23 11:00 END_EXPECTATIONS
+23 11:01 WaterVolume 40
+
+23 12:00 BEGIN_EXPECTATIONS
+23 12:00 Temperature 24
+23 12:00 WaterVolume 0
+23 12:00 Light 80
+23 12:00 EXP_WaterVolume 0
+23 12:00 Moisture 31
+23 12:00 Fertilizer 1.2
+23 12:00 END_EXPECTATIONS
+23 12:01 WaterVolume 0
+
+23 13:00 BEGIN_EXPECTATIONS
+23 13:00 Temperature 23
+23 13:00 WaterVolume 0
+23 13:00 Light 70
+23 13:00 EXP_WaterVolume 0
+23 13:00 Moisture 31
+23 13:00 Fertilizer 2.1
+23 13:00 END_EXPECTATIONS
+23 13:01 WaterVolume 0
+
+23 14:00 BEGIN_EXPECTATIONS
+23 14:00 Temperature 23
+23 14:00 WaterVolume 0
+23 14:00 Light 70
+23 14:00 EXP_WaterVolume 0
+23 14:00 Moisture 31
+23 14:00 Fertilizer 1.4
+23 14:00 END_EXPECTATIONS
+23 14:01 WaterVolume 0
+
+23 15:00 BEGIN_EXPECTATIONS
+23 15:00 Temperature 23
+23 15:00 WaterVolume 0
+23 15:00 Light 70
+23 15:00 EXP_WaterVolume 0
+23 15:00 Moisture 30
+23 15:00 Fertilizer 2.2
+23 15:00 END_EXPECTATIONS
+23 15:01 WaterVolume 0
+
+23 16:00 BEGIN_EXPECTATIONS
+23 16:00 Temperature 23
+23 16:00 WaterVolume 0
+23 16:00 Light 65
+23 16:00 EXP_WaterVolume 0
+23 16:00 Moisture 30
+23 16:00 Fertilizer 1.6
+23 16:00 END_EXPECTATIONS
+23 16:01 WaterVolume 0
+
+23 17:00 BEGIN_EXPECTATIONS
+23 17:00 Temperature 23
+23 17:00 WaterVolume 0
+23 17:00 Light 60
+23 17:00 EXP_WaterVolume 80
+23 17:00 Moisture 0
+23 17:00 Fertilizer 1.0
+23 17:00 END_EXPECTATIONS
+23 17:01 WaterVolume 80
+
+23 18:00 BEGIN_EXPECTATIONS
+23 18:00 Temperature 22
+23 18:00 WaterVolume 0
+23 18:00 Light 50
+23 18:00 EXP_WaterVolume 80
+23 18:00 Moisture 5
+23 18:00 Fertilizer 2.1
+23 18:00 END_EXPECTATIONS
+23 18:01 WaterVolume 80
+
+23 19:00 BEGIN_EXPECTATIONS
+23 19:00 Temperature 21
+23 19:00 WaterVolume 0
+23 19:00 Light 30
+23 19:00 EXP_WaterVolume 80
+23 19:00 Moisture 8
+23 19:00 Fertilizer 1.3
+23 19:00 END_EXPECTATIONS
+23 19:01 WaterVolume 80
+
+23 20:00 BEGIN_EXPECTATIONS
+23 20:00 Temperature 20
+23 20:00 WaterVolume 0
+23 20:00 Light 10
+23 20:00 EXP_WaterVolume 60
+23 20:00 Moisture 12
+23 20:00 Fertilizer 1.1
+23 20:00 END_EXPECTATIONS
+23 20:01 WaterVolume 60
+
+23 21:00 BEGIN_EXPECTATIONS
+23 21:00 Temperature 20
+23 21:00 WaterVolume 0
+23 21:00 Light 10
+23 21:00 EXP_WaterVolume 60
+23 21:00 Moisture 13
+23 21:00 Fertilizer 1.0
+23 21:00 END_EXPECTATIONS
+23 21:01 WaterVolume 60
+
+23 22:00 BEGIN_EXPECTATIONS
+23 22:00 Temperature 20
+23 22:00 WaterVolume 0
+23 22:00 Light 10
+23 22:00 EXP_WaterVolume 60
+23 22:00 Moisture 19
+23 22:00 Fertilizer 1.9
+23 22:00 END_EXPECTATIONS
+23 22:01 WaterVolume 60
+
+23 23:00 BEGIN_EXPECTATIONS
+23 23:00 Temperature 20
+23 23:00 WaterVolume 0
+23 23:00 Light 10
+23 23:00 EXP_WaterVolume 40
+23 23:00 Moisture 21
+23 23:00 Fertilizer 2.0
+23 23:00 END_EXPECTATIONS
+23 23:01 WaterVolume 40
+
+### Thursday ###
+24 0:00 BEGIN_EXPECTATIONS
+24 0:00 Temperature 17
+24 0:00 WaterVolume 0
+24 0:00 Light 10
+24 0:00 EXP_WaterVolume 40
+24 0:00 Moisture 20
+24 0:00 Fertilizer 2.2
+24 0:00 END_EXPECTATIONS
+24 0:01 WaterVolume 40
+
+24 1:00 BEGIN_EXPECTATIONS
+24 1:00 Temperature 17
+24 1:00 WaterVolume 0
+24 1:00 Light 11
+24 1:00 EXP_WaterVolume 40
+24 1:00 Moisture 24
+24 1:00 Fertilizer 1.8
+24 1:00 END_EXPECTATIONS
+24 1:01 WaterVolume 40
+
+24 2:00 BEGIN_EXPECTATIONS
+24 2:00 Temperature 17
+24 2:00 WaterVolume 0
+24 2:00 Light 13
+24 2:00 EXP_WaterVolume 40
+24 2:00 Moisture 23
+24 2:00 Fertilizer 1.7
+24 2:00 END_EXPECTATIONS
+24 2:01 WaterVolume 40
+
+24 3:00 BEGIN_EXPECTATIONS
+24 3:00 Temperature 17
+24 3:00 WaterVolume 0
+24 3:00 Light 15
+24 3:00 EXP_WaterVolume 40
+24 3:00 Moisture 26
+24 3:00 Fertilizer 2.0
+24 3:00 END_EXPECTATIONS
+24 3:01 WaterVolume 40
+
+24 4:00 BEGIN_EXPECTATIONS
+24 4:00 Temperature 18
+24 4:00 WaterVolume 0
+24 4:00 Light 20
+24 4:00 EXP_WaterVolume 0
+24 4:00 Moisture 30
+24 4:00 Fertilizer 1.1
+24 4:00 END_EXPECTATIONS
+24 4:01 WaterVolume 0
+
+24 5:00 BEGIN_EXPECTATIONS
+24 5:00 Temperature 18
+24 5:00 WaterVolume 0
+24 5:00 Light 25
+24 5:00 EXP_WaterVolume 40
+24 5:00 Moisture 29
+24 5:00 Fertilizer 1.0
+24 5:00 END_EXPECTATIONS
+24 5:01 WaterVolume 40
+
+24 6:00 BEGIN_EXPECTATIONS
+24 6:00 Temperature 19
+24 6:00 WaterVolume 0
+24 6:00 Light 40
+24 6:00 EXP_WaterVolume 0
+24 6:00 Moisture 30
+24 6:00 Fertilizer 2.8
+24 6:00 END_EXPECTATIONS
+24 6:01 WaterVolume 0
+
+24 7:00 BEGIN_EXPECTATIONS
+24 7:00 Temperature 19
+24 7:00 WaterVolume 0
+24 7:00 Light 45
+24 7:00 EXP_WaterVolume 0
+24 7:00 Moisture 30
+24 7:00 Fertilizer 2.1
+24 7:00 END_EXPECTATIONS
+24 7:01 WaterVolume 0
+
+24 8:00 BEGIN_EXPECTATIONS
+24 8:00 Temperature 19
+24 8:00 WaterVolume 0
+24 8:00 Light 50
+24 8:00 EXP_WaterVolume 40
+24 8:00 Moisture 29
+24 8:00 Fertilizer 1.2
+24 8:00 END_EXPECTATIONS
+24 8:01 WaterVolume 40
+
+24 9:00 BEGIN_EXPECTATIONS
+24 9:00 Temperature 19
+24 9:00 WaterVolume 0
+24 9:00 Light 50
+24 9:00 EXP_WaterVolume 40
+24 9:00 Moisture 29
+24 9:00 Fertilizer 1.0
+24 9:00 END_EXPECTATIONS
+24 9:01 WaterVolume 40
+
+24 10:00 BEGIN_EXPECTATIONS
+24 10:00 Temperature 19
+24 10:00 WaterVolume 0
+24 10:00 Light 50
+24 10:00 EXP_WaterVolume 0
+24 10:00 Moisture 33
+24 10:00 Fertilizer 1.0
+24 10:00 END_EXPECTATIONS
+24 10:01 WaterVolume 0
+
+24 11:00 BEGIN_EXPECTATIONS
+24 11:00 Temperature 20
+24 11:00 WaterVolume 0
+24 11:00 Light 60
+24 11:00 EXP_WaterVolume 0
+24 11:00 Moisture 30
+24 11:00 Fertilizer 2.9
+24 11:00 END_EXPECTATIONS
+24 11:01 WaterVolume 0
+
+24 12:00 BEGIN_EXPECTATIONS
+24 12:00 Temperature 21
+24 12:00 WaterVolume 0
+24 12:00 Light 80
+24 12:00 EXP_WaterVolume 0
+24 12:00 Moisture 30
+24 12:00 Fertilizer 1.2
+24 12:00 END_EXPECTATIONS
+24 12:01 WaterVolume 0
+
+24 13:00 BEGIN_EXPECTATIONS
+24 13:00 Temperature 20
+24 13:00 WaterVolume 0
+24 13:00 Light 70
+24 13:00 EXP_WaterVolume 40
+24 13:00 Moisture 25
+24 13:00 Fertilizer 1.2
+24 13:00 END_EXPECTATIONS
+24 13:01 WaterVolume 40
+
+24 14:00 BEGIN_EXPECTATIONS
+24 14:00 Temperature 20
+24 14:00 WaterVolume 0
+24 14:00 Light 70
+24 14:00 EXP_WaterVolume 40
+24 14:00 Moisture 24
+24 14:00 Fertilizer 1.3
+24 14:00 END_EXPECTATIONS
+24 14:01 WaterVolume 40
+
+24 15:00 BEGIN_EXPECTATIONS
+24 15:00 Temperature 20
+24 15:00 WaterVolume 0
+24 15:00 Light 70
+24 15:00 EXP_WaterVolume 40
+24 15:00 Moisture 24
+24 15:00 Fertilizer 1.9
+24 15:00 END_EXPECTATIONS
+24 15:01 WaterVolume 40
+
+24 16:00 BEGIN_EXPECTATIONS
+24 16:00 Temperature 20
+24 16:00 WaterVolume 0
+24 16:00 Light 65
+24 16:00 EXP_WaterVolume 40
+24 16:00 Moisture 28
+24 16:00 Fertilizer 2.8
+24 16:00 END_EXPECTATIONS
+24 16:01 WaterVolume 40
+
+24 17:00 BEGIN_EXPECTATIONS
+24 17:00 Temperature 20
+24 17:00 WaterVolume 0
+24 17:00 Light 60
+24 17:00 EXP_WaterVolume 40
+24 17:00 Moisture 27
+24 17:00 Fertilizer 1.1
+24 17:00 END_EXPECTATIONS
+24 17:01 WaterVolume 40
+
+24 18:00 BEGIN_EXPECTATIONS
+24 18:00 Temperature 19
+24 18:00 WaterVolume 0
+24 18:00 Light 50
+24 18:00 EXP_WaterVolume 40
+24 18:00 Moisture 26
+24 18:00 Fertilizer 2.3
+24 18:00 END_EXPECTATIONS
+24 18:01 WaterVolume 40
+
+24 19:00 BEGIN_EXPECTATIONS
+24 19:00 Temperature 18
+24 19:00 WaterVolume 0
+24 19:00 Light 30
+24 19:00 EXP_WaterVolume 40
+24 19:00 Moisture 26
+24 19:00 Fertilizer 2.1
+24 19:00 END_EXPECTATIONS
+24 19:01 WaterVolume 40
+
+24 20:00 BEGIN_EXPECTATIONS
+24 20:00 Temperature 17
+24 20:00 WaterVolume 0
+24 20:00 Light 10
+24 20:00 EXP_WaterVolume 40
+24 20:00 Moisture 26
+24 20:00 Fertilizer 1.9
+24 20:00 END_EXPECTATIONS
+24 20:01 WaterVolume 40
+
+24 21:00 BEGIN_EXPECTATIONS
+24 21:00 Temperature 17
+24 21:00 WaterVolume 0
+24 21:00 Light 10
+24 21:00 EXP_WaterVolume 40
+24 21:00 Moisture 25
+24 21:00 Fertilizer 1.5
+24 21:00 END_EXPECTATIONS
+24 21:01 WaterVolume 40
+
+24 22:00 BEGIN_EXPECTATIONS
+24 22:00 Temperature 17
+24 22:00 WaterVolume 0
+24 22:00 Light 10
+24 22:00 EXP_WaterVolume 40
+24 22:00 Moisture 26
+24 22:00 Fertilizer 2.7
+24 22:00 END_EXPECTATIONS
+24 22:01 WaterVolume 40
+
+24 23:00 BEGIN_EXPECTATIONS
+24 23:00 Temperature 17
+24 23:00 WaterVolume 0
+24 23:00 Light 10
+24 23:00 EXP_WaterVolume 40
+24 23:00 Moisture 25
+24 23:00 Fertilizer 1.0
+24 23:00 END_EXPECTATIONS
+24 23:01 WaterVolume 40
+
+### Friday ###
+25 0:00 BEGIN_EXPECTATIONS
+25 0:00 Temperature 20
+25 0:00 WaterVolume 0
+25 0:00 Light 10
+25 0:00 EXP_WaterVolume 40
+25 0:00 Moisture 25
+25 0:00 Fertilizer 2.5
+25 0:00 END_EXPECTATIONS
+25 0:01 WaterVolume 40
+
+25 1:00 BEGIN_EXPECTATIONS
+25 1:00 Temperature 20
+25 1:00 WaterVolume 0
+25 1:00 Light 11
+25 1:00 EXP_WaterVolume 40
+25 1:00 Moisture 27
+25 1:00 Fertilizer 2.2
+25 1:00 END_EXPECTATIONS
+25 1:01 WaterVolume 40
+
+25 2:00 BEGIN_EXPECTATIONS
+25 2:00 Temperature 20
+25 2:00 WaterVolume 0
+25 2:00 Light 13
+25 2:00 EXP_WaterVolume 0
+25 2:00 Moisture 31
+25 2:00 Fertilizer 2.9
+25 2:00 END_EXPECTATIONS
+25 2:01 WaterVolume 0
+
+25 3:00 BEGIN_EXPECTATIONS
+25 3:00 Temperature 20
+25 3:00 WaterVolume 0
+25 3:00 Light 15
+25 3:00 EXP_WaterVolume 40
+25 3:00 Moisture 27
+25 3:00 Fertilizer 1.2
+25 3:00 END_EXPECTATIONS
+25 3:01 WaterVolume 40
+
+25 4:00 BEGIN_EXPECTATIONS
+25 4:00 Temperature 21
+25 4:00 WaterVolume 0
+25 4:00 Light 20
+25 4:00 EXP_WaterVolume 40
+25 4:00 Moisture 29
+25 4:00 Fertilizer 1.5
+25 4:00 END_EXPECTATIONS
+25 4:01 WaterVolume 40
+
+25 5:00 BEGIN_EXPECTATIONS
+25 5:00 Temperature 21
+25 5:00 WaterVolume 0
+25 5:00 Light 25
+25 5:00 EXP_WaterVolume 40
+25 5:00 Moisture 28
+25 5:00 Fertilizer 2.4
+25 5:00 END_EXPECTATIONS
+25 5:01 WaterVolume 40
+
+25 6:00 BEGIN_EXPECTATIONS
+25 6:00 Temperature 22
+25 6:00 WaterVolume 0
+25 6:00 Light 40
+25 6:00 EXP_WaterVolume 40
+25 6:00 Moisture 27
+25 6:00 Fertilizer 1.8
+25 6:00 END_EXPECTATIONS
+25 6:01 WaterVolume 40
+
+25 7:00 BEGIN_EXPECTATIONS
+25 7:00 Temperature 22
+25 7:00 WaterVolume 0
+25 7:00 Light 45
+25 7:00 EXP_WaterVolume 0
+25 7:00 Moisture 31
+25 7:00 Fertilizer 1.1
+25 7:00 END_EXPECTATIONS
+25 7:01 WaterVolume 0
+
+25 8:00 BEGIN_EXPECTATIONS
+25 8:00 Temperature 22
+25 8:00 WaterVolume 0
+25 8:00 Light 50
+25 8:00 EXP_WaterVolume 0
+25 8:00 Moisture 31
+25 8:00 Fertilizer 2.6
+25 8:00 END_EXPECTATIONS
+25 8:01 WaterVolume 0
+
+25 9:00 BEGIN_EXPECTATIONS
+25 9:00 Temperature 22
+25 9:00 WaterVolume 0
+25 9:00 Light 50
+25 9:00 EXP_WaterVolume 40
+25 9:00 Moisture 26
+25 9:00 Fertilizer 1.1
+25 9:00 END_EXPECTATIONS
+25 9:01 WaterVolume 40
+
+25 10:00 BEGIN_EXPECTATIONS
+25 10:00 Temperature 22
+25 10:00 WaterVolume 0
+25 10:00 Light 50
+25 10:00 EXP_WaterVolume 40
+25 10:00 Moisture 28
+25 10:00 Fertilizer 1.6
+25 10:00 END_EXPECTATIONS
+25 10:01 WaterVolume 40
+
+25 11:00 BEGIN_EXPECTATIONS
+25 11:00 Temperature 23
+25 11:00 WaterVolume 0
+25 11:00 Light 60
+25 11:00 EXP_WaterVolume 0
+25 11:00 Moisture 31
+25 11:00 Fertilizer 1.8
+25 11:00 END_EXPECTATIONS
+25 11:01 WaterVolume 0
+
+25 12:00 BEGIN_EXPECTATIONS
+25 12:00 Temperature 24
+25 12:00 WaterVolume 0
+25 12:00 Light 80
+25 12:00 EXP_WaterVolume 40
+25 12:00 Moisture 27
+25 12:00 Fertilizer 1.9
+25 12:00 END_EXPECTATIONS
+25 12:01 WaterVolume 40
+
+25 13:00 BEGIN_EXPECTATIONS
+25 13:00 Temperature 23
+25 13:00 WaterVolume 0
+25 13:00 Light 70
+25 13:00 EXP_WaterVolume 40
+25 13:00 Moisture 29
+25 13:00 Fertilizer 2.5
+25 13:00 END_EXPECTATIONS
+25 13:01 WaterVolume 40
+
+25 14:00 BEGIN_EXPECTATIONS
+25 14:00 Temperature 23
+25 14:00 WaterVolume 0
+25 14:00 Light 70
+25 14:00 EXP_WaterVolume 0
+25 14:00 Moisture 30
+25 14:00 Fertilizer 2.4
+25 14:00 END_EXPECTATIONS
+25 14:01 WaterVolume 0
+
+25 15:00 BEGIN_EXPECTATIONS
+25 15:00 Temperature 23
+25 15:00 WaterVolume 0
+25 15:00 Light 70
+25 15:00 EXP_WaterVolume 40
+25 15:00 Moisture 26
+25 15:00 Fertilizer 2.2
+25 15:00 END_EXPECTATIONS
+25 15:01 WaterVolume 40
+
+25 16:00 BEGIN_EXPECTATIONS
+25 16:00 Temperature 23
+25 16:00 WaterVolume 0
+25 16:00 Light 65
+25 16:00 EXP_WaterVolume 40
+25 16:00 Moisture 27
+25 16:00 Fertilizer 1.8
+25 16:00 END_EXPECTATIONS
+25 16:01 WaterVolume 40
+
+25 17:00 BEGIN_EXPECTATIONS
+25 17:00 Temperature 23
+25 17:00 WaterVolume 0
+25 17:00 Light 60
+25 17:00 EXP_WaterVolume 0
+25 17:00 Moisture 30
+25 17:00 Fertilizer 1.9
+25 17:00 END_EXPECTATIONS
+25 17:01 WaterVolume 0
+
+25 18:00 BEGIN_EXPECTATIONS
+25 18:00 Temperature 22
+25 18:00 WaterVolume 0
+25 18:00 Light 50
+25 18:00 EXP_WaterVolume 40
+25 18:00 Moisture 26
+25 18:00 Fertilizer 1.7
+25 18:00 END_EXPECTATIONS
+25 18:01 WaterVolume 40
+
+25 19:00 BEGIN_EXPECTATIONS
+25 19:00 Temperature 21
+25 19:00 WaterVolume 0
+25 19:00 Light 30
+25 19:00 EXP_WaterVolume 40
+25 19:00 Moisture 26
+25 19:00 Fertilizer 2.9
+25 19:00 END_EXPECTATIONS
+25 19:01 WaterVolume 40
+
+25 20:00 BEGIN_EXPECTATIONS
+25 20:00 Temperature 20
+25 20:00 WaterVolume 0
+25 20:00 Light 10
+25 20:00 EXP_WaterVolume 40
+25 20:00 Moisture 28
+25 20:00 Fertilizer 2.6
+25 20:00 END_EXPECTATIONS
+25 20:01 WaterVolume 40
+
+25 21:00 BEGIN_EXPECTATIONS
+25 21:00 Temperature 20
+25 21:00 WaterVolume 0
+25 21:00 Light 10
+25 21:00 EXP_WaterVolume 40
+25 21:00 Moisture 28
+25 21:00 Fertilizer 1.8
+25 21:00 END_EXPECTATIONS
+25 21:01 WaterVolume 40
+
+25 22:00 BEGIN_EXPECTATIONS
+25 22:00 Temperature 20
+25 22:00 WaterVolume 0
+25 22:00 Light 10
+25 22:00 EXP_WaterVolume 40
+25 22:00 Moisture 28
+25 22:00 Fertilizer 2.9
+25 22:00 END_EXPECTATIONS
+25 22:01 WaterVolume 40
+
+25 23:00 BEGIN_EXPECTATIONS
+25 23:00 Temperature 20
+25 23:00 WaterVolume 0
+25 23:00 Light 10
+25 23:00 EXP_WaterVolume 40
+25 23:00 Moisture 28
+25 23:00 Fertilizer 1.7
+25 23:00 END_EXPECTATIONS
+25 23:01 WaterVolume 40
+
+### Saturday ###
+26 0:00 BEGIN_EXPECTATIONS
+26 0:00 Temperature 18
+26 0:00 WaterVolume 0
+26 0:00 Light 10
+26 0:00 EXP_WaterVolume 40
+26 0:00 Moisture 28
+26 0:00 Fertilizer 2.6
+26 0:00 END_EXPECTATIONS
+26 0:01 WaterVolume 40
+
+26 1:00 BEGIN_EXPECTATIONS
+26 1:00 Temperature 18
+26 1:00 WaterVolume 0
+26 1:00 Light 11
+26 1:00 EXP_WaterVolume 40
+26 1:00 Moisture 29
+26 1:00 Fertilizer 1.1
+26 1:00 END_EXPECTATIONS
+26 1:01 WaterVolume 40
+
+26 2:00 BEGIN_EXPECTATIONS
+26 2:00 Temperature 18
+26 2:00 WaterVolume 0
+26 2:00 Light 13
+26 2:00 EXP_WaterVolume 0
+26 2:00 Moisture 33
+26 2:00 Fertilizer 2.0
+26 2:00 END_EXPECTATIONS
+26 2:01 WaterVolume 0
+
+26 3:00 BEGIN_EXPECTATIONS
+26 3:00 Temperature 18
+26 3:00 WaterVolume 0
+26 3:00 Light 15
+26 3:00 EXP_WaterVolume 0
+26 3:00 Moisture 31
+26 3:00 Fertilizer 1.0
+26 3:00 END_EXPECTATIONS
+26 3:01 WaterVolume 0
+
+26 4:00 BEGIN_EXPECTATIONS
+26 4:00 Temperature 19
+26 4:00 WaterVolume 0
+26 4:00 Light 20
+26 4:00 EXP_WaterVolume 40
+26 4:00 Moisture 28
+26 4:00 Fertilizer 1.1
+26 4:00 END_EXPECTATIONS
+26 4:01 WaterVolume 40
+
+26 5:00 BEGIN_EXPECTATIONS
+26 5:00 Temperature 19
+26 5:00 WaterVolume 0
+26 5:00 Light 25
+26 5:00 EXP_WaterVolume 0
+26 5:00 Moisture 32
+26 5:00 Fertilizer 1.7
+26 5:00 END_EXPECTATIONS
+26 5:01 WaterVolume 0
+
+26 6:00 BEGIN_EXPECTATIONS
+26 6:00 Temperature 20
+26 6:00 WaterVolume 0
+26 6:00 Light 40
+26 6:00 EXP_WaterVolume 0
+26 6:00 Moisture 30
+26 6:00 Fertilizer 1.3
+26 6:00 END_EXPECTATIONS
+26 6:01 WaterVolume 0
+
+26 7:00 BEGIN_EXPECTATIONS
+26 7:00 Temperature 20
+26 7:00 WaterVolume 0
+26 7:00 Light 45
+26 7:00 EXP_WaterVolume 0
+26 7:00 Moisture 30
+26 7:00 Fertilizer 1.7
+26 7:00 END_EXPECTATIONS
+26 7:01 WaterVolume 0
+
+26 8:00 BEGIN_EXPECTATIONS
+26 8:00 Temperature 20
+26 8:00 WaterVolume 0
+26 8:00 Light 50
+26 8:00 EXP_WaterVolume 40
+26 8:00 Moisture 27
+26 8:00 Fertilizer 2.1
+26 8:00 END_EXPECTATIONS
+26 8:01 WaterVolume 40
+
+26 9:00 BEGIN_EXPECTATIONS
+26 9:00 Temperature 20
+26 9:00 WaterVolume 0
+26 9:00 Light 50
+26 9:00 EXP_WaterVolume 40
+26 9:00 Moisture 28
+26 9:00 Fertilizer 2.7
+26 9:00 END_EXPECTATIONS
+26 9:01 WaterVolume 40
+
+26 10:00 BEGIN_EXPECTATIONS
+26 10:00 Temperature 20
+26 10:00 WaterVolume 0
+26 10:00 Light 50
+26 10:00 EXP_WaterVolume 40
+26 10:00 Moisture 29
+26 10:00 Fertilizer 2.2
+26 10:00 END_EXPECTATIONS
+26 10:01 WaterVolume 40
+
+26 11:00 BEGIN_EXPECTATIONS
+26 11:00 Temperature 21
+26 11:00 WaterVolume 0
+26 11:00 Light 60
+26 11:00 EXP_WaterVolume 40
+26 11:00 Moisture 29
+26 11:00 Fertilizer 1.0
+26 11:00 END_EXPECTATIONS
+26 11:01 WaterVolume 40
+
+26 12:00 BEGIN_EXPECTATIONS
+26 12:00 Temperature 22
+26 12:00 WaterVolume 0
+26 12:00 Light 80
+26 12:00 EXP_WaterVolume 0
+26 12:00 Moisture 30
+26 12:00 Fertilizer 2.6
+26 12:00 END_EXPECTATIONS
+26 12:01 WaterVolume 0
+
+26 13:00 BEGIN_EXPECTATIONS
+26 13:00 Temperature 21
+26 13:00 WaterVolume 0
+26 13:00 Light 70
+26 13:00 EXP_WaterVolume 40
+26 13:00 Moisture 26
+26 13:00 Fertilizer 1.5
+26 13:00 END_EXPECTATIONS
+26 13:01 WaterVolume 40
+
+26 14:00 BEGIN_EXPECTATIONS
+26 14:00 Temperature 21
+26 14:00 WaterVolume 0
+26 14:00 Light 70
+26 14:00 EXP_WaterVolume 40
+26 14:00 Moisture 28
+26 14:00 Fertilizer 1.5
+26 14:00 END_EXPECTATIONS
+26 14:01 WaterVolume 40
+
+26 15:00 BEGIN_EXPECTATIONS
+26 15:00 Temperature 21
+26 15:00 WaterVolume 0
+26 15:00 Light 70
+26 15:00 EXP_WaterVolume 40
+26 15:00 Moisture 28
+26 15:00 Fertilizer 2.7
+26 15:00 END_EXPECTATIONS
+26 15:01 WaterVolume 40
+
+26 16:00 BEGIN_EXPECTATIONS
+26 16:00 Temperature 21
+26 16:00 WaterVolume 0
+26 16:00 Light 65
+26 16:00 EXP_WaterVolume 0
+26 16:00 Moisture 32
+26 16:00 Fertilizer 2.9
+26 16:00 END_EXPECTATIONS
+26 16:01 WaterVolume 0
+
+26 17:00 BEGIN_EXPECTATIONS
+26 17:00 Temperature 21
+26 17:00 WaterVolume 0
+26 17:00 Light 60
+26 17:00 EXP_WaterVolume 40
+26 17:00 Moisture 29
+26 17:00 Fertilizer 2.9
+26 17:00 END_EXPECTATIONS
+26 17:01 WaterVolume 40
+
+26 18:00 BEGIN_EXPECTATIONS
+26 18:00 Temperature 20
+26 18:00 WaterVolume 0
+26 18:00 Light 50
+26 18:00 EXP_WaterVolume 40
+26 18:00 Moisture 29
+26 18:00 Fertilizer 1.4
+26 18:00 END_EXPECTATIONS
+26 18:01 WaterVolume 40
+
+26 19:00 BEGIN_EXPECTATIONS
+26 19:00 Temperature 19
+26 19:00 WaterVolume 0
+26 19:00 Light 30
+26 19:00 EXP_WaterVolume 0
+26 19:00 Moisture 30
+26 19:00 Fertilizer 2.3
+26 19:00 END_EXPECTATIONS
+26 19:01 WaterVolume 0
+
+26 20:00 BEGIN_EXPECTATIONS
+26 20:00 Temperature 18
+26 20:00 WaterVolume 0
+26 20:00 Light 10
+26 20:00 EXP_WaterVolume 40
+26 20:00 Moisture 27
+26 20:00 Fertilizer 2.6
+26 20:00 END_EXPECTATIONS
+26 20:01 WaterVolume 40
+
+26 21:00 BEGIN_EXPECTATIONS
+26 21:00 Temperature 18
+26 21:00 WaterVolume 0
+26 21:00 Light 10
+26 21:00 EXP_WaterVolume 40
+26 21:00 Moisture 27
+26 21:00 Fertilizer 2.6
+26 21:00 END_EXPECTATIONS
+26 21:01 WaterVolume 40
+
+26 22:00 BEGIN_EXPECTATIONS
+26 22:00 Temperature 18
+26 22:00 WaterVolume 0
+26 22:00 Light 10
+26 22:00 EXP_WaterVolume 0
+26 22:00 Moisture 50
+26 22:00 Fertilizer 1.9
+26 22:00 END_EXPECTATIONS
+26 22:01 WaterVolume 0
+
+26 23:00 BEGIN_EXPECTATIONS
+26 23:00 Temperature 18
+26 23:00 WaterVolume 0
+26 23:00 Light 10
+26 23:00 EXP_WaterVolume 0
+26 23:00 Moisture 46
+26 23:00 Fertilizer 2.1
+26 23:00 END_EXPECTATIONS
+26 23:01 WaterVolume 0
+
+### Sunday ###
+27 0:00 BEGIN_EXPECTATIONS
+27 0:00 Temperature 23
+27 0:00 WaterVolume 0
+27 0:00 Light 10
+27 0:00 EXP_WaterVolume 0
+27 0:00 Moisture 43
+27 0:00 Fertilizer 1.5
+27 0:00 END_EXPECTATIONS
+27 0:01 WaterVolume 0
+
+27 1:00 BEGIN_EXPECTATIONS
+27 1:00 Temperature 23
+27 1:00 WaterVolume 0
+27 1:00 Light 11
+27 1:00 EXP_WaterVolume 0
+27 1:00 Moisture 40
+27 1:00 Fertilizer 2.1
+27 1:00 END_EXPECTATIONS
+27 1:01 WaterVolume 0
+
+27 2:00 BEGIN_EXPECTATIONS
+27 2:00 Temperature 23
+27 2:00 WaterVolume 0
+27 2:00 Light 13
+27 2:00 EXP_WaterVolume 0
+27 2:00 Moisture 39
+27 2:00 Fertilizer 2.1
+27 2:00 END_EXPECTATIONS
+27 2:01 WaterVolume 0
+
+27 3:00 BEGIN_EXPECTATIONS
+27 3:00 Temperature 23
+27 3:00 WaterVolume 0
+27 3:00 Light 15
+27 3:00 EXP_WaterVolume 0
+27 3:00 Moisture 34
+27 3:00 Fertilizer 2.2
+27 3:00 END_EXPECTATIONS
+27 3:01 WaterVolume 0
+
+27 4:00 BEGIN_EXPECTATIONS
+27 4:00 Temperature 24
+27 4:00 WaterVolume 0
+27 4:00 Light 20
+27 4:00 EXP_WaterVolume 0
+27 4:00 Moisture 31
+27 4:00 Fertilizer 1.8
+27 4:00 END_EXPECTATIONS
+27 4:01 WaterVolume 0
+
+27 5:00 BEGIN_EXPECTATIONS
+27 5:00 Temperature 24
+27 5:00 WaterVolume 0
+27 5:00 Light 25
+27 5:00 EXP_WaterVolume 0
+27 5:00 Moisture 30
+27 5:00 Fertilizer 2.3
+27 5:00 END_EXPECTATIONS
+27 5:01 WaterVolume 0
+
+27 6:00 BEGIN_EXPECTATIONS
+27 6:00 Temperature 25
+27 6:00 WaterVolume 0
+27 6:00 Light 40
+27 6:00 EXP_WaterVolume 40
+27 6:00 Moisture 28
+27 6:00 Fertilizer 2.3
+27 6:00 END_EXPECTATIONS
+27 6:01 WaterVolume 40
+
+27 7:00 BEGIN_EXPECTATIONS
+27 7:00 Temperature 25
+27 7:00 WaterVolume 0
+27 7:00 Light 45
+27 7:00 EXP_WaterVolume 40
+27 7:00 Moisture 29
+27 7:00 Fertilizer 1.1
+27 7:00 END_EXPECTATIONS
+27 7:01 WaterVolume 40
+
+27 8:00 BEGIN_EXPECTATIONS
+27 8:00 Temperature 25
+27 8:00 WaterVolume 0
+27 8:00 Light 50
+27 8:00 EXP_WaterVolume 0
+27 8:00 Moisture 33
+27 8:00 Fertilizer 2.8
+27 8:00 END_EXPECTATIONS
+27 8:01 WaterVolume 0
+
+27 9:00 BEGIN_EXPECTATIONS
+27 9:00 Temperature 25
+27 9:00 WaterVolume 0
+27 9:00 Light 50
+27 9:00 EXP_WaterVolume 0
+27 9:00 Moisture 50
+27 9:00 Fertilizer 2.5
+27 9:00 END_EXPECTATIONS
+27 9:01 WaterVolume 0
+
+27 10:00 BEGIN_EXPECTATIONS
+27 10:00 Temperature 25
+27 10:00 WaterVolume 0
+27 10:00 Light 50
+27 10:00 EXP_WaterVolume 0
+27 10:00 Moisture 50
+27 10:00 Fertilizer 2.8
+27 10:00 END_EXPECTATIONS
+27 10:01 WaterVolume 0
+
+27 11:00 BEGIN_EXPECTATIONS
+27 11:00 Temperature 26
+27 11:00 WaterVolume 0
+27 11:00 Light 60
+27 11:00 EXP_WaterVolume 0
+27 11:00 Moisture 46
+27 11:00 Fertilizer 2.0
+27 11:00 END_EXPECTATIONS
+27 11:01 WaterVolume 0
+
+27 12:00 BEGIN_EXPECTATIONS
+27 12:00 Temperature 27
+27 12:00 WaterVolume 0
+27 12:00 Light 80
+27 12:00 EXP_WaterVolume 0
+27 12:00 Moisture 41
+27 12:00 Fertilizer 1.5
+27 12:00 END_EXPECTATIONS
+27 12:01 WaterVolume 0
+
+27 13:00 BEGIN_EXPECTATIONS
+27 13:00 Temperature 26
+27 13:00 WaterVolume 0
+27 13:00 Light 70
+27 13:00 EXP_WaterVolume 0
+27 13:00 Moisture 40
+27 13:00 Fertilizer 1.0
+27 13:00 END_EXPECTATIONS
+27 13:01 WaterVolume 0
+
+27 14:00 BEGIN_EXPECTATIONS
+27 14:00 Temperature 26
+27 14:00 WaterVolume 0
+27 14:00 Light 70
+27 14:00 EXP_WaterVolume 0
+27 14:00 Moisture 40
+27 14:00 Fertilizer 1.7
+27 14:00 END_EXPECTATIONS
+27 14:01 WaterVolume 0
+
+27 15:00 BEGIN_EXPECTATIONS
+27 15:00 Temperature 26
+27 15:00 WaterVolume 0
+27 15:00 Light 70
+27 15:00 EXP_WaterVolume 0
+27 15:00 Moisture 38
+27 15:00 Fertilizer 2.7
+27 15:00 END_EXPECTATIONS
+27 15:01 WaterVolume 0
+
+27 16:00 BEGIN_EXPECTATIONS
+27 16:00 Temperature 26
+27 16:00 WaterVolume 0
+27 16:00 Light 65
+27 16:00 EXP_WaterVolume 0
+27 16:00 Moisture 34
+27 16:00 Fertilizer 1.4
+27 16:00 END_EXPECTATIONS
+27 16:01 WaterVolume 0
+
+27 17:00 BEGIN_EXPECTATIONS
+27 17:00 Temperature 26
+27 17:00 WaterVolume 0
+27 17:00 Light 60
+27 17:00 EXP_WaterVolume 0
+27 17:00 Moisture 31
+27 17:00 Fertilizer 1.0
+27 17:00 END_EXPECTATIONS
+27 17:01 WaterVolume 0
+
+27 18:00 BEGIN_EXPECTATIONS
+27 18:00 Temperature 25
+27 18:00 WaterVolume 0
+27 18:00 Light 50
+27 18:00 EXP_WaterVolume 40
+27 18:00 Moisture 27
+27 18:00 Fertilizer 2.1
+27 18:00 END_EXPECTATIONS
+27 18:01 WaterVolume 40
+
+27 19:00 BEGIN_EXPECTATIONS
+27 19:00 Temperature 24
+27 19:00 WaterVolume 0
+27 19:00 Light 30
+27 19:00 EXP_WaterVolume 40
+27 19:00 Moisture 28
+27 19:00 Fertilizer 2.0
+27 19:00 END_EXPECTATIONS
+27 19:01 WaterVolume 40
+
+27 20:00 BEGIN_EXPECTATIONS
+27 20:00 Temperature 23
+27 20:00 WaterVolume 0
+27 20:00 Light 10
+27 20:00 EXP_WaterVolume 0
+27 20:00 Moisture 30
+27 20:00 Fertilizer 2.7
+27 20:00 END_EXPECTATIONS
+27 20:01 WaterVolume 0
+
+27 21:00 BEGIN_EXPECTATIONS
+27 21:00 Temperature 23
+27 21:00 WaterVolume 0
+27 21:00 Light 10
+27 21:00 EXP_WaterVolume 40
+27 21:00 Moisture 27
+27 21:00 Fertilizer 2.1
+27 21:00 END_EXPECTATIONS
+27 21:01 WaterVolume 40
+
+27 22:00 BEGIN_EXPECTATIONS
+27 22:00 Temperature 23
+27 22:00 WaterVolume 0
+27 22:00 Light 10
+27 22:00 EXP_WaterVolume 0
+27 22:00 Moisture 30
+27 22:00 Fertilizer 2.8
+27 22:00 END_EXPECTATIONS
+27 22:01 WaterVolume 0
+
+27 23:00 BEGIN_EXPECTATIONS
+27 23:00 Temperature 23
+27 23:00 WaterVolume 0
+27 23:00 Light 10
+27 23:00 EXP_WaterVolume 40
+27 23:00 Moisture 25
+27 23:00 Fertilizer 2.8
+27 23:00 END_EXPECTATIONS
+27 23:01 WaterVolume 40
+

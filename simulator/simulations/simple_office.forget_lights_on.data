@@ -1,0 +1,314 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# Simulation: a single person working in a office
+# She always let lights turned on while she is inside
+# She wants to avoid forgotting lights on
+#
+# It simulates the usage of a room for 2 weeks, usually used from 10:00
+# to 18:00 on work days (Mon to Fri) with lunch between 13:00 and 14:00.
+# It has a luminosity sensor, a presence sensor and a light bulb.
+# User can change light state using a switcher, but it won't be
+# used as input. Time is used as input (hours and week days).
+
+# initial scenario - lights off
+0 0:00 Light OFF
+0 0:00 EnvLight Night
+0 0:00 Presence Absence
+
+0 7:23 EnvLight PartlySunny
+
+# we expect to turn on as soon as she arrives
+0 8:10 Presence Presence
+0 8:12 Light ON
+
+0 12:00 Light OFF
+0 12:02 Presence Absence
+
+0 12:40 EnvLight Sunny
+
+0 13:04 Presence Presence
+0 13:06 Light ON
+
+0 18:00 Light OFF
+0 18:02 Presence Absence
+
+0 18:30 EnvLight Cloudy
+
+0 20:04 EnvLight Night
+
+##############
+
+1 7:00 EnvLight PartlyCloudy
+
+1 8:20 Presence Presence
+1 8:23 Light ON
+
+1 12:10 Light OFF
+1 12:14 Presence Absence
+
+1 13:00 EnvLight Cloudy
+
+1 13:20 Presence Presence
+1 13:22 Light ON
+
+1 18:05 Light OFF
+1 18:07 Presence Absence
+
+1 20:18 EnvLight Night
+
+##############
+
+2 7:18 EnvLight Sunny
+
+2 8:25 Presence Presence
+2 8:29 Light ON
+
+2 11:05 EnvLight PartlyCloudy
+
+2 12:20 Light OFF
+2 12:21 Presence Absence
+
+2 13:00 EnvLight Cloudy
+
+2 13:18 Presence Presence
+2 13:20 Light ON
+
+2 18:25 Light OFF
+2 18:27 Presence Absence
+
+2 20:09 EnvLight Night
+
+##############
+
+3 7:22 EnvLight PartlySunny
+
+3 8:15 Presence Presence
+3 8:19 Light ON
+
+3 12:10 Light OFF
+3 12:11 Presence Absence
+
+3 13:12 Presence Presence
+3 13:15 Light ON
+
+# she forgot the lights on
+3 18:18 BEGIN_EXPECTATIONS forgot_lights_on
+3 18:18 EXP_Light OFF
+3 18:18 Presence Absence
+3 18:18 END_EXPECTATIONS
+
+# sml should turn off Lights and keep it off during the night.
+3 18:19 BEGIN_EXPECTATIONS lights_off_at_night
+3 18:19 Light OFF
+3 20:12 EnvLight Night
+
+##############
+
+# A regular day without any big issue
+4 7:00 EnvLight Sunny
+
+4 8:30 END_EXPECTATIONS
+
+4 8:31 BEGIN_EXPECTATIONS regular_day
+4 8:31 Presence Presence
+4 8:31 EXP_Light ON
+4 8:32 Light ON
+
+4 12:00 Light OFF
+4 12:00 EXP_Light OFF
+4 12:02 Presence Absence
+
+4 12:50 Presence Presence
+4 12:50 EXP_Light ON
+4 12:51 Light ON
+
+4 18:00 Light OFF
+4 18:00 EXP_Light OFF
+4 18:05 Presence Absence
+
+5 19:30 END_EXPECTATIONS
+
+4 19:31 BEGIN_EXPECTATIONS lights_off_weekend
+4 20:04 EnvLight Night
+
+##############
+
+# she doesn't work at weekends
+5 7:03 EnvLight PartlySunny
+5 9:21 EnvLight Sunny
+5 15:46 EnvLight PartlyCloudy
+5 20:10 EnvLight Night
+
+##############
+
+6 7:12 EnvLight Sunny
+6 12:29 EnvLight Cloudy
+6 20:01 EnvLight Night
+
+##############
+
+# second week is just repeating the first week
+
+
+7 7:23 EnvLight PartlySunny
+
+7 8:00 END_EXPECTATIONS
+7 8:10 Presence Presence
+7 8:10 EXP_Light ON
+7 8:12 Light ON
+
+7 12:00 Light OFF
+7 12:02 EXP_Light OFF
+7 12:02 Presence Absence
+
+7 12:40 EnvLight Sunny
+
+7 13:04 Presence Presence
+7 13:04 EXP_Light ON
+7 13:06 Light ON
+
+7 18:00 Light OFF
+7 18:02 EXP_Light OFF
+7 18:02 Presence Absence
+
+7 18:30 EnvLight Cloudy
+
+7 20:04 EnvLight Night
+
+##############
+
+8 7:00 EnvLight PartlyCloudy
+
+8 8:20 Presence Presence
+8 8:20 EXP_Light ON
+8 8:23 Light ON
+
+8 12:10 Light OFF
+8 12:10 EXP_Light OFF
+8 12:14 Presence Absence
+
+8 13:00 EnvLight Cloudy
+
+8 13:20 Presence Presence
+8 13:20 EXP_Light ON
+8 13:22 Light ON
+
+8 18:05 Light OFF
+8 18:07 EXP_Light OFF
+8 18:07 Presence Absence
+
+8 20:18 EnvLight Night
+
+##############
+
+9 7:18 EnvLight Sunny
+
+9 8:25 Presence Presence
+9 8:25 EXP_Light ON
+9 8:29 Light ON
+
+9 11:05 EnvLight PartlyCloudy
+
+9 12:20 Light OFF
+9 12:20 EXP_Light OFF
+9 12:21 Presence Absence
+
+9 13:00 EnvLight Cloudy
+
+9 13:18 Presence Presence
+9 13:18 EXP_Light ON
+9 13:20 Light ON
+
+9 18:25 Light OFF
+9 18:27 EXP_Light OFF
+9 18:27 Presence Absence
+
+9 20:09 EnvLight Night
+
+##############
+
+10 0:00 BEGIN_EXPECTATIONS another_regular_day
+
+10 7:22 EnvLight PartlySunny
+
+10 8:15 Presence Presence
+10 8:15 EXP_Light ON
+10 8:16 Light ON
+
+10 12:10 Light OFF
+10 12:10 EXP_Light OFF
+10 12:15 Presence Absence
+
+10 13:12 Presence Presence
+10 13:12 EXP_Light ON
+10 13:13 Light ON
+
+10 18:18 EXP_Light OFF
+10 18:18 Presence Absence
+10 18:19 Light OFF
+
+10 20:12 EnvLight Night
+
+11 8:00 END_EXPECTATIONS
+
+##############
+
+11 7:00 EnvLight Sunny
+
+11 8:31 Presence Presence
+11 8:32 Light ON
+
+11 12:00 Light OFF
+11 12:02 Presence Absence
+
+11 12:50 Presence Presence
+11 12:55 Light ON
+
+11 18:00 Light OFF
+11 18:02 Presence Absence
+11 18:00 EnvLight Night
+11 18:00 EXP_Light OFF
+
+11 18:10 BEGIN_EXPECTATIONS another_weekend
+
+##############
+
+12 7:03 EnvLight PartlySunny
+12 9:21 EnvLight Sunny
+12 15:46 EnvLight PartlyCloudy
+12 20:10 EnvLight Night
+
+##############
+
+13 7:12 EnvLight Sunny
+13 12:29 EnvLight Cloudy
+13 20:01 EnvLight Night
+13 23:59 END_EXPECTATIONS

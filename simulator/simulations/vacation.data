@@ -1,0 +1,758 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+#Mon
+0 0:00 EnvLight Night
+0 0:00 Light ON
+0 0:00 EXP_Light ON
+
+0 7:23 EnvLight PartlySunny
+0 7:23 Light OFF
+0 7:23 EXP_Light OFF
+
+0 9:00 EnvLight Cloudy
+0 9:00 Light ON
+0 9:00 EXP_Light ON
+
+0 13:00 EnvLight PartlyCloudy
+0 13:00 Light OFF
+0 13:00 EXP_Light OFF
+
+0 20:00 EnvLight Night
+0 20:00 EXP_Light ON
+0 20:00 Light ON
+
+#Tue
+1 7:23 EnvLight PartlySunny
+1 7:23 Light OFF
+1 7:23 EXP_Light OFF
+
+1 9:00 EnvLight Cloudy
+1 9:00 Light ON
+1 9:00 EXP_Light ON
+
+1 13:00 EnvLight PartlyCloudy
+1 13:00 Light OFF
+1 13:00 EXP_Light OFF
+
+1 20:00 EnvLight Night
+1 20:00 EXP_Light ON
+1 20:00 Light ON
+
+#Wed
+2 0:00 EnvLight Night
+2 0:00 Light ON
+2 0:00 EXP_Light ON
+
+2 7:23 EnvLight PartlySunny
+2 7:23 Light OFF
+2 7:23 EXP_Light OFF
+
+2 9:00 EnvLight Sunny
+2 9:00 Light OFF
+2 9:00 EXP_Light OFF
+
+2 13:00 EnvLight PartlyCloudy
+2 13:00 Light OFF
+2 13:00 EXP_Light OFF
+
+2 20:00 EnvLight Night
+2 20:00 EXP_Light ON
+2 20:00 Light ON
+
+#Thu
+3 0:00 EnvLight Night
+3 0:00 Light ON
+3 0:00 EXP_Light ON
+
+3 7:23 EnvLight PartlySunny
+3 7:23 Light OFF
+3 7:23 EXP_Light OFF
+
+3 9:00 EnvLight Sunny
+3 9:00 Light OFF
+3 9:00 EXP_Light OFF
+
+3 13:00 EnvLight PartlyCloudy
+3 13:00 Light OFF
+3 13:00 EXP_Light OFF
+
+3 20:00 EnvLight Night
+3 20:00 EXP_Light ON
+3 20:00 Light ON
+
+#Fri
+4 0:00 EnvLight Night
+4 0:00 Light ON
+4 0:00 EXP_Light ON
+
+4 7:23 EnvLight PartlySunny
+4 7:23 Light OFF
+4 7:23 EXP_Light OFF
+
+4 9:00 EnvLight Sunny
+4 9:00 Light OFF
+4 9:00 EXP_Light OFF
+
+4 13:00 EnvLight PartlyCloudy
+4 13:00 Light OFF
+4 13:00 EXP_Light OFF
+
+4 20:00 EnvLight Night
+4 20:00 EXP_Light ON
+4 20:00 Light ON
+
+#Sat
+5 0:00 EnvLight Night
+5 0:00 Light ON
+5 0:00 EXP_Light ON
+
+5 7:23 EnvLight PartlySunny
+5 7:23 Light OFF
+5 7:23 EXP_Light OFF
+
+5 9:00 EnvLight Cloudy
+5 9:00 Light ON
+5 9:00 EXP_Light ON
+
+5 13:00 EnvLight PartlyCloudy
+5 13:00 Light OFF
+5 13:00 EXP_Light OFF
+
+5 20:00 EnvLight Night
+5 20:00 EXP_Light ON
+5 20:00 Light ON
+
+#Sun
+6 0:00 EnvLight Night
+6 0:00 Light ON
+6 0:00 EXP_Light ON
+
+6 7:23 EnvLight PartlySunny
+6 7:23 Light OFF
+6 7:23 EXP_Light OFF
+
+6 9:00 EnvLight Sunny
+6 9:00 Light OFF
+6 9:00 EXP_Light OFF
+
+6 13:00 EnvLight PartlyCloudy
+6 13:00 Light OFF
+6 13:00 EXP_Light OFF
+
+6 20:00 EnvLight Night
+6 20:00 EXP_Light ON
+6 20:00 Light ON
+
+#Mon
+7 0:00 EnvLight Night
+7 0:00 Light ON
+7 0:00 EXP_Light ON
+
+7 7:23 EnvLight PartlySunny
+7 7:23 Light OFF
+7 7:23 EXP_Light OFF
+
+7 9:00 EnvLight Cloudy
+7 9:00 Light ON
+7 9:00 EXP_Light ON
+
+7 13:00 EnvLight PartlyCloudy
+7 13:00 Light OFF
+7 13:00 EXP_Light OFF
+
+7 20:00 EnvLight Night
+7 20:00 EXP_Light ON
+7 20:00 Light ON
+
+#Tue
+8 7:23 EnvLight PartlySunny
+8 7:23 Light OFF
+8 7:23 EXP_Light OFF
+
+8 9:00 EnvLight Cloudy
+8 9:00 Light ON
+8 9:00 EXP_Light ON
+
+8 13:00 EnvLight PartlyCloudy
+8 13:00 Light OFF
+8 13:00 EXP_Light OFF
+
+8 20:00 EnvLight Night
+8 20:00 EXP_Light ON
+8 20:00 Light ON
+
+#Wed
+9 0:00 EnvLight Night
+9 0:00 Light ON
+9 0:00 EXP_Light ON
+
+9 7:23 EnvLight PartlySunny
+9 7:23 Light OFF
+9 7:23 EXP_Light OFF
+
+9 9:00 EnvLight Sunny
+9 9:00 Light OFF
+9 9:00 EXP_Light OFF
+
+9 13:00 EnvLight PartlyCloudy
+9 13:00 Light OFF
+9 13:00 EXP_Light OFF
+
+9 20:00 EnvLight Night
+9 20:00 EXP_Light ON
+9 20:00 Light ON
+
+#Thu
+10 0:00 EnvLight Night
+10 0:00 Light ON
+10 0:00 EXP_Light ON
+
+10 7:23 EnvLight PartlySunny
+10 7:23 Light OFF
+10 7:23 EXP_Light OFF
+
+10 9:00 EnvLight Sunny
+10 9:00 Light OFF
+10 9:00 EXP_Light OFF
+
+10 13:00 EnvLight PartlyCloudy
+10 13:00 Light OFF
+10 13:00 EXP_Light OFF
+
+10 20:00 EnvLight Night
+10 20:00 EXP_Light ON
+10 20:00 Light ON
+
+#Fri
+11 0:00 EnvLight Night
+11 0:00 Light ON
+11 0:00 EXP_Light ON
+
+11 7:23 EnvLight PartlySunny
+11 7:23 Light OFF
+11 7:23 EXP_Light OFF
+
+11 9:00 EnvLight Sunny
+11 9:00 Light OFF
+11 9:00 EXP_Light OFF
+
+11 13:00 EnvLight PartlyCloudy
+11 13:00 Light OFF
+11 13:00 EXP_Light OFF
+
+11 20:00 EnvLight Night
+11 20:00 EXP_Light ON
+11 20:00 Light ON
+
+#Sat
+12 0:00 EnvLight Night
+12 0:00 Light ON
+12 0:00 EXP_Light ON
+
+12 7:23 EnvLight PartlySunny
+12 7:23 Light OFF
+12 7:23 EXP_Light OFF
+
+12 9:00 EnvLight Cloudy
+12 9:00 Light ON
+12 9:00 EXP_Light ON
+
+12 13:00 EnvLight PartlyCloudy
+12 13:00 Light OFF
+12 13:00 EXP_Light OFF
+
+12 20:00 EnvLight Night
+12 20:00 EXP_Light ON
+12 20:00 Light ON
+
+#Sun
+13 0:00 BEGIN_EXPECTATIONS regular_day1
+13 0:00 Light nan
+13 0:00 EnvLight Night
+13 0:00 EXP_Light ON
+
+13 7:23 EnvLight PartlySunny
+13 7:23 EXP_Light OFF
+
+13 9:00 EnvLight Sunny
+13 9:00 EXP_Light OFF
+
+13 13:00 EnvLight PartlyCloudy
+13 13:00 EXP_Light OFF
+
+13 20:00 EnvLight Night
+13 20:00 EXP_Light ON
+13 23:59 END_EXPECTATIONS
+
+#VACATION
+
+#Mon
+14 0:00 BEGIN_EXPECTATIONS vacation_day1
+14 0:00 EnvLight Night
+14 0:00 Light OFF
+14 0:00 EXP_Light OFF
+
+14 7:23 EnvLight PartlySunny
+14 7:23 Light OFF
+14 7:23 EXP_Light OFF
+
+14 9:00 EnvLight Cloudy
+14 9:00 Light OFF
+14 9:00 EXP_Light OFF
+
+14 13:00 EnvLight PartlyCloudy
+14 13:00 Light OFF
+14 13:00 EXP_Light OFF
+
+14 20:00 EnvLight Night
+14 20:00 EXP_Light OFF
+14 20:00 Light OFF
+14 23:59 END_EXPECTATIONS
+
+#Tue
+15 0:00 BEGIN_EXPECTATIONS vacation_day2
+15 7:23 EnvLight PartlySunny
+15 7:23 Light OFF
+15 7:23 EXP_Light OFF
+
+15 9:00 EnvLight Cloudy
+15 9:00 Light OFF
+15 9:00 EXP_Light OFF
+
+15 13:00 EnvLight PartlyCloudy
+15 13:00 Light OFF
+15 13:00 EXP_Light OFF
+
+15 20:00 EnvLight Night
+15 20:00 EXP_Light OFF
+15 20:00 Light OFF
+15 23:59 END_EXPECTATIONS
+
+#Wed
+16 0:00 EnvLight Night
+16 0:00 Light OFF
+16 0:00 EXP_Light OFF
+
+16 7:23 EnvLight PartlySunny
+16 7:23 Light OFF
+16 7:23 EXP_Light OFF
+
+16 9:00 EnvLight Sunny
+16 9:00 Light OFF
+16 9:00 EXP_Light OFF
+
+16 13:00 EnvLight PartlyCloudy
+16 13:00 Light OFF
+16 13:00 EXP_Light OFF
+
+16 20:00 EnvLight Night
+16 20:00 EXP_Light OFF
+16 20:00 Light OFF
+
+#Thu
+17 0:00 EnvLight Night
+17 0:00 Light OFF
+17 0:00 EXP_Light OFF
+
+17 7:23 EnvLight PartlySunny
+17 7:23 Light OFF
+17 7:23 EXP_Light OFF
+
+17 9:00 EnvLight Sunny
+17 9:00 Light OFF
+17 9:00 EXP_Light OFF
+
+17 13:00 EnvLight PartlyCloudy
+17 13:00 Light OFF
+17 13:00 EXP_Light OFF
+
+17 20:00 EnvLight Night
+17 20:00 EXP_Light OFF
+17 20:00 Light OFF
+
+#Fri
+18 0:00 EnvLight Night
+18 0:00 Light OFF
+18 0:00 EXP_Light OFF
+
+18 7:23 EnvLight PartlySunny
+18 7:23 Light OFF
+18 7:23 EXP_Light OFF
+
+18 9:00 EnvLight Sunny
+18 9:00 Light OFF
+18 9:00 EXP_Light OFF
+
+18 13:00 EnvLight PartlyCloudy
+18 13:00 Light OFF
+18 13:00 EXP_Light OFF
+
+18 20:00 EnvLight Night
+18 20:00 EXP_Light OFF
+18 20:00 Light OFF
+
+#Sat
+19 0:00 EnvLight Night
+19 0:00 Light OFF
+19 0:00 EXP_Light OFF
+
+19 7:23 EnvLight PartlySunny
+19 7:23 Light OFF
+19 7:23 EXP_Light OFF
+
+19 9:00 EnvLight Cloudy
+19 9:00 Light OFF
+19 9:00 EXP_Light OFF
+
+19 13:00 EnvLight PartlyCloudy
+19 13:00 Light OFF
+19 13:00 EXP_Light OFF
+
+19 20:00 EnvLight Night
+19 20:00 EXP_Light OFF
+19 20:00 Light OFF
+
+#Sun
+20 0:00 EnvLight Night
+20 0:00 Light OFF
+20 0:00 EXP_Light OFF
+
+20 7:23 EnvLight PartlySunny
+20 7:23 Light OFF
+20 7:23 EXP_Light OFF
+
+20 9:00 EnvLight Sunny
+20 9:00 Light OFF
+20 9:00 EXP_Light OFF
+
+20 13:00 EnvLight PartlyCloudy
+20 13:00 Light OFF
+20 13:00 EXP_Light OFF
+
+20 20:00 EnvLight Night
+20 20:00 Light OFF
+20 20:00 Light OFF
+
+#Mon
+21 0:00 EnvLight Night
+21 0:00 Light OFF
+21 0:00 EXP_Light OFF
+
+21 7:23 EnvLight PartlySunny
+21 7:23 Light OFF
+21 7:23 EXP_Light OFF
+
+21 9:00 EnvLight Cloudy
+21 9:00 Light OFF
+21 9:00 EXP_Light OFF
+
+21 13:00 EnvLight PartlyCloudy
+21 13:00 Light OFF
+21 13:00 EXP_Light OFF
+
+21 20:00 EnvLight Night
+21 20:00 EXP_Light OFF
+21 20:00 Light OFF
+
+#Tue
+22 7:23 EnvLight PartlySunny
+22 7:23 Light OFF
+22 7:23 EXP_Light OFF
+
+22 9:00 EnvLight Cloudy
+22 9:00 Light OFF
+22 9:00 EXP_Light OFF
+
+22 13:00 EnvLight PartlyCloudy
+22 13:00 Light OFF
+22 13:00 EXP_Light OFF
+
+22 20:00 EnvLight Night
+22 20:00 EXP_Light OFF
+22 20:00 Light OFF
+
+#Wed
+23 0:00 EnvLight Night
+23 0:00 Light OFF
+23 0:00 EXP_Light OFF
+
+23 7:23 EnvLight PartlySunny
+23 7:23 Light OFF
+23 7:23 EXP_Light OFF
+
+23 9:00 EnvLight Sunny
+23 9:00 Light OFF
+23 9:00 EXP_Light OFF
+
+23 13:00 EnvLight PartlyCloudy
+23 13:00 Light OFF
+23 13:00 EXP_Light OFF
+
+23 20:00 EnvLight Night
+23 20:00 EXP_Light OFF
+23 20:00 Light OFF
+
+#Thu
+24 0:00 EnvLight Night
+24 0:00 Light OFF
+24 0:00 EXP_Light OFF
+
+24 7:23 EnvLight PartlySunny
+24 7:23 Light OFF
+24 7:23 EXP_Light OFF
+
+24 9:00 EnvLight Sunny
+24 9:00 Light OFF
+24 9:00 EXP_Light OFF
+
+24 13:00 EnvLight PartlyCloudy
+24 13:00 Light OFF
+24 13:00 EXP_Light OFF
+
+24 20:00 EnvLight Night
+24 20:00 EXP_Light OFF
+24 20:00 Light OFF
+
+#Fri
+25 0:00 EnvLight Night
+25 0:00 Light OFF
+25 0:00 EXP_Light OFF
+
+25 7:23 EnvLight PartlySunny
+25 7:23 Light OFF
+25 7:23 EXP_Light OFF
+
+25 9:00 EnvLight Sunny
+25 9:00 Light OFF
+25 9:00 EXP_Light OFF
+
+25 13:00 EnvLight PartlyCloudy
+25 13:00 Light OFF
+25 13:00 EXP_Light OFF
+
+25 20:00 EnvLight Night
+25 20:00 EXP_Light OFF
+25 20:00 Light OFF
+
+#Sat
+26 0:00 EnvLight Night
+26 0:00 Light OFF
+26 0:00 EXP_Light OFF
+
+26 7:23 EnvLight PartlySunny
+26 7:23 Light OFF
+26 7:23 EXP_Light OFF
+
+26 9:00 EnvLight Cloudy
+26 9:00 Light OFF
+26 9:00 EXP_Light OFF
+
+26 13:00 EnvLight PartlyCloudy
+26 13:00 Light OFF
+26 13:00 EXP_Light OFF
+
+26 20:00 EnvLight Night
+26 20:00 EXP_Light OFF
+26 20:00 Light OFF
+
+#Sun
+27 0:00 BEGIN_EXPECTATIONS vacation_last_day
+27 0:00 EnvLight Night
+27 0:00 Light OFF
+27 0:00 EXP_Light OFF
+
+27 7:23 EnvLight PartlySunny
+27 7:23 Light OFF
+27 7:23 EXP_Light OFF
+
+27 9:00 EnvLight Sunny
+27 9:00 Light OFF
+27 9:00 EXP_Light OFF
+
+27 13:00 EnvLight PartlyCloudy
+27 13:00 Light OFF
+27 13:00 EXP_Light OFF
+
+27 20:00 EnvLight Night
+27 20:00 Light OFF
+27 20:00 Light OFF
+27 23:59 END_EXPECTATIONS
+
+#End vacation
+
+#Mon
+28 0:00 BEGIN_EXPECTATIONS after_vacations
+28 0:00 EnvLight Night
+28 0:00 Light ON
+28 0:00 EXP_Light ON
+
+28 7:23 EnvLight PartlySunny
+28 7:23 Light OFF
+28 7:23 EXP_Light OFF
+
+28 9:00 EnvLight Cloudy
+28 9:00 Light ON
+28 9:00 EXP_Light ON
+
+28 13:00 EnvLight PartlyCloudy
+28 13:00 Light OFF
+28 13:00 EXP_Light OFF
+
+28 20:00 EnvLight Night
+28 20:00 EXP_Light ON
+28 20:00 Light ON
+28 23:59 END_EXPECTATIONS
+
+#Tue
+29 0:00 BEGIN_EXPECTATIONS after_vacations2
+29 7:23 EnvLight PartlySunny
+29 7:23 Light OFF
+29 7:23 EXP_Light OFF
+
+29 9:00 EnvLight Cloudy
+29 9:00 Light ON
+29 9:00 EXP_Light ON
+
+29 13:00 EnvLight PartlyCloudy
+29 13:00 Light OFF
+29 13:00 EXP_Light OFF
+
+29 20:00 EnvLight Night
+29 20:00 EXP_Light ON
+29 20:00 Light ON
+29 23:59 END_EXPECTATIONS
+
+#Wed
+30 0:00 EnvLight Night
+30 0:00 Light ON
+30 0:00 EXP_Light ON
+
+30 7:23 EnvLight PartlySunny
+30 7:23 Light OFF
+30 7:23 EXP_Light OFF
+
+30 9:00 EnvLight Sunny
+30 9:00 Light OFF
+30 9:00 EXP_Light OFF
+
+30 13:00 EnvLight PartlyCloudy
+30 13:00 Light OFF
+30 13:00 EXP_Light OFF
+
+30 20:00 EnvLight Night
+30 20:00 EXP_Light ON
+30 20:00 Light ON
+
+#Thu
+31 0:00 EnvLight Night
+31 0:00 Light ON
+31 0:00 EXP_Light ON
+
+31 7:23 EnvLight PartlySunny
+31 7:23 Light OFF
+31 7:23 EXP_Light OFF
+
+31 9:00 EnvLight Sunny
+31 9:00 Light OFF
+31 9:00 EXP_Light OFF
+
+31 13:00 EnvLight PartlyCloudy
+31 13:00 Light OFF
+31 13:00 EXP_Light OFF
+
+31 20:00 EnvLight Night
+31 20:00 EXP_Light ON
+31 20:00 Light ON
+
+#Fri
+32 0:00 EnvLight Night
+32 0:00 Light ON
+32 0:00 EXP_Light ON
+
+32 7:23 EnvLight PartlySunny
+32 7:23 Light OFF
+32 7:23 EXP_Light OFF
+
+32 9:00 EnvLight Sunny
+32 9:00 Light OFF
+32 9:00 EXP_Light OFF
+
+32 13:00 EnvLight PartlyCloudy
+32 13:00 Light OFF
+32 13:00 EXP_Light OFF
+
+32 20:00 EnvLight Night
+32 20:00 EXP_Light ON
+32 20:00 Light ON
+
+#Sat
+33 0:00 EnvLight Night
+33 0:00 Light ON
+33 0:00 EXP_Light ON
+
+33 7:23 EnvLight PartlySunny
+33 7:23 Light OFF
+33 7:23 EXP_Light OFF
+
+33 9:00 EnvLight Cloudy
+33 9:00 Light ON
+33 9:00 EXP_Light ON
+
+33 13:00 EnvLight PartlyCloudy
+33 13:00 Light OFF
+33 13:00 EXP_Light OFF
+
+33 20:00 EnvLight Night
+33 20:00 EXP_Light ON
+33 20:00 Light ON
+
+#Sun
+34 0:00 BEGIN_EXPECTATIONS after_vacations3
+34 0:00 EnvLight Night
+34 0:00 Light ON
+34 0:00 EXP_Light ON
+
+34 7:23 EnvLight PartlySunny
+34 7:23 Light OFF
+34 7:23 EXP_Light OFF
+
+34 9:00 EnvLight Sunny
+34 9:00 Light OFF
+34 9:00 EXP_Light OFF
+
+34 13:00 EnvLight PartlyCloudy
+34 13:00 Light OFF
+34 13:00 EXP_Light OFF
+
+34 20:00 EnvLight Night
+34 20:00 EXP_Light ON
+34 20:00 Light ON
+34 23:59 END_EXPECTATIONS

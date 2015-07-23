@@ -1,0 +1,58 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+INPORT=start_conv.IN:START
+INPORT=stop_conv.IN:STOP
+INPORT=end_conv.IN:RESET
+OUTPORT=concat.OUT:OUT
+
+false(constant/boolean:value=false)
+ten(constant/int:value=10)
+
+false OUT -> ENABLED timer(timer:interval=100)
+timer OUT -> INC sec(int/accumulator:setup_value=min:0|max:59|step:1)
+start_conv(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
+end_conv(converter/empty-to-boolean:output_value=false) OUT -> ENABLED timer
+stop_conv(converter/empty-to-boolean:output_value=false) OUT -> ENABLED timer
+
+end_conv OUT -> PULSE_IF_FALSE reset_pulse(converter/boolean-to-empty)
+reset_pulse OUT -> RESET sec
+reset_pulse OUT -> RESET min
+
+sec OVERFLOW -> INC min(int/accumulator:setup_value=min:0|step:1)
+
+
+ten OUT -> IN[0] sec_cmp(int/greater)
+sec OUT -> IN[1] sec_cmp OUT -> IN custom_str(converter/boolean-to-string:false_value=":",true_value=":0")
+custom_str OUT -> IN[0] sec_concat(string/concatenate)
+sec OUT -> IN sec_str(converter/int-to-string) OUT -> IN[1] sec_concat
+
+min OUT -> IN min_str(converter/int-to-string) OUT -> IN[0] concat(string/concatenate)
+sec_concat OUT -> IN[1] concat

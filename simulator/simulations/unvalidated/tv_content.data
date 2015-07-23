@@ -1,0 +1,571 @@
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+# initial state
+0 0:00 BEGIN_EXPECTATIONS
+0 0:00 EnvTemperature 21
+0 0:00 User Nobody
+0 0:00 MindState Annoyed
+0 0:00 BodyState Healthy
+
+0 0:00 ProgramType None
+0 0:00 EXP_ProgramType None
+0 0:00 ProgramGenre None
+0 0:00 EXP_ProgramGenre None
+
+### Monday ###
+
+# Bruno watches the news every weekday at breakfast time
+# and when he returns home from work.
+# Sometimes he also watches something like movies or games before
+# going to bed
+0 8:00 EnvTemperature 21
+0 8:00 User Bruno
+0 8:05 MindState Neutral
+0 8:08 BodyState Healthy
+
+0 8:15 ProgramType Cartoon
+0 8:15 EXP_ProgramType News
+0 8:15 ProgramGenre None
+0 8:15 EXP_ProgramGenre None
+
+0 8:30 EnvTemperature 25
+
+0 8:30 User Nobody
+0 8:30 ProgramType None
+0 8:30 EXP_ProgramType None
+0 8:30 ProgramGenre None
+0 8:30 EXP_ProgramGenre None
+
+0 12:00 EnvTemperature 32
+
+0 19:30 EnvTemperature 20
+
+0 19:45 User Bruno
+0 19:48 MindState Sad
+0 19:50 BodyState Tired
+
+0 19:57 ProgramType News
+0 19:57 EXP_ProgramType News
+0 19:57 ProgramGenre None
+0 19:57 EXP_ProgramGenre None
+
+0 20:30 ProgramType Movie
+0 20:30 EXP_ProgramType Movie
+0 20:30 ProgramGenre Terror
+0 20:30 EXP_ProgramGenre Terror
+
+0 21:47 ProgramType Series
+0 21:47 EXP_ProgramType Series
+0 21:47 ProgramGenre Thriller
+0 21:47 EXP_ProgramGenre Thriller
+
+0 23:00 EnvTemperature 18
+
+0 23:05 User Nobody
+0 23:05 ProgramType None
+0 23:05 EXP_ProgramType None
+0 23:05 ProgramGenre None
+0 23:05 EXP_ProgramGenre None
+
+### Tuesday ###
+1 8:00 EnvTemperature 19
+1 8:07 User Bruno
+1 8:11 MindState Annoyed
+1 8:11 BodyState Healthy
+
+1 8:15 ProgramType Series
+1 8:15 EXP_ProgramType Cartoon
+1 8:15 ProgramGenre Thriller
+1 8:15 EXP_ProgramGenre None
+
+1 8:30 EnvTemperature 21
+
+1 8:30 User Nobody
+1 8:30 ProgramType None
+1 8:30 EXP_ProgramType None
+1 8:30 ProgramGenre None
+1 8:30 EXP_ProgramGenre None
+
+1 12:00 EnvTemperature 22
+
+1 19:30 EnvTemperature 17
+
+1 19:52 User Bruno
+1 19:54 MindState Sad
+1 19:54 BodyState Exhausted
+
+1 20:13 ProgramType Cartoon
+1 20:13 EXP_ProgramType News
+1 20:13 ProgramGenre None
+1 20:13 EXP_ProgramGenre None
+
+1 20:30 ProgramType Sports
+1 20:30 EXP_ProgramType Sports
+1 20:30 ProgramGenre None
+1 20:30 EXP_ProgramGenre None
+
+1 21:30 EnvTemperature 15
+
+1 22:05 User Nobody
+1 22:05 ProgramType None
+1 22:05 EXP_ProgramType None
+1 22:05 ProgramGenre None
+1 22:05 EXP_ProgramGenre None
+
+### Wednesday ###
+2 8:00 EnvTemperature 19
+2 8:03 User Bruno
+2 8:05 MindState Neutral
+2 8:07 BodyState Healthy
+
+2 8:10 ProgramType Sports
+2 8:10 EXP_ProgramType News
+2 8:10 ProgramGenre None
+2 8:10 EXP_ProgramGenre None
+
+2 8:30 EnvTemperature 21
+
+2 8:30 User Nobody
+2 8:30 ProgramType None
+2 8:30 EXP_ProgramType None
+2 8:30 ProgramGenre None
+2 8:30 EXP_ProgramGenre None
+
+2 12:00 EnvTemperature 24
+
+2 19:30 EnvTemperature 20
+
+2 19:39 User Bruno
+2 19:41 MindState Sad
+2 19:41 BodyState Exhausted
+
+2 19:45 ProgramType News
+2 19:45 EXP_ProgramType News
+2 19:45 ProgramGenre None
+2 19:45 EXP_ProgramGenre None
+
+2 20:30 User Nobody
+2 20:30 ProgramType None
+2 20:30 EXP_ProgramType None
+2 20:30 ProgramGenre None
+2 20:30 EXP_ProgramGenre None
+
+2 21:00 EnvTemperature 18
+
+### Thursday ###
+3 7:30 EnvTemperature 17
+3 7:35 User Bruno
+3 7:37 MindState Neutral
+3 7:38 BodyState Healthy
+
+3 7:43 ProgramType News
+3 7:43 EXP_ProgramType News
+3 7:43 ProgramGenre None
+3 7:43 EXP_ProgramGenre None
+
+3 8:00 EnvTemperature 18
+
+3 8:05 User Nobody
+3 8:05 ProgramType None
+3 8:05 EXP_ProgramType None
+3 8:05 ProgramGenre None
+3 8:05 EXP_ProgramGenre None
+
+3 12:00 EnvTemperature 23
+
+3 19:00 EnvTemperature 20
+
+3 19:15 User Bruno
+3 19:15 MindState Sad
+3 19:15 BodyState Exhausted
+
+3 20:00 ProgramType News
+3 20:00 EXP_ProgramType News
+3 20:00 ProgramGenre None
+3 20:00 EXP_ProgramGenre None
+
+3 20:30 User Nobody
+3 20:30 ProgramType None
+3 20:30 EXP_ProgramType None
+3 20:30 ProgramGenre None
+3 20:30 EXP_ProgramGenre None
+
+3 21:00 EnvTemperature 17
+
+### Friday ###
+4 8:00 EnvTemperature 19
+4 8:02 User Bruno
+4 8:04 MindState Annoyed
+4 8:05 BodyState Healthy
+
+4 8:43 ProgramType News
+4 8:43 EXP_ProgramType News
+4 8:43 ProgramGenre None
+4 8:43 EXP_ProgramGenre None
+
+4 9:00 EnvTemperature 18
+
+4 9:05 User Nobody
+4 9:05 ProgramType None
+4 9:05 EXP_ProgramType None
+4 9:05 ProgramGenre None
+4 9:05 EXP_ProgramGenre None
+
+4 12:00 EnvTemperature 23
+
+4 19:00 EnvTemperature 16
+
+4 20:15 User Bruno
+4 20:15 MindState Happy
+4 20:15 BodyState Exhausted
+
+4 20:30 ProgramType News
+4 20:30 EXP_ProgramType Series
+4 20:30 ProgramGenre None
+4 20:30 EXP_ProgramGenre Thriller
+
+4 21:30 User Nobody
+4 21:30 ProgramType None
+4 21:30 EXP_ProgramType None
+4 21:30 ProgramGenre None
+4 21:30 EXP_ProgramGenre None
+
+### Saturday ###
+5 8:00 EnvTemperature 14
+
+5 10:02 User Bruno
+5 10:04 MindState Annoyed
+5 10:05 BodyState Healthy
+
+5 11:43 ProgramType Series
+5 11:43 EXP_ProgramType Series
+5 11:43 ProgramGenre Drama
+5 11:43 EXP_ProgramGenre Drama
+
+5 12:00 EnvTemperature 18
+
+5 17:00 EnvTemperature 17
+
+5 18:30 ProgramType None
+5 18:30 EXP_ProgramType None
+5 18:30 ProgramGenre None
+5 18:30 EXP_ProgramGenre None
+
+### Sunday ###
+6 8:00 EnvTemperature 15
+
+6 15:02 User Bruno
+6 15:04 MindState Annoyed
+6 15:05 BodyState Healthy
+
+6 10:00 EnvTemperature 18
+
+6 12:00 EnvTemperature 20
+
+6 15:30 ProgramType Series
+6 15:30 EXP_ProgramType Sports
+6 15:30 ProgramGenre Drama
+6 15:30 EXP_ProgramGenre None
+
+6 17:00 EnvTemperature 18
+
+6 17:30 User Nobody
+6 17:30 ProgramType None
+6 17:30 EXP_ProgramType None
+6 17:30 ProgramGenre None
+6 17:30 EXP_ProgramGenre None
+
+### Monday ###
+7 8:00 EnvTemperature 21
+7 8:00 User Bruno
+7 8:05 MindState Neutral
+7 8:08 BodyState Healthy
+
+7 8:15 ProgramType Sports
+7 8:15 EXP_ProgramType News
+7 8:15 ProgramGenre None
+7 8:15 EXP_ProgramGenre None
+
+7 8:30 EnvTemperature 25
+
+7 8:30 User Nobody
+7 8:30 ProgramType None
+7 8:30 EXP_ProgramType None
+7 8:30 ProgramGenre None
+7 8:30 EXP_ProgramGenre None
+
+7 12:00 EnvTemperature 32
+
+7 19:30 EnvTemperature 20
+
+7 19:45 User Bruno
+7 19:48 MindState Sad
+7 19:50 BodyState Tired
+
+7 19:57 ProgramType News
+7 19:57 EXP_ProgramType News
+7 19:57 ProgramGenre None
+7 19:57 EXP_ProgramGenre None
+
+7 20:30 ProgramType Movie
+7 20:30 EXP_ProgramType Movie
+7 20:30 ProgramGenre Terror
+7 20:30 EXP_ProgramGenre Terror
+
+7 21:47 ProgramType Series
+7 21:47 EXP_ProgramType Series
+7 21:47 ProgramGenre Thriller
+7 21:47 EXP_ProgramGenre Thriller
+
+7 23:00 EnvTemperature 18
+
+7 23:05 User Nobody
+7 23:05 ProgramType Series
+7 23:05 EXP_ProgramType News
+7 23:05 ProgramGenre Thriller
+7 23:05 EXP_ProgramGenre None
+
+### Tuesday ###
+8 8:00 EnvTemperature 19
+8 8:07 User Bruno
+8 8:11 MindState Annoyed
+8 8:11 BodyState Healthy
+
+8 8:15 ProgramType News
+8 8:15 EXP_ProgramType Cartoon
+8 8:15 ProgramGenre None
+8 8:15 EXP_ProgramGenre None
+
+8 8:30 EnvTemperature 21
+
+8 8:30 User Nobody
+8 8:30 ProgramType None
+8 8:30 EXP_ProgramType None
+8 8:30 ProgramGenre None
+8 8:30 EXP_ProgramGenre None
+
+8 12:00 EnvTemperature 22
+
+8 19:30 EnvTemperature 17
+
+8 19:52 User Bruno
+8 19:54 MindState Sad
+8 19:54 BodyState Exhausted
+
+8 20:13 ProgramType Cartoon
+8 20:13 EXP_ProgramType News
+8 20:13 ProgramGenre None
+8 20:13 EXP_ProgramGenre None
+
+8 20:30 ProgramType Movie
+8 20:30 EXP_ProgramType Movie
+8 20:30 ProgramGenre Romance
+8 20:30 EXP_ProgramGenre Romance
+
+8 21:30 EnvTemperature 15
+
+### Wednesday ###
+9 02:05 User Nobody
+9 02:05 ProgramType None
+9 02:05 EXP_ProgramType None
+9 02:05 ProgramGenre None
+9 02:05 EXP_ProgramGenre None
+
+9 8:00 EnvTemperature 19
+9 8:03 User Bruno
+9 8:05 MindState Neutral
+9 8:07 BodyState Healthy
+
+9 8:10 ProgramType Movie
+9 8:10 EXP_ProgramType News
+9 8:10 ProgramGenre Romance
+9 8:10 EXP_ProgramGenre None
+
+9 8:30 EnvTemperature 21
+
+9 8:30 User Nobody
+9 8:30 ProgramType None
+9 8:30 EXP_ProgramType None
+9 8:30 ProgramGenre None
+9 8:30 EXP_ProgramGenre None
+
+9 12:00 EnvTemperature 24
+
+9 19:30 EnvTemperature 20
+
+9 19:39 User Bruno
+9 19:41 MindState Sad
+9 19:41 BodyState Exhausted
+
+9 19:45 ProgramType News
+9 19:45 EXP_ProgramType News
+9 19:45 ProgramGenre None
+9 19:45 EXP_ProgramGenre None
+
+9 20:30 User Nobody
+9 20:30 ProgramType None
+9 20:30 EXP_ProgramType None
+9 20:30 ProgramGenre None
+9 20:30 EXP_ProgramGenre None
+
+9 21:00 EnvTemperature 18
+
+### Thursday ###
+10 7:30 EnvTemperature 17
+10 7:35 User Bruno
+10 7:37 MindState Neutral
+10 7:38 BodyState Healthy
+
+10 7:43 ProgramType News
+10 7:43 EXP_ProgramType News
+10 7:43 ProgramGenre None
+10 7:43 EXP_ProgramGenre None
+
+10 8:00 EnvTemperature 18
+
+10 8:05 User Nobody
+10 8:05 ProgramType None
+10 8:05 EXP_ProgramType None
+10 8:05 ProgramGenre None
+10 8:05 EXP_ProgramGenre None
+
+10 12:00 EnvTemperature 23
+
+10 19:00 EnvTemperature 20
+
+10 19:15 User Bruno
+10 19:15 MindState Sad
+10 19:15 BodyState Exhausted
+
+10 20:00 ProgramType News
+10 20:00 EXP_ProgramType News
+10 20:00 ProgramGenre None
+10 20:00 EXP_ProgramGenre None
+
+10 21:00 ProgramType Movie
+10 21:00 EXP_ProgramType Movie
+10 21:00 ProgramGenre Comedy
+10 21:00 EXP_ProgramGenre Comedy
+
+10 20:30 User Nobody
+10 20:30 ProgramType None
+10 20:30 EXP_ProgramType None
+10 20:30 ProgramGenre None
+10 20:30 EXP_ProgramGenre None
+
+10 21:00 EnvTemperature 17
+
+### Friday ###
+11 8:00 EnvTemperature 19
+11 8:02 User Bruno
+11 8:04 MindState Annoyed
+11 8:05 BodyState Healthy
+
+11 8:43 ProgramType Movie       
+11 8:43 EXP_ProgramType News
+11 8:43 ProgramGenre Comedy
+11 8:43 EXP_ProgramGenre None
+
+11 9:00 EnvTemperature 18
+
+11 9:05 User Nobody
+11 9:05 ProgramType None
+11 9:05 EXP_ProgramType None
+11 9:05 ProgramGenre None
+11 9:05 EXP_ProgramGenre None
+
+11 12:00 EnvTemperature 23
+
+11 19:00 EnvTemperature 16
+
+11 20:15 User Bruno
+11 20:15 MindState Happy
+11 20:15 BodyState Exhausted
+
+11 21:30 ProgramType News
+11 21:30 EXP_ProgramType Movie
+11 21:30 ProgramGenre None
+11 21:30 EXP_ProgramGenre Drama
+
+11 22:30 User Nobody
+11 22:30 ProgramType None
+11 22:30 EXP_ProgramType None
+11 22:30 ProgramGenre None
+11 22:30 EXP_ProgramGenre None
+
+### Saturday ###
+12 8:00 EnvTemperature 16
+
+12 12:00 EnvTemperature 22
+
+12 16:00 EnvTemperature 18
+
+12 20:00 EnvTemperature 17
+
+12 21:02 User Bruno
+12 21:04 MindState Annoyed
+12 21:05 BodyState Healthy
+
+12 21:43 ProgramType Movie
+12 21:43 EXP_ProgramType Series
+12 21:43 ProgramGenre Drama
+12 21:43 EXP_ProgramGenre Drama
+
+12 23:30 User Nobody
+12 23:30 ProgramType None
+12 23:30 EXP_ProgramType None
+12 23:30 ProgramGenre None
+12 23:30 EXP_ProgramGenre None
+
+### Sunday ###
+13 8:00 EnvTemperature 15
+13 15:02 User Bruno
+13 15:04 MindState Annoyed
+13 15:05 BodyState Tired
+
+13 10:00 EnvTemperature 18
+
+13 12:00 EnvTemperature 20
+
+13 15:30 ProgramType Series
+13 15:30 EXP_ProgramType Sports
+13 15:30 ProgramGenre None
+13 15:30 EXP_ProgramGenre None
+
+13 17:00 EnvTemperature 18
+
+13 17:30 User Nobody
+13 17:30 ProgramType None
+13 17:30 EXP_ProgramType None
+13 17:30 ProgramGenre None
+13 17:30 EXP_ProgramGenre None
+
+13 23:59 END_EXPECTATIONS

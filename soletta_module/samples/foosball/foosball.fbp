@@ -1,0 +1,157 @@
+#!/usr/bin/env sol-fbp-runner
+
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+DECLARE=PlayerSelector:fbp:player_selector.fbp
+DECLARE=Time:fbp:time.fbp
+DECLARE=FoosballMachine:fbp:foosball_machine.fbp
+
+max_goals(constant/int:value=3)
+
+#state machine definition
+state(int/accumulator:setup_value=min:0|max:2|step:1)
+state_player_selection_const(constant/int:value=0)
+state_game_const(constant/int:value=1)
+
+state OUT -> IN[0] state_player_selection(int/equal)
+state_player_selection_const OUT -> IN[1] state_player_selection
+state OUT -> IN[0] state_game(int/equal)
+state_game_const OUT -> IN[1] state_game
+
+#player selections
+yellow_goalkeeper(PlayerSelector)
+yellow_striker(PlayerSelector)
+red_goalkeeper(PlayerSelector)
+red_striker(PlayerSelector)
+state_player_selection OUT -> ENABLED yellow_goalkeeper
+state_player_selection OUT -> ENABLED yellow_striker
+state_player_selection OUT -> ENABLED red_goalkeeper
+state_player_selection OUT -> ENABLED red_striker
+yellow_goalkeeper_btn(PushButton) OUT -> BUTTON yellow_goalkeeper
+yellow_goalkeeper NUMBER -> IN yellow_goalkeeper_lbl(Label)
+yellow_striker_btn(PushButton) OUT -> BUTTON yellow_striker
+yellow_striker NUMBER -> IN yellow_striker_lbl(Label)
+red_goalkeeper_btn(PushButton) OUT -> BUTTON red_goalkeeper
+red_goalkeeper NUMBER -> IN red_goalkeeper_lbl(Label)
+red_striker_btn(PushButton) OUT -> BUTTON red_striker
+red_striker NUMBER -> IN red_striker_lbl(Label)
+
+yellow_goalkeeper NUMBER -> IN[0] cmp1(int/equal)
+yellow_striker NUMBER -> IN[1] cmp1
+
+yellow_goalkeeper NUMBER -> IN[0] cmp2(int/equal)
+red_goalkeeper NUMBER -> IN[1] cmp2
+
+yellow_goalkeeper NUMBER -> IN[0] cmp3(int/equal)
+red_striker NUMBER -> IN[1] cmp3
+
+yellow_striker NUMBER -> IN[0] cmp4(int/equal)
+red_goalkeeper NUMBER -> IN[1] cmp4
+
+yellow_striker NUMBER -> IN[0] cmp5(int/equal)
+red_striker NUMBER -> IN[1] cmp5
+
+red_goalkeeper NUMBER -> IN[0] cmp6(int/equal)
+red_striker NUMBER -> IN[1] cmp6
+
+cmp1 OUT -> IN[0] or1(boolean/or)
+cmp2 OUT -> IN[1] or1
+
+cmp3 OUT -> IN[0] or2(boolean/or)
+cmp4 OUT -> IN[1] or2
+
+cmp5 OUT -> IN[0] or3(boolean/or)
+cmp6 OUT -> IN[1] or3
+
+or1 OUT -> IN[0] or4(boolean/or)
+or2 OUT -> IN[1] or4
+
+or3 OUT -> IN[0] or5(boolean/or)
+or4 OUT -> IN[1] or5
+
+or5 OUT -> IN selection_correct(boolean/not) OUT -> IN selection_correct_led(Led:rgb=0|255|0)
+
+selection_correct OUT -> IN[0] can_start_game(boolean/and)
+state_player_selection OUT -> IN[1] can_start_game
+
+can_start_game OUT -> IN[0] and_start_game(boolean/and)
+start_game(PushButton) OUT -> IN[1] and_start_game OUT -> PULSE_IF_TRUE game_start(converter/boolean-to-empty)
+game_start OUT -> START time(Time) OUT -> IN time_label(Label)
+game_start OUT -> INC state
+
+state_game OUT -> IN[0] and_yellow_goal(boolean/and)
+yellow_goal(PushButton) OUT -> IN[1] and_yellow_goal OUT -> PULSE_IF_TRUE yellow_goal_toggle(converter/boolean-to-empty)
+yellow_goal_toggle OUT -> INC yellow_goals_ac(int/accumulator:setup_value=min:0|max:10) OUT -> IN yellow_goals(Label)
+game_start OUT -> RESET yellow_goals_ac
+
+state_game OUT -> IN[0] and_red_goal(boolean/and)
+red_goal(PushButton) OUT -> IN[1] and_red_goal OUT -> PULSE_IF_TRUE red_goal_toggle(converter/boolean-to-empty)
+red_goal_toggle OUT -> INC red_goals_ac(int/accumulator:setup_value=min:0|max:10) OUT -> IN red_goals(Label)
+game_start OUT -> RESET red_goals_ac
+
+max_goals OUT -> IN[0] yellow_goals_cmp(int/equal)
+yellow_goals_ac OUT -> IN[1] yellow_goals_cmp
+yellow_goals_cmp OUT -> PULSE_IF_TRUE yellow_winner(converter/boolean-to-empty)
+
+max_goals OUT -> IN[0] red_goals_cmp(int/equal)
+red_goals_ac OUT -> IN[1] red_goals_cmp
+red_goals_cmp OUT -> PULSE_IF_TRUE red_winner(converter/boolean-to-empty)
+
+#Machine learning
+sml(FoosballMachine)
+yellow_goalkeeper NUMBER -> GOAL_KEEPER1 sml
+yellow_striker NUMBER -> STRIKER1 sml
+red_goalkeeper NUMBER -> GOAL_KEEPER2 sml
+red_striker NUMBER -> STRIKER2 sml
+
+yellow_winner OUT -> WINNER1 sml
+red_winner OUT -> WINNER2 sml
+yellow_winner OUT -> INC state
+red_winner OUT -> INC state
+yellow_winner OUT -> STOP time
+red_winner OUT -> STOP time
+
+sml PROCESS_END -> IN game_over(hub/empty)
+game_over OUT -> RESET time
+game_over OUT -> INC state
+game_over OUT -> RESET yellow_goalkeeper
+game_over OUT -> RESET yellow_striker
+game_over OUT -> RESET red_goalkeeper
+game_over OUT -> RESET red_striker
+
+#prediction
+game_start OUT -> PREDICTION_TRIGGER sml
+predicted_winner_led(Led)
+game_over OUT -> IN _(converter/empty-to-rgb:output_value=0|0|0|255|255|255) OUT -> IN predicted_winner_led
+sml PREDICTED_WINNER1 -> IN pred_yellow_winner (converter/empty-to-rgb:output_value=255|255|0|255|255|255)
+pred_yellow_winner OUT -> IN predicted_winner_led
+sml PREDICTED_WINNER2 -> IN pred_red_winner (converter/empty-to-rgb:output_value=255|0|0|255|255|255)
+pred_red_winner OUT -> IN predicted_winner_led
