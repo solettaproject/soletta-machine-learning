@@ -251,63 +251,12 @@ struct machine_learning_output_var {
     char *tag;
 };
 
-/* TODO avoid gaps between terms */
-static void
-add_term(struct sml_object *sml, int32_t term_index,
-    struct sml_variable *sml_var, const char *name, float var_min,
-    float step, uint16_t number_of_terms, float overlap)
-{
-    double min, max;
-
-    if (term_index == 0) {
-        min = var_min;
-        max = min + (step / 2) + overlap;
-        sml_fuzzy_variable_add_term_ramp(sml, sml_var, name, max, min, 1);
-    } else if (term_index == number_of_terms - 1) {
-        max = var_min + term_index * step;
-        min = max - (step / 2) - overlap;
-        sml_fuzzy_variable_add_term_ramp(sml, sml_var, name, min, max, 1);
-    } else {
-        min = var_min + step * term_index - (step / 2) - overlap;
-        max = min + step + overlap;
-        sml_fuzzy_variable_add_term_triangle(sml, sml_var, name, min,
-            min + (max - min) / 2, max, 1);
-    }
-
-    SOL_DBG("Term %s (%f - %f) added for %s", name, min, max,
-        sml_variable_get_name(sml, sml_var));
-}
-
-#define OVERLAP_PERCENTAGE (0.1)
-static void
-variable_add_terms(struct sml_object *sml, struct machine_learning_var *var,
-    uint16_t max_number_of_terms)
-{
-
-    /* TODO check for used range instead of nominal range to improve terms */
-    float step;
-    int32_t i;
-    char name[8];
-    uint16_t number_of_terms;
-    float overlap;
-
-    number_of_terms = fmin((var->value.max - var->value.min + 1) /
-        var->value.step, max_number_of_terms);
-
-    step = (var->value.max - var->value.min + 1) / number_of_terms;
-    overlap = step * OVERLAP_PERCENTAGE;
-    for (i = 0; i < number_of_terms; i++) {
-        snprintf(name, sizeof(name), "t%d", i);
-        add_term(sml, i, var->sml_variable, name, var->value.min, step,
-            number_of_terms, overlap);
-    }
-}
-#undef OVERLAP_PERCENTAGE
-
 static void
 set_variable(struct machine_learning_data *mdata,
     struct machine_learning_var *var)
 {
+    float width;
+
     sml_variable_set_value(mdata->sml, var->sml_variable, var->value.val);
 
     if (!var->range_changed)
@@ -317,11 +266,15 @@ set_variable(struct machine_learning_data *mdata,
     sml_variable_set_range(mdata->sml, var->sml_variable, var->value.min,
         var->value.max);
 
-    if (sml_is_ann(mdata->sml))
-        return;
+    if (sml_is_fuzzy(mdata->sml)) {
+        //works fine with non id fields too
+        sml_fuzzy_variable_set_is_id(mdata->sml, var->sml_variable, true);
+        width = fmax((var->value.max - var->value.min + 1) /
+            mdata->number_of_terms, var->value.step);
 
-    /* TODO remove terms before (if any was previouly created) */
-    variable_add_terms(mdata->sml, var, mdata->number_of_terms);
+        sml_fuzzy_variable_set_default_term_width(mdata->sml, var->sml_variable,
+            width);
+    }
 }
 
 static bool
