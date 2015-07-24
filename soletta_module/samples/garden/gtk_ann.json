@@ -1,0 +1,25 @@
+{
+ "$schema": "http://solettaproject.github.io/soletta/schemas/config.schema",
+ "nodetypes": [
+  {
+   "name": "PushButton",
+   "type": "gtk/pushbutton"
+  },
+  {
+   "name": "Label",
+   "type": "gtk/label"
+  },
+  {
+   "name": "Led",
+   "type": "gtk/led"
+  },
+  {
+   "name": "SML",
+   "options": {
+    "stabilization_hits": 0,
+    "initial_required_observations": 10
+   },
+   "type": "machine-learning/neural-network"
+  }
+ ]
+}
