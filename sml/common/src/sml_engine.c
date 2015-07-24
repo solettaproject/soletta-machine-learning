@@ -334,7 +334,7 @@ sml_variable_get_value(struct sml_object *sml,
     if (!engine->get_value) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variable_get_value is mandatory for engines.");
-        return false;
+        return NAN;
     }
     return engine->get_value(sml_variable);
 }
