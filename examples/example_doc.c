@@ -135,13 +135,11 @@ main(int argc, char *argv[])
 
     sensor = sml_new_input(sml, "PresenceSensor");
     sml_variable_set_range(sml, sensor, 0, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, sensor, "Off", 0.6, 0, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, sensor, "On", 0.4, 1.0, 1);
+    sml_fuzzy_variable_set_default_term_width(sml, sensor, 0.5);
 
     light = sml_new_output(sml, "Light");
     sml_variable_set_range(sml, light, 0, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, light, "Off", 0.6, 0, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, light, "On", 0.4, 1.0, 1);
+    sml_fuzzy_variable_set_default_term_width(sml, light, 0.5);
 
     sml_set_read_state_callback(sml, read_state_cb, NULL);
     sml_set_output_state_changed_callback(sml, output_state_changed_cb, NULL);

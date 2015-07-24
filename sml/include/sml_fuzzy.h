@@ -244,6 +244,108 @@ bool sml_fuzzy_output_set_defuzzifier(struct sml_object *sml, struct sml_variabl
 bool sml_fuzzy_output_set_accumulation(struct sml_object *sml, struct sml_variable *sml_variable, enum sml_fuzzy_snorm accumulation);
 
 /**
+ * @brief Set the default term width used by fuzzy to create terms
+ *
+ * If ::sml_process is called and a variable has no terms fuzzy engine will
+ * automatically create terms for this variable. Some properties are important
+ * help fuzzy engine to improve the quality of the created terms.
+ *
+ * Width is the width of each creted term. Other important properties are
+ * is_id, set by ::sml_fuzzy_variable_set_is_id and range (min and max), set by
+ * ::sml_variable_set_range.
+ *
+ * For example, for the variable created by the following code:
+ * @code{.c}
+ * struct sml_variable *var = sml_new_input(sml, "my_var");
+ * sml_variable_set_range(sml, var, 0, 5);
+ * sml_fuzzy_variable_set_default_term_width(sml, var, 1);
+ * @endcode
+ *
+ * Fuzzy engine will create 5 terms:
+ * - ramp from 0 to 1
+ * - triangle from 1 to 2, with peak at 0.5
+ * - triangle from 2 to 3, with peak at 1.5
+ * - triangle from 3 to 4, with peak at 3.5
+ * - ramp from 4 to 5.
+ *
+ * After that, a small overlap will be added between each term. The default
+ * overlap value is 10% of width, in this case, 0.1. So at the end we would
+ * have:
+ * - ramp from 0 to 1.1
+ * - triangle from 0.9 to 2.1, with peak at 0.5
+ * - triangle from 1.9 to 3.1, with peak at 1.5
+ * - triangle from 2.9 to 4.1, with peak at 3.5
+ * - ramp from 3.9 to 5.
+ *
+ * In case the variable is an id, the first and last element will have a size
+ * width/2. This is necessary so we can have a constant distance from the peak
+ * of each term. This distance is always equal width.
+ *
+ * For example, for the variable created by the following code:
+ * @code{.c}
+ * struct sml_variable *var = sml_new_input(sml, "my_var");
+ * sml_variable_set_range(sml, var, 0, 5);
+ * sml_fuzzy_variable_set_default_term_width(sml, var, 1);
+ * sml_fuzzy_variable_set_is_id(sml, var, true);
+ * @endcode
+ * We would have 5 terms:
+ * - ramp from 0 to 0.6
+ * - triangle from 0.4 to 1.6, with peak at 1
+ * - triangle from 1.4 to 2.6 with peak at 2
+ * - triangle from 2.4 to 3.6, with peak at 3
+ * - triange from 3.4 to 4.6, with peak at 4
+ * - ramp from 4.4 to 5
+ *
+ * @param sml The ::sml_object object.
+ * @param sml_variable The ::sml_variable.
+ * @param width Default term width
+ * @remark The default value is @c NAN
+ *
+ * @see ::sml_fuzzy_variable_get_default_term_width
+ */
+bool sml_fuzzy_variable_set_default_term_width(struct sml_object *sml, struct sml_variable *sml_variable, float width);
+
+/**
+ * @brief Get the default term width used by fuzzy to create terms.
+ *
+ * @param sml The ::sml_object object.
+ * @param sml_variable The ::sml_variable.
+ *
+ * @see ::sml_fuzzy_variable_set_default_term_width
+ */
+float sml_fuzzy_variable_get_default_term_width(struct sml_object *sml, struct sml_variable *sml_variable);
+
+/**
+ * @brief Check if this variable is used as an id field.
+ *
+ * The is_id property is used by fuzzy engine when it is creating terms
+ * automatically. Terms created by fuzzy engine will be optimized to be
+ * used by variables that keeps ids.
+ *
+ * For more information take a look at ::sml_fuzzy_variable_set_default_term_width
+ *
+ * @param sml The ::sml_object object.
+ * @param sml_variable The ::sml_variable.
+ * @param is_id @c true if this variable should be considered an id. @c false otherwise
+ * @remark The default value is @c false
+ *
+ * @see ::sml_fuzzy_variable_get_is_id
+ */
+bool sml_fuzzy_variable_set_is_id(struct sml_object *sml, struct sml_variable *sml_variable, bool is_id);
+
+/**
+ * @brief Check if this variable is used as an id field.
+ *
+ * @param sml The ::sml_object object.
+ * @param sml_variable The ::sml_variable.
+ * @return @c true if sml_variable is an id field
+ * @return @c false if sml_variable isn't an id field
+ *
+ * @see ::sml_fuzzy_variable_set_is_id
+ */
+bool sml_fuzzy_variable_get_is_id(struct sml_object *sml, struct sml_variable *sml_variable);
+
+/**
  * @brief Add a rectangle term for a variable.
  *
  * A rectangle term uses a mathematical function defined by its start and end

@@ -89,10 +89,14 @@ extern "C" {
  *
  * Terms are a way to split the values in the range in meaningful parts.
  * Fuzzy supports some functions to describe them, as ramps, triangles
- * and others. Since they're binary variables, using two ramps,
- * one starting on 0 and other ending on 1, with a small overlap between them,
- * seems good enough. This way, it will try to predict the output
- * for any possible value being more certain about it on extremities.
+ * and others.
+ *
+ * Although we have the possibility to define each term to describe your
+ * problem, for this example we will let the fuzzy engine do this for you.
+ * To improve the quality of the automatically created terms, we need to give
+ * fuzzy engine some hints about the variable being used. As both variables are
+ * boolean values, lets set the default term width to 0.5 and the range from
+ * 0 to 1. So we will have 2 terms, one for on and another for off.
  *
  * After everything is set up, it's time to trigger the processing.
  * It will be done in a simple loop, making 150 sml_process() calls,

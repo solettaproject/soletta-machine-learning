@@ -50,6 +50,8 @@ struct sml_fuzzy {
     struct sml_variables_list *output_list;
     uint16_t input_terms_count;
     uint16_t output_terms_count;
+    struct sol_vector input_terms_width;
+    struct sol_vector output_terms_width;
 };
 
 struct sml_fuzzy *sml_get_fuzzy(struct sml_engine *sml);
@@ -97,8 +99,8 @@ int sml_fuzzy_term_get_name(struct sml_fuzzy_term *term, char *term_name, size_t
 bool sml_fuzzy_term_get_range(struct sml_fuzzy_term *term, float *min, float *max);
 bool sml_fuzzy_term_set_range(struct sml_fuzzy_term *term, float min, float max);
 
-bool sml_fuzzy_is_input(struct sml_fuzzy *fuzzy, struct sml_variable *variable);
-bool sml_fuzzy_is_output(struct sml_fuzzy *fuzzy, struct sml_variable *variable);
+bool sml_fuzzy_is_input(struct sml_fuzzy *fuzzy, struct sml_variable *variable, uint16_t *index);
+bool sml_fuzzy_is_output(struct sml_fuzzy *fuzzy, struct sml_variable *variable, uint16_t *index);
 bool sml_fuzzy_is_rule_block_empty(struct sml_fuzzy *fuzzy);
 struct sml_fuzzy_rule *sml_fuzzy_rule_add(struct sml_fuzzy *fuzzy, const char *rule);
 bool sml_fuzzy_rule_free(struct sml_fuzzy *fuzzy, struct sml_fuzzy_rule *rule);
@@ -109,6 +111,10 @@ void sml_fuzzy_debug(struct sml_fuzzy *fuzzy);
 struct sml_variables_list *sml_fuzzy_variables_list_new(struct sml_fuzzy *fuzzy, struct sol_vector *indexes);
 void sml_fuzzy_variables_list_free(struct sml_variables_list *list);
 bool sml_fuzzy_set_read_values(struct sml_fuzzy *fuzzy, struct sml_variables_list *outputs);
+bool sml_fuzzy_bridge_variable_set_default_term_width(struct sml_fuzzy *fuzzy, struct sml_variable *var, float width);
+float sml_fuzzy_bridge_variable_get_default_term_width(struct sml_fuzzy *fuzzy, struct sml_variable *var);
+bool sml_fuzzy_bridge_variable_set_is_id(struct sml_fuzzy *fuzzy, struct sml_variable *var, bool is_id);
+bool sml_fuzzy_bridge_variable_get_is_id(struct sml_fuzzy *fuzzy, struct sml_variable *var);
 
 #ifdef __cplusplus
 }
