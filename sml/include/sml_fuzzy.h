@@ -354,23 +354,6 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_gaussian(struct sml_object *s
 struct sml_fuzzy_term *sml_fuzzy_variable_add_term_ramp(struct sml_object *sml, struct sml_variable *variable, const char *name, float start, float end, float height);
 
 /**
- * @brief Set terms autobalance
- *
- * Defining terms overlaps is a hard task, sometimes the user defined terms are not
- * well suited for an application. If the term definitions are poor, the fuzzy engine
- * the fuzzy predictions will be poor as well. If auto balance is enabled and if the
- * fuzzy engine detects that the terms are not well set, it will recreate the terms.
- *
- * @remarks Terms auto balance is disabled by default
- *
- * @param sml The ::sml_object object.
- * @param variable_terms_auto_balance @c true to enable, @c false to disable.
- * @return @c true on success.
- * @return @c false on failure.
- */
-bool sml_fuzzy_set_variable_terms_auto_balance(struct sml_object *sml, bool variable_terms_auto_balance);
-
-/**
  * @brief Remove a fuzzy term from the engine.
  *
  * @param sml The ::sml_object object.
