@@ -39,12 +39,10 @@
 #include <errno.h>
 #include <sol-vector.h>
 #include <sml_log.h>
-#include <new>
 #include <stdexcept>
 #include <algorithm>
+#include <float.h>
 
-#define DEFAULT_MIN (0)
-#define DEFAULT_MAX (1)
 #define DEFAULT_ACCUMULATION (SML_FUZZY_SNORM_MAXIMUM)
 
 template<class Variable>
@@ -582,7 +580,7 @@ sml_fuzzy_new_input(struct sml_fuzzy *fuzzy, const char *name)
 
     variable->setEnabled(true);
     variable->setName(name);
-    variable->setRange(DEFAULT_MIN, DEFAULT_MAX);
+    variable->setRange(FLT_MIN, FLT_MAX);
     engine->addInputVariable(variable);
 
     return (struct sml_variable *)variable;
@@ -609,7 +607,7 @@ sml_fuzzy_new_output(struct sml_fuzzy *fuzzy, const char *name)
 
     variable->setEnabled(true);
     variable->setName(name);
-    variable->setRange(DEFAULT_MIN, DEFAULT_MAX);
+    variable->setRange(FLT_MIN, FLT_MAX);
     variable->setDefaultValue(NAN);
     variable->setDefuzzifier(fl_defuzzifier);
     variable->fuzzyOutput()->setAccumulation(_get_snorm(DEFAULT_ACCUMULATION));
