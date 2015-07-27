@@ -334,7 +334,7 @@ sml_variable_get_value(struct sml_object *sml,
     if (!engine->get_value) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variable_get_value is mandatory for engines.");
-        return false;
+        return NAN;
     }
     return engine->get_value(sml_variable);
 }
@@ -460,6 +460,10 @@ sml_variable_set_range(struct sml_object *sml,
 
     ON_NULL_RETURN_VAL(sml_variable, false);
     ON_NULL_RETURN_VAL(sml, false);
+
+    if (isnan(min) || isnan(max) || max < min)
+        return false;
+
     if (!engine->variable_set_range) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variable_set_range is mandatory for engines.");

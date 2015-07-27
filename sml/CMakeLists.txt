@@ -43,9 +43,7 @@ if (FUZZY_ENGINE)
     ${CMAKE_CURRENT_SOURCE_DIR}/sml_fuzzy/src/sml_observation_group.h
     ${CMAKE_CURRENT_SOURCE_DIR}/sml_fuzzy/src/sml_observation_group.c
     ${CMAKE_CURRENT_SOURCE_DIR}/sml_fuzzy/src/sml_rule_group.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/sml_fuzzy/src/sml_rule_group.c
-    ${CMAKE_CURRENT_SOURCE_DIR}/sml_fuzzy/src/sml_terms_manager.h
-    ${CMAKE_CURRENT_SOURCE_DIR}/sml_fuzzy/src/sml_terms_manager.c)
+    ${CMAKE_CURRENT_SOURCE_DIR}/sml_fuzzy/src/sml_rule_group.c)
 else()
   set(SML_FUZZY_FILES
     ${SML_INCLUDE_DIR}/sml_fuzzy.h

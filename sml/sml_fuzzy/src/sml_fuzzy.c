@@ -36,7 +36,6 @@
 #include "sml_observation_controller.h"
 #include "sml_util.h"
 #include "sml_matrix.h"
-#include "sml_terms_manager.h"
 #include <macros.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -49,6 +48,10 @@
 #define FUZZY_FILE_PREFIX "fuzzy"
 #define DEFAULT_FLL "fuzzy_description.fll"
 #define FUZZY_MAGIC (0xf0022ee)
+#define DEFAULT_NUM_TERMS (10)
+#define DEFAULT_OVERLAP_PERCENTAGE (0.1)
+#define TERM_NAME_SIZE 100
+#define TERM_NAME_FMT "%.95s_%d"
 
 struct sml_term_to_remove {
     struct sml_variable *var;
@@ -60,13 +63,11 @@ struct sml_fuzzy_engine {
     struct sml_engine engine;
 
     bool output_state_changed_called;
-    bool variable_terms_auto_balance;
 
     struct sml_measure *last_stable_measure;
 
     struct sml_fuzzy *fuzzy;
     struct sml_observation_controller *observation_controller;
-    struct sml_terms_manager terms_manager;
     struct sol_ptr_vector inputs_to_be_removed;
     struct sol_ptr_vector outputs_to_be_removed;
     struct sol_vector terms_to_be_removed;
@@ -102,7 +103,6 @@ _sml_load_fll_file(struct sml_engine *engine, const char *filename)
         return false;
 
     sml_observation_controller_clear(fuzzy_engine->observation_controller);
-    sml_terms_manager_clear(&fuzzy_engine->terms_manager);
     sol_ptr_vector_clear(&fuzzy_engine->inputs_to_be_removed);
     sol_vector_clear(&fuzzy_engine->terms_to_be_removed);
     sol_ptr_vector_clear(&fuzzy_engine->outputs_to_be_removed);
@@ -164,22 +164,6 @@ _measure_has_significant_changes(struct sml_measure *old_measure,
     return false;
 }
 
-API_EXPORT bool
-sml_fuzzy_set_variable_terms_auto_balance(struct sml_object *sml,
-    bool variable_terms_auto_balance)
-{
-    if (!sml_is_fuzzy(sml))
-        return false;
-    struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)sml;
-
-    if (!variable_terms_auto_balance &&
-        fuzzy_engine->variable_terms_auto_balance)
-        sml_terms_manager_clear(&fuzzy_engine->terms_manager);
-    fuzzy_engine->variable_terms_auto_balance = variable_terms_auto_balance;
-
-    return true;
-}
-
 static int
 _read_variables(struct sml_fuzzy_engine *fuzzy_engine)
 {
@@ -197,11 +181,109 @@ _read_variables(struct sml_fuzzy_engine *fuzzy_engine)
 }
 
 static bool
+_create_fuzzy_terms(struct sml_fuzzy_engine *fuzzy_engine,
+    struct sml_variable *var)
+{
+    struct sml_fuzzy *fuzzy;
+    float width, min, max, range, overlap, first_width, last_stop, cur;
+    bool is_id;
+    uint16_t num_terms, i;
+    char term_name[TERM_NAME_SIZE];
+
+    fuzzy = fuzzy_engine->fuzzy;
+    width = sml_fuzzy_bridge_variable_get_default_term_width(fuzzy, var);
+    is_id = sml_fuzzy_bridge_variable_get_is_id(fuzzy, var);
+    sml_fuzzy_variable_get_range(var, &min, &max);
+    range = max - min;
+
+    if (isnan(width)) {
+        width = range / DEFAULT_NUM_TERMS;
+        sml_fuzzy_bridge_variable_set_default_term_width(fuzzy, var, width);
+    }
+
+    if (is_id) {
+        num_terms = floorf(range / width) + 1;
+        first_width = (range - width * (num_terms - 2)) / 2;
+    } else {
+        num_terms = ceilf(range / width);
+        first_width = width;
+    }
+
+    overlap = width * DEFAULT_OVERLAP_PERCENTAGE;
+    last_stop = 0;
+
+    if (num_terms == 1) {
+        snprintf(term_name, TERM_NAME_SIZE, TERM_NAME_FMT,
+            sml_fuzzy_variable_get_name(var), 0);
+        sml_fuzzy_bridge_variable_add_term_rectangle(fuzzy, var, term_name,
+            min, max, 1);
+        return true;
+    }
+
+    for (i = 0; i < num_terms; i++) {
+        snprintf(term_name, TERM_NAME_SIZE, TERM_NAME_FMT,
+            sml_fuzzy_variable_get_name(var), i);
+        if (i == 0) {
+            last_stop = min + first_width;
+            sml_fuzzy_bridge_variable_add_term_ramp(fuzzy, var, term_name,
+                last_stop + overlap, min, 1);
+        } else if (i == num_terms - 1)
+            sml_fuzzy_bridge_variable_add_term_ramp(fuzzy, var, term_name,
+                last_stop - overlap, max, 1);
+        else {
+            cur = last_stop + width;
+            sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var, term_name,
+                last_stop - overlap, last_stop + (cur - last_stop) / 2,
+                cur + overlap, 1);
+            last_stop = cur;
+        }
+    }
+
+    return true;
+}
+
+static bool
+_fuzzy_initialize_terms_list(struct sml_fuzzy_engine *fuzzy_engine,
+    struct sml_variables_list *list)
+{
+    uint16_t i, len;
+    struct sml_variable *var;
+
+    len = sml_fuzzy_variables_list_get_length(list);
+    for (i = 0; i < len; i++) {
+        var = sml_fuzzy_variables_list_index(list, i);
+        if (sml_fuzzy_variable_terms_count(var) == 0) {
+            if (!_create_fuzzy_terms(fuzzy_engine, var))
+                return false;
+        }
+    }
+
+    return true;
+}
+
+static bool
+_fuzzy_initialize_terms(struct sml_fuzzy_engine *fuzzy_engine)
+{
+    if (!_fuzzy_initialize_terms_list(fuzzy_engine,
+        fuzzy_engine->fuzzy->input_list))
+        return false;
+    if (!_fuzzy_initialize_terms_list(fuzzy_engine,
+        fuzzy_engine->fuzzy->output_list))
+        return false;
+    return true;
+}
+
+static bool
 _pre_process(struct sml_fuzzy_engine *fuzzy_engine, bool *should_act,
     bool *should_learn)
 {
     struct sml_measure *new_measure;
     bool input_changed;
+
+    if (!_fuzzy_initialize_terms(fuzzy_engine)) {
+        sml_debug("Initialization of fuzzy terms failed.");
+        return false;
+    }
 
     if (!fuzzy_engine->fuzzy->input_terms_count ||
         !fuzzy_engine->fuzzy->output_terms_count)
@@ -346,11 +428,6 @@ _remove_variables(struct sml_fuzzy_engine *fuzzy_engine, bool *removed)
             inputs_to_remove_bool, outputs_to_remove_bool)))
         return error;
 
-    if ((error = sml_terms_manager_remove_variables(
-            &fuzzy_engine->terms_manager,
-            inputs_to_remove_bool, outputs_to_remove_bool)))
-        return error;
-
     SOL_PTR_VECTOR_FOREACH_IDX (&fuzzy_engine->inputs_to_be_removed, var, i) {
         if (!sml_fuzzy_find_variable(fuzzy_engine->fuzzy->input_list, var,
             &pos))
@@ -413,9 +490,6 @@ _remove_terms(struct sml_fuzzy_engine *fuzzy_engine, bool *removed)
                 term_num)))
             goto _remove_terms_end;
 
-        sml_terms_manager_remove_term(&fuzzy_engine->terms_manager, var_num,
-            term_num, to_remove->is_input);
-
         terms_removed = true;
     }
     sol_vector_clear(&fuzzy_engine->terms_to_be_removed);
@@ -454,23 +528,6 @@ _print_rule(const char *str, void *data)
 }
 
 static int
-_initialize_terms_list(struct sml_fuzzy *fuzzy, struct sml_variables_list *list)
-{
-    int error;
-    uint16_t len, i;
-
-    len = sml_fuzzy_variables_list_get_length(list);
-    for (i = 0; i < len; i++) {
-        struct sml_variable *var = sml_fuzzy_variables_list_index(list, i);
-        if (!sml_fuzzy_variable_terms_count(var))
-            if ((error = sml_terms_manager_initialize_variable(fuzzy, var)))
-                return error;
-    }
-
-    return 0;
-}
-
-static int
 _sml_process(struct sml_engine *engine)
 {
     struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)engine;
@@ -485,13 +542,6 @@ _sml_process(struct sml_engine *engine)
     if ((error = _handle_removals(fuzzy_engine)))
         return error;
 
-    if (fuzzy_engine->variable_terms_auto_balance &&
-        ((error = _initialize_terms_list(fuzzy_engine->fuzzy,
-            fuzzy_engine->fuzzy->input_list)) ||
-        (error = _initialize_terms_list(fuzzy_engine->fuzzy,
-            fuzzy_engine->fuzzy->output_list))))
-        return error;
-
     if ((error = _read_variables(fuzzy_engine)))
         return error;
 
@@ -503,13 +553,6 @@ _sml_process(struct sml_engine *engine)
 
     if (should_learn && !fuzzy_engine->engine.learn_disabled &&
         (error = sml_observation_controller_observation_hit(
-            fuzzy_engine->observation_controller,
-            fuzzy_engine->last_stable_measure)))
-        return error;
-
-    if (fuzzy_engine->variable_terms_auto_balance &&
-        (error = sml_terms_manager_hit(&fuzzy_engine->terms_manager,
-            fuzzy_engine->fuzzy,
             fuzzy_engine->observation_controller,
             fuzzy_engine->last_stable_measure)))
         return error;
@@ -579,7 +622,6 @@ _sml_free(struct sml_engine *engine)
 
     sml_measure_free(fuzzy_engine->last_stable_measure);
     sml_observation_controller_free(fuzzy_engine->observation_controller);
-    sml_terms_manager_clear(&fuzzy_engine->terms_manager);
     sol_ptr_vector_clear(&fuzzy_engine->inputs_to_be_removed);
     sol_vector_clear(&fuzzy_engine->terms_to_be_removed);
     sol_ptr_vector_clear(&fuzzy_engine->outputs_to_be_removed);
@@ -629,7 +671,6 @@ _sml_print_debug(struct sml_engine *engine, bool full)
 
     if (full) {
         sml_observation_controller_debug(fuzzy_engine->observation_controller);
-        sml_terms_manager_debug(&fuzzy_engine->terms_manager);
         sml_debug("Last Stable Measure:");
         if (fuzzy_engine->last_stable_measure)
             sml_measure_debug(fuzzy_engine->last_stable_measure,
@@ -666,7 +707,7 @@ _sml_remove_variable(struct sml_engine *engine, struct sml_variable *variable)
 {
     struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)engine;
 
-    if (sml_fuzzy_is_input(fuzzy_engine->fuzzy, variable)) {
+    if (sml_fuzzy_is_input(fuzzy_engine->fuzzy, variable, NULL)) {
         if (sol_ptr_vector_append(&fuzzy_engine->inputs_to_be_removed,
             variable)) {
             sml_critical("Could not add input variable to the remove list");
@@ -674,7 +715,7 @@ _sml_remove_variable(struct sml_engine *engine, struct sml_variable *variable)
         }
         return true;
     }
-    if (sml_fuzzy_is_output(fuzzy_engine->fuzzy, variable)) {
+    if (sml_fuzzy_is_output(fuzzy_engine->fuzzy, variable, NULL)) {
         if (sol_ptr_vector_append(&fuzzy_engine->outputs_to_be_removed,
             variable)) {
             sml_critical("Could not add output variable to the remove list");
@@ -697,9 +738,9 @@ sml_fuzzy_variable_remove_term(struct sml_object *sml, struct sml_variable *var,
     bool is_input;
     struct sml_term_to_remove *to_remove;
 
-    if (sml_fuzzy_is_input(fuzzy_engine->fuzzy, var))
+    if (sml_fuzzy_is_input(fuzzy_engine->fuzzy, var, NULL))
         is_input = true;
-    else if (sml_fuzzy_is_output(fuzzy_engine->fuzzy, var))
+    else if (sml_fuzzy_is_output(fuzzy_engine->fuzzy, var, NULL))
         is_input = false;
     else {
         sml_critical("Failed to remove term. Variable not in fuzzy engine.");
@@ -881,7 +922,6 @@ sml_fuzzy_new(void)
     if (!fuzzy_engine->observation_controller)
         goto error_observation_controller;
 
-    sml_terms_manager_init(&fuzzy_engine->terms_manager);
     sol_ptr_vector_init(&fuzzy_engine->inputs_to_be_removed);
     sol_vector_init(&fuzzy_engine->terms_to_be_removed,
         sizeof(struct sml_term_to_remove));
@@ -962,4 +1002,52 @@ API_EXPORT bool
 sml_fuzzy_supported(void)
 {
     return true;
+}
+
+API_EXPORT bool
+sml_fuzzy_variable_set_default_term_width(struct sml_object *sml,
+    struct sml_variable *var, float width)
+{
+    ON_NULL_RETURN_VAL(var, false);
+    if (!sml_is_fuzzy(sml))
+        return false;
+
+    return sml_fuzzy_bridge_variable_set_default_term_width(
+            sml_get_fuzzy((struct sml_engine *)sml), var, width);
+}
+
+API_EXPORT float
+sml_fuzzy_variable_get_default_term_width(struct sml_object *sml,
+    struct sml_variable *var)
+{
+    ON_NULL_RETURN_VAL(var, NAN);
+    if (!sml_is_fuzzy(sml))
+        return NAN;
+
+    return sml_fuzzy_bridge_variable_get_default_term_width(
+            sml_get_fuzzy((struct sml_engine *)sml), var);
+}
+
+API_EXPORT bool
+sml_fuzzy_variable_set_is_id(struct sml_object *sml,
+    struct sml_variable *var, bool is_id)
+{
+    ON_NULL_RETURN_VAL(var, NAN);
+    if (!sml_is_fuzzy(sml))
+        return NAN;
+
+    return sml_fuzzy_bridge_variable_set_is_id(
+            sml_get_fuzzy((struct sml_engine *)sml), var, is_id);
+}
+
+API_EXPORT bool
+sml_fuzzy_variable_get_is_id(struct sml_object *sml,
+    struct sml_variable *var)
+{
+    ON_NULL_RETURN_VAL(var, NAN);
+    if (!sml_is_fuzzy(sml))
+        return NAN;
+
+    return sml_fuzzy_bridge_variable_get_is_id(
+            sml_get_fuzzy((struct sml_engine *)sml), var);
 }

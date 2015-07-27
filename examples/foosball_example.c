@@ -47,10 +47,7 @@
 #include <glib.h>
 
 #define LINE_SIZE (256)
-#define DISCRETE_THRESHOLD (0.45)
 #define REQUIRED_OBS 5
-#define TERM_NAME_SIZE 20
-#define THRESHOLD (0.1)
 #define FUZZY_ENGINE 0
 #define ANN_ENGINE 1
 #define MIN_PLAYERS 4
@@ -216,28 +213,12 @@ _sml_new(int id)
 static struct sml_variable *
 _create_input(Context *ctx, const char *name)
 {
-    char term_name[TERM_NAME_SIZE];
     struct sml_variable *v;
-    uint16_t i;
 
     v = sml_new_input(ctx->sml, name);
     sml_variable_set_range(ctx->sml, v, 0, ctx->num_players - 1);
-
-    if (ctx->sml_engine == FUZZY_ENGINE) {
-        snprintf(term_name, LINE_SIZE, "%s_%s", name, ctx->players[0]);
-        sml_fuzzy_variable_add_term_ramp(ctx->sml, v, term_name,
-            0 + DISCRETE_THRESHOLD, 0, 1);
-        for (i = 1; i < ctx->num_players - 1; i++) {
-            snprintf(term_name, LINE_SIZE, "%s_%s", name, ctx->players[i]);
-            sml_fuzzy_variable_add_term_triangle(ctx->sml, v, term_name,
-                i - DISCRETE_THRESHOLD, i,
-                i + DISCRETE_THRESHOLD, 1);
-        }
-        snprintf(term_name, LINE_SIZE, "%s_%s", name, ctx->players[i]);
-        sml_fuzzy_variable_add_term_ramp(ctx->sml, v, term_name,
-            ctx->num_players - 1 - DISCRETE_THRESHOLD,
-            ctx->num_players - 1, 1);
-    }
+    sml_fuzzy_variable_set_default_term_width(ctx->sml, v, 1);
+    sml_fuzzy_variable_set_is_id(ctx->sml, v, true);
 
     return v;
 }
@@ -258,16 +239,8 @@ _initialize_sml(Context *ctx)
     //number of the winner team
     ctx->winner = sml_new_output(ctx->sml, "winner");
     sml_variable_set_range(ctx->sml, ctx->winner, 0, 2);
-    if (ctx->sml_engine == FUZZY_ENGINE) {
-        sml_fuzzy_variable_add_term_ramp(ctx->sml, ctx->winner, "none",
-            0 + DISCRETE_THRESHOLD, 0, 1);
-        sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->winner,
-            "red_winner", WINNER1 - DISCRETE_THRESHOLD, WINNER1,
-            WINNER1 + DISCRETE_THRESHOLD, 1);
-        sml_fuzzy_variable_add_term_ramp(ctx->sml, ctx->winner, "yellow_winner",
-            WINNER2 - DISCRETE_THRESHOLD, WINNER2,
-            1);
-    }
+    sml_fuzzy_variable_set_default_term_width(ctx->sml, ctx->winner, 1);
+    sml_fuzzy_variable_set_is_id(ctx->sml, ctx->winner, true);
 
     return true;
 }

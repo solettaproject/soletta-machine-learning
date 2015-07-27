@@ -575,7 +575,10 @@ bool sml_variables_list_contains(struct sml_object *sml, struct sml_variables_li
 /**
  * @brief Set variable range.
  *
- * @remarks default value is FLT_MIN for min and FLT_MAX for max.
+ * Neither min nor max values should be NAN. Min value should be lower or equal
+ * Max value.
+ *
+ * @remarks default value is @c FLT_MIN for min and @c FLT_MAX for max.
  *
  * @param sml The ::sml_object object.
  * @param sml_variable The ::sml_variable.

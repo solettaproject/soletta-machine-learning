@@ -39,13 +39,16 @@
 #include <errno.h>
 #include <sol-vector.h>
 #include <sml_log.h>
-#include <new>
 #include <stdexcept>
 #include <algorithm>
+#include <float.h>
 
-#define DEFAULT_MIN (0)
-#define DEFAULT_MAX (1)
 #define DEFAULT_ACCUMULATION (SML_FUZZY_SNORM_MAXIMUM)
+
+struct terms_width {
+    bool is_id;
+    float value;
+};
 
 template<class Variable>
 static uint16_t
@@ -82,15 +85,21 @@ _remove_rule_blocks(fl::Engine *engine)
 }
 
 static bool
-_is_in_list(struct sml_variables_list *list, fl::Variable *var)
+_is_in_list(struct sml_variables_list *list, fl::Variable *var,
+    uint16_t *index)
 {
+    uint16_t i =0;
     std::vector<fl::Variable*> *variables =
         static_cast<std::vector<fl::Variable*> *>((void *)list);
     for (std::vector<fl::Variable*>::const_iterator it =
          variables->begin();
          it != variables->end(); ++it) {
-        if (*it == var)
+        if (*it == var) {
+            if (index)
+                *index = i;
             return true;
+        }
+        i++;
     }
     return false;
 }
@@ -145,7 +154,7 @@ err_tnorm:
 struct sml_fuzzy *
 sml_fuzzy_bridge_new(void)
 {
-    struct sml_fuzzy *fuzzy = (struct sml_fuzzy *) calloc(1, sizeof(struct sml_fuzzy));
+    struct sml_fuzzy *fuzzy = (struct sml_fuzzy *) malloc(sizeof(struct sml_fuzzy));
     fl::Engine *engine = NULL;
 
     if (!fuzzy) {
@@ -164,8 +173,14 @@ sml_fuzzy_bridge_new(void)
 
     engine->setName("EngineDefault");
     fuzzy->engine = engine;
-    fuzzy->input_list = (struct sml_variables_list*)&(engine->inputVariables());
-    fuzzy->output_list = (struct sml_variables_list*)&(engine->outputVariables());
+    fuzzy->input_list = (struct sml_variables_list*)
+        &(engine->inputVariables());
+    fuzzy->output_list = (struct sml_variables_list*)
+        &(engine->outputVariables());
+    fuzzy->input_terms_count = 0;
+    fuzzy->output_terms_count = 0;
+    sol_vector_init(&fuzzy->input_terms_width, sizeof(struct terms_width));
+    sol_vector_init(&fuzzy->output_terms_width, sizeof(struct terms_width));
 
     return fuzzy;
 
@@ -572,6 +587,7 @@ struct sml_variable *
 sml_fuzzy_new_input(struct sml_fuzzy *fuzzy, const char *name)
 {
     fl::Engine *engine = (fl::Engine*)fuzzy->engine;
+    struct terms_width *width;
 
     if (engine->hasInputVariable(name))
         return NULL;
@@ -582,9 +598,12 @@ sml_fuzzy_new_input(struct sml_fuzzy *fuzzy, const char *name)
 
     variable->setEnabled(true);
     variable->setName(name);
-    variable->setRange(DEFAULT_MIN, DEFAULT_MAX);
+    variable->setRange(FLT_MIN, FLT_MAX);
     engine->addInputVariable(variable);
 
+    width = (struct terms_width*)sol_vector_append(&fuzzy->input_terms_width);
+    width->is_id = false;
+    width->value = NAN;
     return (struct sml_variable *)variable;
 }
 
@@ -592,6 +611,7 @@ struct sml_variable *
 sml_fuzzy_new_output(struct sml_fuzzy *fuzzy, const char *name)
 {
     fl::Engine *engine = (fl::Engine*)fuzzy->engine;
+    struct terms_width *width;
 
     if (engine->hasOutputVariable(name))
         return NULL;
@@ -609,12 +629,15 @@ sml_fuzzy_new_output(struct sml_fuzzy *fuzzy, const char *name)
 
     variable->setEnabled(true);
     variable->setName(name);
-    variable->setRange(DEFAULT_MIN, DEFAULT_MAX);
+    variable->setRange(FLT_MIN, FLT_MAX);
     variable->setDefaultValue(NAN);
     variable->setDefuzzifier(fl_defuzzifier);
     variable->fuzzyOutput()->setAccumulation(_get_snorm(DEFAULT_ACCUMULATION));
     engine->addOutputVariable(variable);
 
+    width = (struct terms_width*)sol_vector_append(&fuzzy->output_terms_width);
+    width->is_id = false;
+    width->value = NAN;
     return (struct sml_variable *)variable;
 }
 
@@ -781,22 +804,27 @@ sml_fuzzy_remove_variable(struct sml_fuzzy *fuzzy, struct sml_variable *variable
     fl::Variable *removed_var = NULL;
     fl::Engine *engine = (fl::Engine*)fuzzy->engine;
     uint16_t index;
+    bool ret = true;
 
     if (_find_variable((std::vector<fl::Variable*> *) fuzzy->input_list,
                 fl_var, &index)) {
         removed_var = engine->removeInputVariable(index);
         fuzzy->input_terms_count -= removed_var->numberOfTerms();
+        if (sol_vector_del(&fuzzy->input_terms_width, index))
+            ret = false;
     } else if (_find_variable((std::vector<fl::Variable*> *)
                fuzzy->output_list, fl_var, &index)) {
         removed_var = engine->removeOutputVariable(index);
         fuzzy->output_terms_count -= removed_var->numberOfTerms();
+        if (sol_vector_del(&fuzzy->output_terms_width, index))
+            ret = false;
     } else {
         sml_critical("Variable is not a valid input or output");
         return false;
     }
 
     delete removed_var;
-    return true;
+    return ret;
 }
 
 bool
@@ -840,9 +868,9 @@ sml_fuzzy_bridge_variable_add_term_rectangle(struct sml_fuzzy *fuzzy,
         return NULL;
     }
 
-    if (sml_fuzzy_is_input(fuzzy, variable))
+    if (sml_fuzzy_is_input(fuzzy, variable, NULL))
         fuzzy->input_terms_count++;
-    else if (sml_fuzzy_is_output(fuzzy, variable))
+    else if (sml_fuzzy_is_output(fuzzy, variable, NULL))
         fuzzy->output_terms_count++;
     else {
         delete term;
@@ -871,9 +899,9 @@ sml_fuzzy_bridge_variable_add_term_triangle(struct sml_fuzzy *fuzzy,
         return NULL;
     }
 
-    if (sml_fuzzy_is_input(fuzzy, variable))
+    if (sml_fuzzy_is_input(fuzzy, variable, NULL))
         fuzzy->input_terms_count++;
-    else if (sml_fuzzy_is_output(fuzzy, variable))
+    else if (sml_fuzzy_is_output(fuzzy, variable, NULL))
         fuzzy->output_terms_count++;
     else {
         delete term;
@@ -899,9 +927,9 @@ sml_fuzzy_bridge_variable_add_term_cosine(struct sml_fuzzy *fuzzy,
         return NULL;
     }
 
-    if (sml_fuzzy_is_input(fuzzy, variable))
+    if (sml_fuzzy_is_input(fuzzy, variable, NULL))
         fuzzy->input_terms_count++;
-    else if (sml_fuzzy_is_output(fuzzy, variable))
+    else if (sml_fuzzy_is_output(fuzzy, variable, NULL))
         fuzzy->output_terms_count++;
     else {
         delete term;
@@ -929,9 +957,9 @@ sml_fuzzy_bridge_variable_add_term_gaussian(struct sml_fuzzy *fuzzy,
         return NULL;
     }
 
-    if (sml_fuzzy_is_input(fuzzy, variable))
+    if (sml_fuzzy_is_input(fuzzy, variable, NULL))
         fuzzy->input_terms_count++;
-    else if (sml_fuzzy_is_output(fuzzy, variable))
+    else if (sml_fuzzy_is_output(fuzzy, variable, NULL))
         fuzzy->output_terms_count++;
     else {
         delete term;
@@ -957,9 +985,9 @@ sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy,
         return NULL;
     }
 
-    if (sml_fuzzy_is_input(fuzzy, variable))
+    if (sml_fuzzy_is_input(fuzzy, variable, NULL))
         fuzzy->input_terms_count++;
-    else if (sml_fuzzy_is_output(fuzzy, variable))
+    else if (sml_fuzzy_is_output(fuzzy, variable, NULL))
         fuzzy->output_terms_count++;
     else {
         delete term;
@@ -971,7 +999,8 @@ sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy,
 }
 
 bool
-sml_fuzzy_is_input(struct sml_fuzzy *fuzzy, struct sml_variable *variable)
+sml_fuzzy_is_input(struct sml_fuzzy *fuzzy, struct sml_variable *variable,
+    uint16_t *index)
 {
     fl::InputVariable *input_var;
 
@@ -979,11 +1008,12 @@ sml_fuzzy_is_input(struct sml_fuzzy *fuzzy, struct sml_variable *variable)
     if (!input_var)
         return false;
 
-    return _is_in_list(fuzzy->input_list, input_var);
+    return _is_in_list(fuzzy->input_list, input_var, index);
 }
 
 bool
-sml_fuzzy_is_output(struct sml_fuzzy *fuzzy, struct sml_variable *variable)
+sml_fuzzy_is_output(struct sml_fuzzy *fuzzy, struct sml_variable *variable,
+    uint16_t *index)
 {
     fl::OutputVariable *output_var;
 
@@ -991,7 +1021,7 @@ sml_fuzzy_is_output(struct sml_fuzzy *fuzzy, struct sml_variable *variable)
     if (!output_var)
         return false;
 
-    return _is_in_list(fuzzy->output_list, output_var);
+    return _is_in_list(fuzzy->output_list, output_var, index);
 
 }
 
@@ -1201,4 +1231,79 @@ sml_fuzzy_set_read_values(struct sml_fuzzy *fuzzy, struct sml_variables_list *ou
           (*it)->setOutputValue((*it)->getPreviousOutputValue());
     }
     return true;
+}
+
+struct terms_width*
+_get_terms_width(struct sml_fuzzy *fuzzy, struct sml_variable *var)
+{
+    uint16_t i;
+
+    if (sml_fuzzy_is_input(fuzzy, var, &i))
+        return (struct terms_width *)sol_vector_get(&fuzzy->input_terms_width,
+            i);
+    if (sml_fuzzy_is_output(fuzzy, var, &i))
+        return (struct terms_width *)sol_vector_get(&fuzzy->output_terms_width,
+            i);
+
+    return NULL;
+}
+
+bool
+sml_fuzzy_bridge_variable_set_default_term_width(struct sml_fuzzy *fuzzy,
+    struct sml_variable *var, float width_val)
+{
+    struct terms_width *width;
+
+    width = _get_terms_width(fuzzy, var);
+
+    if (width) {
+        width->value = width_val;
+        return true;
+    }
+
+    return false;
+}
+
+float
+sml_fuzzy_bridge_variable_get_default_term_width(struct sml_fuzzy *fuzzy,
+    struct sml_variable *var)
+{
+    struct terms_width *width;
+
+    width = _get_terms_width(fuzzy, var);
+
+    if (width)
+        return width->value;
+
+    return NAN;
+}
+
+bool
+sml_fuzzy_bridge_variable_set_is_id(struct sml_fuzzy *fuzzy,
+    struct sml_variable *var, bool is_id)
+{
+    struct terms_width *width;
+
+    width = _get_terms_width(fuzzy, var);
+
+    if (width) {
+        width->is_id = is_id;
+        return true;
+    }
+
+    return false;
+}
+
+bool
+sml_fuzzy_bridge_variable_get_is_id(struct sml_fuzzy *fuzzy,
+    struct sml_variable *var)
+{
+    struct terms_width *width;
+
+    width = _get_terms_width(fuzzy, var);
+
+    if (width)
+        return width->is_id;
+
+    return false;
 }

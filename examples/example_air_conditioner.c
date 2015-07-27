@@ -264,24 +264,19 @@ main(int argc, char **argv)
 
     //Create temperature input
     temp = sml_new_input(sml, "Temperature");
-    sml_variable_set_range(sml, temp, 0, 50);
-    sml_fuzzy_variable_add_term_ramp(sml, temp, "COLD", 16, 0, 1);
-    sml_fuzzy_variable_add_term_triangle(sml, temp, "WARM", 15, 19, 23, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, temp, "HOT", 22, 50, 1);
+    sml_variable_set_range(sml, temp, 0, 48);
+    sml_fuzzy_variable_set_default_term_width(sml, temp, 16);
 
     //Create presence input
     presence = sml_new_input(sml, "Presence");
     sml_variable_set_range(sml, presence, 0, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, presence, "ABSENT", 0.6, 0, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, presence, "PRESET", 0.4, 1, 1);
+    sml_fuzzy_variable_set_default_term_width(sml, presence, 0.5);
 
     //Create power output
     power = sml_new_output(sml, "Power");
     sml_variable_set_range(sml, power, 0, 3);
-    sml_fuzzy_variable_add_term_ramp(sml, power, "OFF", 0.6, 0, 1);
-    sml_fuzzy_variable_add_term_triangle(sml, power, "LOW", 0.4, 1, 1.6, 1);
-    sml_fuzzy_variable_add_term_triangle(sml, power, "MEDIUM", 1.4, 2, 2.6, 1);
-    sml_fuzzy_variable_add_term_ramp(sml, power, "HIGH", 2.4, 3, 1);
+    sml_fuzzy_variable_set_default_term_width(sml, power, 1);
+    sml_fuzzy_variable_set_is_id(sml, power, true);
 
     //set SML callbacks
     sml_set_read_state_callback(sml, _read_state_cb, &acc);
