@@ -227,7 +227,9 @@ _hit(struct sml_fuzzy *fuzzy, struct sml_variables_list *list,
             measured_val = sml_matrix_cast_get(values, i, j, tmp, float);
             struct sml_fuzzy_term *term = sml_fuzzy_variable_get_term(var, j);
             float min = NAN, max = NAN;
-            sml_fuzzy_term_get_range(term, &min, &max);
+
+            if (!sml_fuzzy_term_get_range(term, &min, &max))
+                return -EINVAL;
 
             val = sml_matrix_insert(variable_hits, i, j);
             if (measured_val >= VARIABLE_MEMBERSHIP_THRESHOLD)

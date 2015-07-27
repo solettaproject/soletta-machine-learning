@@ -440,9 +440,11 @@ sml_observation_hit(struct sml_fuzzy *fuzzy,
         }
 
         if (reduce_weight)
-            for (j = 0; j < terms_len; j++)
-                _output_set(fuzzy, observation, i, j,
-                    _output_get(observation, i, j));
+            for (j = 0; j < terms_len; j++) {
+                if ((error = _output_set(fuzzy, observation, i, j,
+                        _output_get(observation, i, j))))
+                    return error;
+            }
     }
 
     if (hit)
