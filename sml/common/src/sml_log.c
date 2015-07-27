@@ -45,8 +45,14 @@ _sml_log_default_handler(enum sml_log_level level, const char *msg, void *data)
     case SML_LOG_LEVEL_DEBUG:
         fprintf(stdout, "(**SML Debug**) %s\n", msg);
         break;
+    case SML_LOG_LEVEL_INFO:
+        fprintf(stdout, "(**SML Info**) %s\n", msg);
+        break;
     case SML_LOG_LEVEL_WARNING:
         fprintf(stdout, "(**SML Warning**) %s\n", msg);
+        break;
+    case SML_LOG_LEVEL_ERROR:
+        fprintf(stderr, "(**SML Error**) %s\n", msg);
         break;
     case SML_LOG_LEVEL_CRITICAL:
         fprintf(stderr, "(**SML Critical**) %s\n", msg);

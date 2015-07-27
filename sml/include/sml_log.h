@@ -48,10 +48,12 @@ extern "C" {
  * @brief Log level types
  */
 enum sml_log_level {
-    SML_LOG_LEVEL_DEBUG = 1 << 0,     /**< Show debug messages. The debug messages will not be loged with SML is compiled in Release mode.*/
-        SML_LOG_LEVEL_WARNING = 1 << 1, /**< Show warning messages */
-        SML_LOG_LEVEL_CRITICAL = 1 << 2, /**< Show critical messages */
-        SML_LOG_LEVEL_ALL = (SML_LOG_LEVEL_DEBUG | SML_LOG_LEVEL_WARNING | SML_LOG_LEVEL_CRITICAL) /**< Show all messages. */
+    SML_LOG_LEVEL_DEBUG = 1 << 0,     /**< Show debug messages. The debug messages will not be loged with SML is compiled in Release mode. */
+    SML_LOG_LEVEL_INFO = 1 << 1,     /**< Show info messages. */
+    SML_LOG_LEVEL_WARNING = 1 << 2, /**< Show warning messages. */
+    SML_LOG_LEVEL_ERROR = 1 << 3, /**< Show error messages. */
+    SML_LOG_LEVEL_CRITICAL = 1 << 4, /**< Show critical messages. */
+    SML_LOG_LEVEL_ALL = (SML_LOG_LEVEL_DEBUG | SML_LOG_LEVEL_INFO | SML_LOG_LEVEL_WARNING | SML_LOG_LEVEL_ERROR | SML_LOG_LEVEL_CRITICAL) /**< Show all messages. */
 };     /**< The types of log levels */
 
 /**
@@ -102,6 +104,16 @@ void sml_log_print(enum sml_log_level level, const char *format, ...);
  * @see ::sml_log_print
  */
 #define sml_debug(...) sml_log_print(SML_LOG_LEVEL_DEBUG, __VA_ARGS__)
+
+/**
+ * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_INFO, "info message")
+ *
+ * @param ... A formatted message
+ *
+ * @see ::sml_log_print
+ */
+#define sml_info(...) sml_log_print(SML_LOG_LEVEL_INFO, __VA_ARGS__)
+
 /**
  * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_WARNING, "warning message")
  *
@@ -110,6 +122,16 @@ void sml_log_print(enum sml_log_level level, const char *format, ...);
  * @see ::sml_log_print
  */
 #define sml_warning(...) sml_log_print(SML_LOG_LEVEL_WARNING, __VA_ARGS__)
+
+/**
+ * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_ERROR, "error message")
+ *
+ * @param ... A formatted message
+ *
+ * @see ::sml_log_print
+ */
+#define sml_error(...) sml_log_print(SML_LOG_LEVEL_ERROR, __VA_ARGS__)
+
 /**
  * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_CRITICAL, "critical message")
  *
