@@ -819,6 +819,7 @@ read_values(const char *file_path, Context *ctx)
             if (expec) {
                 fprintf(stderr, "Error: EXP_%s is not suppose to have status "
                     "changes\n", var->name);
+                free(status_event);
                 goto error;
             }
             var->status_events = g_list_append(var->status_events,
@@ -1072,7 +1073,7 @@ read_config(const char *file_path, Context *ctx)
         if (ret > 0) {
             if (!last_var) {
                 fprintf(stderr, "Failed to find var for term %s\n", line);
-                return false;
+                goto error;
             }
             add_term(ctx, last_var, name, min, max);
             continue;

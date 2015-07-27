@@ -84,10 +84,14 @@ clean_dir(const char *path, const char *prefix)
         if (strncmp(file->d_name, prefix, prefix_len))
             continue;
         snprintf(buf, SML_PATH_MAX, "%s/%s", path, file->d_name);
-        if (remove(buf))
+        if (remove(buf)) {
+            sml_error("Failed to remove %s", buf);
+            closedir(dir);
             return false;
+        }
     }
 
+    closedir(dir);
     return true;
 }
 
