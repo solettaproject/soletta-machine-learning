@@ -49,7 +49,6 @@
 #define LINE_SIZE (256)
 #define DISCRETE_THRESHOLD (0.45)
 #define REQUIRED_OBS 5
-#define TERM_NAME_SIZE 20
 #define THRESHOLD (0.1)
 #define FUZZY_ENGINE 0
 #define ANN_ENGINE 1
@@ -216,7 +215,7 @@ _sml_new(int id)
 static struct sml_variable *
 _create_input(Context *ctx, const char *name)
 {
-    char term_name[TERM_NAME_SIZE];
+    char term_name[LINE_SIZE];
     struct sml_variable *v;
     uint16_t i;
 
