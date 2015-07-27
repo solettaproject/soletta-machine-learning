@@ -427,10 +427,7 @@ sml_observation_hit(struct sml_fuzzy *fuzzy,
                 tmp_hit = true;
             } else if (output_weight > 0 &&
                 val < VARIABLE_MEMBERSHIP_THRESHOLD) {
-                if (output_weight < RULE_WEIGHT)
-                    output_weight = 0;
-                else
-                    output_weight -= RULE_WEIGHT;
+                output_weight -= RULE_WEIGHT;
                 if ((error = _output_set(fuzzy, observation, i, j,
                         output_weight)))
                     return error;
