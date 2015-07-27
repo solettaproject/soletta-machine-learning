@@ -882,7 +882,7 @@ _sml_ann_save(struct sml_engine *engine, const char *path)
 
     if (!clean_dir(path, ANN_FILE_PREFIX) ||
         !clean_dir(path, CFG_FILE_PREFIX)) {
-        sml_critical("Failed to clearn %s to save sml\n", path);
+        sml_critical("Failed to clear %s to save sml\n", path);
         return false;
     }
 

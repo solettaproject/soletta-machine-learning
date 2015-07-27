@@ -65,14 +65,20 @@ clean_dir(const char *path, const char *prefix)
     DIR *dir;
     struct dirent *file;
     char buf[SML_PATH_MAX];
-    int prefix_len = 0;
+    int prefix_len;
+
+    if (!prefix) {
+        sml_error("Could not clear dir, missing prefix");
+        return false;
+    }
 
     dir = opendir(path);
-    if (!dir)
+    if (!dir) {
+        sml_error("Failed to open dir %s", path);
         return false;
+    }
 
-    if (prefix)
-        prefix_len = strlen(prefix);
+    prefix_len = strlen(prefix);
 
     while ((file = readdir(dir))) {
         if (strncmp(file->d_name, prefix, prefix_len))
