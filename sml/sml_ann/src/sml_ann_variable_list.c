@@ -192,7 +192,7 @@ sml_ann_variable_new(const char *name, bool input)
     var->current_value = NAN;
     var->previous_value = NAN;
     var->last_stable_value = NAN;
-    var->min_value = FLT_MIN;
+    var->min_value = -FLT_MAX;
     var->max_value = FLT_MAX;
     var->enabled = true;
     var->input = input;
