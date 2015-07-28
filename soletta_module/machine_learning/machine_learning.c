@@ -717,7 +717,11 @@ input_var_process(struct sol_flow_node *node, void *data, uint16_t port,
         return r;
 
     input_var = sol_vector_get(&mdata->input_vec, conn_id);
-    SOL_NULL_CHECK(input_var, -EINVAL);
+    if (!input_var) {
+        SOL_WRN("Failed to get input var");
+        pthread_mutex_unlock(&mdata->read_lock);
+        return -EINVAL;
+    }
 
     if ((!sol_drange_val_equal(input_var->base.value.min, value.min)) ||
         (!sol_drange_val_equal(input_var->base.value.max, value.max)))
