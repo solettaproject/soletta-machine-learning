@@ -226,7 +226,9 @@ struct machine_learning_data {
 
     //Used by main thread and process thread. Need to be locked
     struct sol_vector input_vec;
+    struct sol_vector input_id_vec;
     struct sol_vector output_vec;
+    struct sol_vector output_id_vec;
     bool process_needed, predict_needed, send_process_finished;
 
     struct sol_flow_node *node;
@@ -251,64 +253,12 @@ struct machine_learning_output_var {
     char *tag;
 };
 
-/* TODO avoid gaps between terms */
-static void
-add_term(struct sml_object *sml, int32_t term_index,
-    struct sml_variable *sml_var, const char *name, float var_min,
-    float step, uint16_t number_of_terms, float overlap)
-{
-    double min, max;
-    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
-
-    if (term_index == 0) {
-        min = var_min;
-        max = min + (step / 2) + overlap;
-        sml_fuzzy_variable_add_term_ramp(sml, sml_var, name, max, min, 1);
-    } else if (term_index == number_of_terms - 1) {
-        max = var_min + term_index * step;
-        min = max - (step / 2) - overlap;
-        sml_fuzzy_variable_add_term_ramp(sml, sml_var, name, min, max, 1);
-    } else {
-        min = var_min + step * term_index - (step / 2) - overlap;
-        max = min + step + overlap;
-        sml_fuzzy_variable_add_term_triangle(sml, sml_var, name, min,
-            min + (max - min) / 2, max, 1);
-    }
-
-    if (!sml_variable_get_name(sml, sml_var, var_name, sizeof(var_name)))
-        SOL_DBG("Term %s (%f - %f) added for %s", name, min, max, var_name);
-}
-
-#define OVERLAP_PERCENTAGE (0.1)
-static void
-variable_add_terms(struct sml_object *sml, struct machine_learning_var *var,
-    uint16_t max_number_of_terms)
-{
-
-    /* TODO check for used range instead of nominal range to improve terms */
-    float step;
-    int32_t i;
-    char name[8];
-    uint16_t number_of_terms;
-    float overlap;
-
-    number_of_terms = fmin((var->value.max - var->value.min + 1) /
-        var->value.step, max_number_of_terms);
-
-    step = (var->value.max - var->value.min + 1) / number_of_terms;
-    overlap = step * OVERLAP_PERCENTAGE;
-    for (i = 0; i < number_of_terms; i++) {
-        snprintf(name, sizeof(name), "t%d", i);
-        add_term(sml, i, var->sml_variable, name, var->value.min, step,
-            number_of_terms, overlap);
-    }
-}
-#undef OVERLAP_PERCENTAGE
-
 static void
 set_variable(struct machine_learning_data *mdata,
     struct machine_learning_var *var)
 {
+    float width;
+
     sml_variable_set_value(mdata->sml, var->sml_variable, var->value.val);
 
     if (!var->range_changed)
@@ -318,11 +268,14 @@ set_variable(struct machine_learning_data *mdata,
     sml_variable_set_range(mdata->sml, var->sml_variable, var->value.min,
         var->value.max);
 
-    if (sml_is_ann(mdata->sml))
+    if (!sml_is_fuzzy(mdata->sml))
         return;
 
-    /* TODO remove terms before (if any was previouly created) */
-    variable_add_terms(mdata->sml, var, mdata->number_of_terms);
+    width = fmax((var->value.max - var->value.min + 1) /
+        mdata->number_of_terms, var->value.step);
+
+    sml_fuzzy_variable_set_default_term_width(mdata->sml, var->sml_variable,
+        width);
 }
 
 static bool
@@ -338,11 +291,32 @@ read_state_cb(struct sml_object *sml, void *data)
 
     SOL_VECTOR_FOREACH_IDX (&mdata->input_vec, input_var, i)
         set_variable(mdata, &input_var->base);
+    SOL_VECTOR_FOREACH_IDX (&mdata->input_id_vec, input_var, i)
+        set_variable(mdata, &input_var->base);
     SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i)
+        set_variable(mdata, &output_var->base);
+    SOL_VECTOR_FOREACH_IDX (&mdata->output_id_vec, output_var, i)
         set_variable(mdata, &output_var->base);
 
     pthread_mutex_unlock(&mdata->read_lock);
     return true;
+}
+
+static void
+_process_state_changed_output(struct sml_object *sml,
+    struct sml_variables_list *changed,
+    struct machine_learning_output_var *output_var)
+{
+    double value;
+
+    if (changed && !sml_variables_list_contains(sml, changed,
+        output_var->base.sml_variable))
+        return;
+    value = sml_variable_get_value(sml, output_var->base.sml_variable);
+    if (isnan(value))
+        return;
+
+    output_var->predicted_value = value;
 }
 
 static void
@@ -357,17 +331,11 @@ output_state_changed_cb(struct sml_object *sml,
     if (mutex_lock(&mdata->read_lock))
         return;
 
-    SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i) {
-        if (changed && !sml_variables_list_contains(sml, changed,
-            output_var->base.sml_variable))
-            continue;
-        double value = sml_variable_get_value(sml,
-            output_var->base.sml_variable);
-        if (isnan(value))
-            continue;
+    SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i)
+        _process_state_changed_output(sml, changed, output_var);
 
-        output_var->predicted_value = value;
-    }
+    SOL_VECTOR_FOREACH_IDX (&mdata->output_id_vec, output_var, i)
+        _process_state_changed_output(sml, changed, output_var);
 
     pthread_mutex_unlock(&mdata->read_lock);
 }
@@ -395,7 +363,11 @@ create_engine(struct machine_learning_data *mdata)
 
     sol_vector_init(&mdata->input_vec,
         sizeof(struct machine_learning_input_var));
+    sol_vector_init(&mdata->input_id_vec,
+        sizeof(struct machine_learning_input_var));
     sol_vector_init(&mdata->output_vec,
+        sizeof(struct machine_learning_output_var));
+    sol_vector_init(&mdata->output_id_vec,
         sizeof(struct machine_learning_output_var));
 
     if ((r = pthread_mutex_init(&mdata->process_lock, NULL)) ||
@@ -630,9 +602,13 @@ machine_learning_close(struct sol_flow_node *node, void *data)
     int error;
 
     sol_vector_clear(&mdata->input_vec);
+    sol_vector_clear(&mdata->input_id_vec);
     SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i)
         free(output_var->tag);
     sol_vector_clear(&mdata->output_vec);
+    SOL_VECTOR_FOREACH_IDX (&mdata->output_id_vec, output_var, i)
+        free(output_var->tag);
+    sol_vector_clear(&mdata->output_id_vec);
     if ((error = pthread_mutex_destroy(&mdata->process_lock)))
         SOL_WRN("Error %d when destroying pthread mutex lock", error);
     if ((error = pthread_mutex_destroy(&mdata->read_lock)))
@@ -654,7 +630,12 @@ input_var_connect(struct sol_flow_node *node, void *data, uint16_t port,
     sml_variable = sml_new_input(mdata->sml, name);
     SOL_NULL_CHECK(sml_variable, -EBADR);
 
-    input_var = sol_vector_append(&mdata->input_vec);
+    if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__IN__IN_VAR)
+        input_var = sol_vector_append(&mdata->input_vec);
+    else {
+        sml_fuzzy_variable_set_is_id(mdata->sml, sml_variable, true);
+        input_var = sol_vector_append(&mdata->input_id_vec);
+    }
     if (!input_var) {
         SOL_WRN("Failed to append variable");
         sml_remove_variable(mdata->sml, sml_variable);
@@ -684,7 +665,12 @@ output_var_connect(struct sol_flow_node *node, void *data, uint16_t port,
     sml_variable = sml_new_output(mdata->sml, name);
     SOL_NULL_CHECK(sml_variable, -EBADR);
 
-    output_var = sol_vector_append(&mdata->output_vec);
+    if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__IN__OUT_VAR)
+        output_var = sol_vector_append(&mdata->output_vec);
+    else {
+        sml_fuzzy_variable_set_is_id(mdata->sml, sml_variable, true);
+        output_var = sol_vector_append(&mdata->output_id_vec);
+    }
     if (!output_var) {
         SOL_WRN("Failed to append variable");
         sml_remove_variable(mdata->sml, sml_variable);
@@ -717,7 +703,10 @@ input_var_process(struct sol_flow_node *node, void *data, uint16_t port,
     if ((r = mutex_lock(&mdata->read_lock)))
         return r;
 
-    input_var = sol_vector_get(&mdata->input_vec, conn_id);
+    if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__IN__IN_VAR)
+        input_var = sol_vector_get(&mdata->input_vec, conn_id);
+    else
+        input_var = sol_vector_get(&mdata->input_id_vec, conn_id);
     if (!input_var) {
         SOL_WRN("Failed to get input var");
         pthread_mutex_unlock(&mdata->read_lock);
@@ -749,7 +738,10 @@ output_var_process(struct sol_flow_node *node, void *data, uint16_t port,
     if ((r = mutex_lock(&mdata->read_lock)))
         return r;
 
-    output_var = sol_vector_get(&mdata->output_vec, conn_id);
+    if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__IN__OUT_VAR)
+        output_var = sol_vector_get(&mdata->output_vec, conn_id);
+    else
+        output_var = sol_vector_get(&mdata->output_id_vec, conn_id);
     if (!output_var) {
         SOL_WRN("Failed to get output var");
         pthread_mutex_unlock(&mdata->read_lock);
@@ -785,29 +777,38 @@ machine_learning_worker_thread_setup(void *data)
 }
 
 static void
+machine_learning_worker_thread_feedback_output(struct sol_flow_node *node,
+    struct machine_learning_output_var *output_var)
+{
+    int r;
+
+    if (isnan(output_var->predicted_value))
+        return;
+
+    output_var->base.value.val = output_var->predicted_value;
+    output_var->predicted_value = NAN;
+    r = send_tagged_float_packet(node,
+        SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__OUT__OUT,
+        &output_var->base.value, output_var->tag);
+    if (r < 0)
+        SOL_WRN("Failed to send packet %s %f", output_var->tag,
+            output_var->base.value.val);
+}
+
+static void
 machine_learning_worker_thread_feedback(void *data)
 {
     struct machine_learning_data *mdata = data;
     struct machine_learning_output_var *output_var;
     uint16_t i;
-    int r;
 
     if (mutex_lock(&mdata->read_lock))
         return;
 
-    SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i) {
-        if (isnan(output_var->predicted_value))
-            continue;
-
-        output_var->base.value.val = output_var->predicted_value;
-        output_var->predicted_value = NAN;
-        r = send_tagged_float_packet(mdata->node,
-            SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__OUT__OUT,
-            &output_var->base.value, output_var->tag);
-        if (r < 0)
-            SOL_WRN("Failed to send packet %s %f", output_var->tag,
-                output_var->base.value.val);
-    }
+    SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i)
+        machine_learning_worker_thread_feedback_output(mdata->node, output_var);
+    SOL_VECTOR_FOREACH_IDX (&mdata->output_id_vec, output_var, i)
+        machine_learning_worker_thread_feedback_output(mdata->node, output_var);
     pthread_mutex_unlock(&mdata->read_lock);
 
     if (mutex_lock(&mdata->process_lock))

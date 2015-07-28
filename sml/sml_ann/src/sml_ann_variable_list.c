@@ -387,7 +387,8 @@ sml_ann_variable_get_name(struct sml_variable *var, char *var_name, size_t var_n
 }
 
 bool
-sml_ann_variable_set_range(struct sml_variable *var, float min, float max)
+sml_ann_variable_set_range(struct sml_engine *engine, struct sml_variable *var,
+    float min, float max)
 {
     struct sml_variable_impl *impl = (struct sml_variable_impl *)var;
 

@@ -36,6 +36,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+struct sml_engine;
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -68,7 +70,7 @@ void sml_ann_variable_set_value_by_index(struct sml_variable *var, float value, 
 struct sml_variable *sml_ann_variables_list_index(struct sml_variables_list *list, unsigned int index);
 uint16_t sml_ann_variables_list_get_length(struct sml_variables_list *list);
 int sml_ann_variable_get_name(struct sml_variable *var, char *var_name, size_t var_name_size);
-bool sml_ann_variable_set_range(struct sml_variable *var, float min, float max);
+bool sml_ann_variable_set_range(struct sml_engine *engine, struct sml_variable *var, float min, float max);
 bool sml_ann_variable_get_range(struct sml_variable *var, float *min, float *max);
 int sml_ann_variable_set_enabled(struct sml_variable *var, bool enabled);
 bool sml_ann_variable_is_enabled(struct sml_variable *var);

@@ -97,6 +97,15 @@
         "name": "IN_VAR"
        },
        {
+        "data_type": "float",
+        "description": "Port for id inputs sending float packets.",
+        "methods": {
+         "connect": "input_var_connect",
+         "process": "input_var_process"
+        },
+        "name": "IN_ID_VAR"
+       },
+       {
         "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
         "description": "Port for outputs sending tagged float packets.",
         "methods": {
@@ -104,6 +113,15 @@
          "process": "output_var_process"
         },
         "name": "OUT_VAR"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Port for id outputs sending tagged float packets.",
+        "methods": {
+         "connect": "output_var_connect",
+         "process": "output_var_process"
+        },
+        "name": "OUT_ID_VAR"
        },
        {
         "data_type": "any",
@@ -173,6 +191,15 @@
         "name": "IN_VAR"
        },
        {
+        "data_type": "float",
+        "description": "Port for inputs sending float packets.",
+        "methods": {
+         "connect": "input_var_connect",
+         "process": "input_var_process"
+        },
+        "name": "IN_ID_VAR"
+       },
+       {
         "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
         "description": "Port for outputs sending tagged float packets.",
         "methods": {
@@ -180,6 +207,15 @@
          "process": "output_var_process"
         },
         "name": "OUT_VAR"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_TAGGED_FLOAT",
+        "description": "Port for id outputs sending tagged float packets.",
+        "methods": {
+         "connect": "output_var_connect",
+         "process": "output_var_process"
+        },
+        "name": "OUT_ID_VAR"
        },
        {
         "data_type": "any",

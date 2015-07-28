@@ -350,6 +350,8 @@ void
 sml_fuzzy_destroy(struct sml_fuzzy *fuzzy)
 {
     delete (fl::Engine*) fuzzy->engine;
+    sol_vector_clear(&fuzzy->input_terms_width);
+    sol_vector_clear(&fuzzy->output_terms_width);
     free(fuzzy);
 }
 
@@ -766,13 +768,12 @@ sml_fuzzy_bridge_output_set_accumulation(struct sml_variable *variable,
     return true;
 }
 
-bool
-sml_fuzzy_variable_set_range(struct sml_variable *variable, float min, float max)
+void
+sml_fuzzy_bridge_variable_set_range(struct sml_variable *variable, float min,
+    float max)
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl_var->setRange(min, max);
-
-    return true;
 }
 
 bool
@@ -1229,7 +1230,7 @@ sml_fuzzy_bridge_variable_remove_term(struct sml_variable *variable,
     term = fl_var->removeTerm(term_num);
     if (term) {
         delete term;
-        return true;
+        return 0;
     }
 
     return -EINVAL;
@@ -1377,4 +1378,27 @@ sml_fuzzy_bridge_variable_get_is_id(struct sml_fuzzy *fuzzy,
         return width->is_id;
 
     return false;
+}
+
+bool
+sml_fuzzy_bridge_variable_term_triangle_update(struct sml_fuzzy_term *term,
+    float vertex_a, float vertex_b, float vertex_c)
+{
+    fl::Term *fl_term = (fl::Term*) term;
+    fl::Triangle *triangle;
+
+    triangle = dynamic_cast<fl::Triangle*>(fl_term);
+    if (!triangle)
+        return false;
+
+    if (!isnan(vertex_a))
+        triangle->setVertexA(vertex_a);
+
+    if (!isnan(vertex_b))
+        triangle->setVertexB(vertex_b);
+
+    if (!isnan(vertex_c))
+        triangle->setVertexA(vertex_c);
+
+    return true;
 }

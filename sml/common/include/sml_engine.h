@@ -61,7 +61,7 @@ typedef bool (*sml_engine_variable_is_enabled)(struct sml_variable *variable);
 typedef bool (*sml_engine_remove_variable)(struct sml_engine *engine, struct sml_variable *variable);
 typedef uint16_t (*sml_engine_variables_list_get_length)(struct sml_variables_list *list);
 typedef struct sml_variable *(*sml_engine_variables_list_index)(struct sml_variables_list *list, unsigned int index);
-typedef bool (*sml_engine_variable_set_range)(struct sml_variable *sml_variable, float min, float max);
+typedef bool (*sml_engine_variable_set_range)(struct sml_engine *engine, struct sml_variable *sml_variable, float min, float max);
 typedef bool (*sml_engine_variable_get_range)(struct sml_variable *sml_variable, float *min, float *max);
 typedef void (*sml_engine_print_debug)(struct sml_engine *engine, bool full);
 
