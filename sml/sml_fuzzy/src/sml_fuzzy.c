@@ -341,13 +341,13 @@ _remove_variables(struct sml_fuzzy_engine *fuzzy_engine, bool *removed)
     if (!inputs_to_remove_bool && !outputs_to_remove_bool)
         return 0;
 
-    if ((error = sml_observation_controller_remove_variables(
-            fuzzy_engine->observation_controller,
+    if ((error = sml_terms_manager_remove_variables(
+            &fuzzy_engine->terms_manager,
             inputs_to_remove_bool, outputs_to_remove_bool)))
         return error;
 
-    if ((error = sml_terms_manager_remove_variables(
-            &fuzzy_engine->terms_manager,
+    if ((error = sml_observation_controller_remove_variables(
+            fuzzy_engine->observation_controller,
             inputs_to_remove_bool, outputs_to_remove_bool)))
         return error;
 
