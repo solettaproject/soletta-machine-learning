@@ -729,9 +729,10 @@ add_expectation_block(GList **list, char *name, int begin, int end)
     eblock->begin = begin;
     eblock->end = end;
     eblock->error = false;
-    if (name && strlen(name))
+    if (name && strlen(name)) {
         strncpy(eblock->name, name, NAME_SIZE);
-    else
+        eblock->name[NAME_SIZE - 1] = '\0';
+    } else
         snprintf(eblock->name, NAME_SIZE, "%s%d",
             DEFAULT_EXPECTATION_BLOCK_NAME, g_list_length(*list));
 
@@ -896,6 +897,7 @@ add_input(Context *ctx, const char *name, float min, float max)
     Variable *var = calloc(1, sizeof(Variable));
 
     strncpy(var->name, name, NAME_SIZE);
+    var->name[NAME_SIZE - 1] = '\0';
     var->sml_var = sml_new_input(ctx->sml, name);
     var->min = min;
     var->max = max;
@@ -910,6 +912,7 @@ add_output(Context *ctx, const char *name, float min, float max)
     Variable *var = calloc(1, sizeof(Variable));
 
     strncpy(var->name, name, NAME_SIZE);
+    var->name[NAME_SIZE - 1] = '\0';
     var->sml_var = sml_new_output(ctx->sml, name);
     var->min = min;
     var->max = max;
@@ -934,6 +937,7 @@ add_term(Context *ctx, Variable *var, const char *name, float min, float max)
     Term *term = calloc(1, sizeof(Term));
 
     strncpy(term->name, name, NAME_SIZE);
+    term->name[NAME_SIZE - 1] = '\0';
     term->min = min;
     term->max = max;
     var->terms = g_list_append(var->terms, term);
