@@ -287,6 +287,7 @@ _read_config(Context *ctx, const char *filename)
     uint16_t i;
     FILE *f;
     size_t line_len;
+    int num_players;
 
     f = fopen(filename, "r");
     if (!f) {
@@ -297,14 +298,20 @@ _read_config(Context *ctx, const char *filename)
     if (!_read_next_line(ctx->line, LINE_SIZE, f))
         goto config_error;
 
-    ctx->num_players = atoi(ctx->line);
-    if (ctx->num_players < MIN_PLAYERS) {
-        fprintf(stderr, "%d is not enough players.\n", ctx->num_players);
+    num_players = atoi(ctx->line);
+    if (num_players < MIN_PLAYERS) {
+        fprintf(stderr, "%d is not enough players.\n", num_players);
+        goto config_error;
+    } else if (num_players > UINT16_MAX) {
+        fprintf(stderr, "%d is not greater than %d.\n", num_players,
+            UINT16_MAX);
         goto config_error;
     }
 
+    ctx->num_players = num_players;
+
     printf("%d players:\n", ctx->num_players);
-    ctx->players = malloc(sizeof(char *) * ctx->num_players);
+    ctx->players = calloc(ctx->num_players, sizeof(char *));
     for (i = 0; i < ctx->num_players; i++) {
         if (!_read_next_line(ctx->line, LINE_SIZE, f)) {
             _free_players(ctx->players, i);
