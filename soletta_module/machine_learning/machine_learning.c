@@ -717,7 +717,11 @@ input_var_process(struct sol_flow_node *node, void *data, uint16_t port,
         return r;
 
     input_var = sol_vector_get(&mdata->input_vec, conn_id);
-    SOL_NULL_CHECK(input_var, -EINVAL);
+    if (!input_var) {
+        SOL_WRN("Failed to get input var");
+        pthread_mutex_unlock(&mdata->read_lock);
+        return -EINVAL;
+    }
 
     if ((!sol_drange_val_equal(input_var->base.value.min, value.min)) ||
         (!sol_drange_val_equal(input_var->base.value.max, value.max)))
@@ -745,11 +749,19 @@ output_var_process(struct sol_flow_node *node, void *data, uint16_t port,
         return r;
 
     output_var = sol_vector_get(&mdata->output_vec, conn_id);
-    SOL_NULL_CHECK(output_var, -EINVAL);
+    if (!output_var) {
+        SOL_WRN("Failed to get output var");
+        pthread_mutex_unlock(&mdata->read_lock);
+        return -EINVAL;
+    }
 
     if (!output_var->tag) {
         output_var->tag = strdup(tag);
-        SOL_NULL_CHECK(output_var->tag, -ENOMEM);
+        if (!output_var->tag) {
+            SOL_WRN("Failed to get output var tag");
+            pthread_mutex_unlock(&mdata->read_lock);
+            return -ENOMEM;
+        }
     }
 
     if ((!sol_drange_val_equal(output_var->base.value.min, value.min)) ||
