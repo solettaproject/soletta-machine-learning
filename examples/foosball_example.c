@@ -380,12 +380,16 @@ main(int argc, char *argv[])
     }
 
     sml_print_debug(ctx.sml, false);
+
     printf("Right guesses: %d of %d (%d games) \n", ctx.rights,
         ctx.predictions, ctx.reads);
-    printf("Right predictions percentage:%f%%\n",
-        ctx.rights * 100.0 / ctx.reads);
-    printf("Total right predictions percentage:%f%%\n",
-        ctx.rights * 100.0 / ctx.predictions);
+    if (ctx.reads > 0)
+        printf("Right predictions percentage:%f%%\n",
+            ctx.rights * 100.0 / ctx.reads);
+    if (ctx.predictions > 0)
+        printf("Total right predictions percentage:%f%%\n",
+            ctx.rights * 100.0 / ctx.predictions);
+
     sml_free(ctx.sml);
     _free_players(ctx.players, ctx.num_players);
 
