@@ -1311,12 +1311,26 @@ main(int argc, char *argv[])
     if (ctx.engine_type == FUZZY_ENGINE_NO_SIMPLIFICATION)
         sml_fuzzy_set_simplification_disabled(ctx.sml, true);
 
-    if (argc >= 7)
-        sml_set_max_memory_for_observations(ctx.sml, atoi(argv[6]));
+    if (argc >= 7) {
+        int observations = atoi(argv[6]);
+        if (observations < 0) {
+            fprintf(stderr, "MAX_MEMORY_FOR_OBSERVATIOS (%s) must be a non "
+                "negative value\n", argv[6]);
+            return 5;
+        }
+        sml_set_max_memory_for_observations(ctx.sml, observations);
+    }
 
     if (ctx.engine_type == ANN_ENGINE) {
-        if (argc >= 8)
-            sml_ann_set_cache_max_size(ctx.sml, atoi(argv[7]));
+        if (argc >= 8) {
+            int cache_size = atoi(argv[7]);
+            if (cache_size < 0 || cache_size >= UINT16_MAX) {
+                fprintf(stderr, "ANN_CACHE_SIZE (%s) must be greater or equal "
+                    "to 0 an less or equal to %d\n", argv[7], UINT16_MAX);
+                return 6;
+            }
+            sml_ann_set_cache_max_size(ctx.sml, cache_size);
+        }
         if (argc >= 9)
             sml_ann_use_pseudorehearsal_strategy(ctx.sml, atoi(argv[8]) != 0);
     }
