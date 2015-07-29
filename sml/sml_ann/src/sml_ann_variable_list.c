@@ -367,7 +367,7 @@ sml_ann_variable_get_name(struct sml_variable *var, char *var_name, size_t var_n
     struct sml_variable_impl *impl = (struct sml_variable_impl *)var;
     size_t name_len;
 
-    ON_NULL_RETURN_VAL(var, NULL);
+    ON_NULL_RETURN_VAL(var, -EINVAL);
 
     if ((!var_name) || var_name_size == 0) {
         sml_warning("Invalid parameters");
