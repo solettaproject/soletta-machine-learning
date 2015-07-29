@@ -52,7 +52,7 @@ function run_massif()
 
 if [[ $# < 2 ]]; then
     echo "Correct use ./run_massif_simulations.sh <simulator_exe>" \
-          "<simulations_dir> <seed>"
+          "<simulations_dir> [seed]"
     exit -1
 fi
 

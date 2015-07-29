@@ -156,8 +156,8 @@ function create_dir()
 
 if [[ $# < 2 ]]; then
     echo "Correct use ./run_all_simulations.sh <simulator_exe>" \
-         "<simulations_dir> <repeat> <engines> <seed>" \
-         "<max_memory_for_observation> <ann_cache size> [result_dir_path]"
+         "<simulations_dir> [repeat] [engines] [seed]" \
+         "[max_memory_for_observation] [ann_cache size] [result_dir_path]"
     exit -1
 fi
 
