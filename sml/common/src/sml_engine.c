@@ -228,7 +228,7 @@ sml_get_input_list(struct sml_object *sml)
     if (!engine->get_input_list) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_get_input_list is mandatory for engines.");
-        return false;
+        return NULL;
     }
     return engine->get_input_list(engine);
 }
@@ -242,7 +242,7 @@ sml_get_output_list(struct sml_object *sml)
     if (!engine->get_output_list) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_get_output_list is mandatory for engines.");
-        return false;
+        return NULL;
     }
     return engine->get_output_list(engine);
 }
@@ -266,7 +266,7 @@ sml_new_input(struct sml_object *sml, const char *name)
     if (!engine->new_input) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_new_input is mandatory for engines.");
-        return false;
+        return NULL;
     }
 
     return engine->new_input(engine, name);
@@ -291,7 +291,7 @@ sml_new_output(struct sml_object *sml, const char *name)
     if (!engine->new_output) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_new_output is mandatory for engines.");
-        return false;
+        return NULL;
     }
 
     return engine->new_output(engine, name);
@@ -307,7 +307,7 @@ sml_get_input(struct sml_object *sml, const char *name)
     if (!engine->get_input) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_get_input is mandatory for engines.");
-        return false;
+        return NULL;
     }
     return engine->get_input(engine, name);
 }
@@ -322,7 +322,7 @@ sml_get_output(struct sml_object *sml, const char *name)
     if (!engine->get_output) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_get_output is mandatory for engines.");
-        return false;
+        return NULL;
     }
     return engine->get_output(engine, name);
 }
@@ -391,7 +391,7 @@ sml_variable_set_enabled(struct sml_object *sml,
     if (!engine->variable_set_enabled) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variable_set_enabled is mandatory for engines.");
-        return false;
+        return -EINVAL;
     }
     return engine->variable_set_enabled(engine,
         sml_variable, enabled);
@@ -435,7 +435,7 @@ sml_variables_list_get_length(struct sml_object *sml,
     struct sml_engine *engine = (struct sml_engine *)sml;
 
     ON_NULL_RETURN_VAL(list, 0);
-    ON_NULL_RETURN_VAL(sml, false);
+    ON_NULL_RETURN_VAL(sml, 0);
     if (!engine->variables_list_get_length) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variables_list_get_length is mandatory for engines.");
@@ -473,7 +473,7 @@ sml_variables_list_index(struct sml_object *sml,
     if (!engine->variables_list_index) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variables_list_index is mandatory for engines.");
-        return false;
+        return NULL;
     }
     return engine->variables_list_index(list, index);
 }
