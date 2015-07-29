@@ -82,7 +82,7 @@ void sml_fuzzy_variable_set_enabled(struct sml_variable *variable, bool enabled)
 bool sml_fuzzy_variable_is_enabled(struct sml_variable *variable);
 bool sml_fuzzy_remove_variable(struct sml_fuzzy *fuzzy, struct sml_variable *variable);
 
-bool sml_fuzzy_variable_set_range(struct sml_variable *variable, float min, float max);
+void sml_fuzzy_bridge_variable_set_range(struct sml_variable *variable, float min, float max);
 bool sml_fuzzy_bridge_output_set_defuzzifier(struct sml_variable *variable, enum sml_fuzzy_defuzzifier defuzzifier, int defuzzifier_resolution);
 bool sml_fuzzy_bridge_output_set_accumulation(struct sml_variable *variable, enum sml_fuzzy_snorm accumulation);
 bool sml_fuzzy_bridge_output_set_default_value(struct sml_variable *variable, float default_value);
@@ -115,6 +115,7 @@ bool sml_fuzzy_bridge_variable_set_default_term_width(struct sml_fuzzy *fuzzy, s
 float sml_fuzzy_bridge_variable_get_default_term_width(struct sml_fuzzy *fuzzy, struct sml_variable *var);
 bool sml_fuzzy_bridge_variable_set_is_id(struct sml_fuzzy *fuzzy, struct sml_variable *var, bool is_id);
 bool sml_fuzzy_bridge_variable_get_is_id(struct sml_fuzzy *fuzzy, struct sml_variable *var);
+bool sml_fuzzy_bridge_variable_term_triangle_update(struct sml_fuzzy_term *term, float vertex_a, float vertex_b, float vertex_c);
 
 #ifdef __cplusplus
 }
