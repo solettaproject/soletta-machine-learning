@@ -466,6 +466,8 @@ _observation_input_rule_generate(struct sml_variables_list *list,
     bool is_first = true, r;
     struct sml_variable *variable;
     struct sml_fuzzy_term *term;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    char term_name[SML_TERM_NAME_MAX_LEN + 1];
 
     len = sml_fuzzy_variables_list_get_length(list);
     for (i = 0; i < len; i++) {
@@ -488,9 +490,21 @@ _observation_input_rule_generate(struct sml_variables_list *list,
                             return false;
                         }
                     }
-                    r = sml_string_append_printf(str, "%s is %s",
-                        sml_fuzzy_variable_get_name(variable),
-                        sml_fuzzy_term_get_name(term));
+
+                    if (sml_fuzzy_variable_get_name(variable, var_name,
+                        sizeof(var_name))) {
+                        sml_critical("Failed to get variable name %p",
+                            variable);
+                        return false;
+                    }
+                    if (sml_fuzzy_term_get_name(term, term_name,
+                        sizeof(term_name))) {
+                        sml_critical("Failed to get term name %p", term);
+                        return false;
+                    }
+
+                    r = sml_string_append_printf(str, "%s is %s", var_name,
+                        term_name);
                     if (!r) {
                         sml_critical("Could not append the variable name " \
                             "and term to the string");
@@ -511,6 +525,8 @@ _observation_output_rule_generate(struct sml_variables_list *list,
     uint16_t output_number,
     sml_process_str_cb process_cb, void *data)
 {
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    char term_name[SML_TERM_NAME_MAX_LEN + 1];
     uint16_t i, j, len, index = 0;
     bool r;
 
@@ -523,6 +539,12 @@ _observation_output_rule_generate(struct sml_variables_list *list,
             continue;
         }
 
+        if (sml_fuzzy_variable_get_name(v, var_name, sizeof(var_name))) {
+            sml_critical("Failed to get variable name %p", v);
+            index += terms_len;
+            continue;
+        }
+
         for (j = 0; j < terms_len; j++) {
             struct sml_fuzzy_term *term = sml_fuzzy_variable_get_term(v, j);
             float output_weight = output_weights[index];
@@ -531,11 +553,20 @@ _observation_output_rule_generate(struct sml_variables_list *list,
                     sml_string_new(sml_string_get_string(prefix));
                 if (!str_observation) {
                     sml_critical("Could not alloc the sml string");
+                    index++;
                     continue;
                 }
+
+                if (sml_fuzzy_term_get_name(term, term_name,
+                    sizeof(term_name))) {
+                    sml_critical("Failed to get term name %p", term);
+                    sml_string_free(str_observation);
+                    index++;
+                    continue;
+                }
+
                 r = sml_string_append_printf(str_observation, "%s is %s",
-                    sml_fuzzy_variable_get_name(v),
-                    sml_fuzzy_term_get_name(term));
+                    var_name, term_name);
                 if (r) {
                     if (output_weight < (1 - FLOAT_THRESHOLD))
                         r = sml_string_append_printf(

@@ -78,7 +78,7 @@ _split(struct sml_fuzzy *fuzzy,
     struct sml_fuzzy_term *term;
     struct sml_variable *var;
     uint16_t cur_hits, new_hits, terms_len, i, *val;
-    const char *term_name;
+    char term_name[SML_TERM_NAME_MAX_LEN + 1];
     void *tmp;
 
     *error = 0;
@@ -87,8 +87,7 @@ _split(struct sml_fuzzy *fuzzy,
     if (!sml_fuzzy_term_get_range(term, &min, &max))
         return false;
 
-    term_name = sml_fuzzy_term_get_name(term);
-    if (!term_name)
+    if (sml_fuzzy_term_get_name(term, term_name, sizeof(term_name)))
         return false;
 
     cur_hits = sml_matrix_cast_get(variable_hits, var_num, term_num, tmp,
@@ -353,14 +352,13 @@ sml_terms_manager_initialize_variable(struct sml_fuzzy *fuzzy,
 {
     //TODO: Improve terms creation
     float min, max, range, step, overlap;
-    const char *var_name;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
     char buf[TERM_LEN];
     uint16_t i;
 
     sml_fuzzy_variable_get_range(var, &min, &max);
 
-    var_name = sml_fuzzy_variable_get_name(var);
-    if (!var_name)
+    if (sml_fuzzy_variable_get_name(var, var_name, sizeof(var_name)))
         return -ENODATA;
 
     range = max - min;

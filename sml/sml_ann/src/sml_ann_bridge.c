@@ -102,6 +102,7 @@ _sml_ann_bridge_calculate_confidence_interval(struct sml_ann_bridge *iann,
     float mean, sd, value;
     struct sml_variable *var;
     Confidence_Interval *ci;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
 
     sml_debug("Calculating confidence interval");
     inputs_len = sml_ann_variables_list_get_length(inputs);
@@ -136,8 +137,14 @@ _sml_ann_bridge_calculate_confidence_interval(struct sml_ann_bridge *iann,
         ci->lower_limit = mean - (1.96 * (sd / sqrt(observations)));
         ci->upper_limit = mean + (1.96 * (sd / sqrt(observations)));
         iann->ci_length_sum += (ci->upper_limit - ci->lower_limit);
+
+        if (sml_ann_variable_get_name(var, var_name, sizeof(var_name))) {
+            sml_warning("Failed to get variable name for %p", var);
+            continue;
+        }
+
         sml_debug("Variable:%s mean:%f sd:%f lower:%f upper:%f",
-            sml_ann_variable_get_name(var), mean, sd, ci->lower_limit,
+            var_name, mean, sd, ci->lower_limit,
             ci->upper_limit);
     }
 
@@ -377,6 +384,7 @@ sml_ann_bridge_inputs_in_confidence_interval_hits(struct sml_ann_bridge *iann,
     unsigned int hits = 0;
     uint16_t i, len;
     Confidence_Interval *ci;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
     float v;
 
     len = sml_ann_variables_list_get_length(inputs);
@@ -387,10 +395,16 @@ sml_ann_bridge_inputs_in_confidence_interval_hits(struct sml_ann_bridge *iann,
             sml_debug("Confidence interval for idx:%d is NULL!", i);
             continue;
         }
+
+        if (sml_ann_variable_get_name(sml_ann_variables_list_index(inputs, i),
+            var_name, sizeof(var_name))) {
+            sml_warning("Failed to get variable name for %p",
+                sml_ann_variables_list_index(inputs, i));
+            continue;
+        }
+
         sml_debug("variable:%s value:%f lower:%f upper:%f",
-            sml_ann_variable_get_name(
-            sml_ann_variables_list_index(inputs, i)),
-            v, ci->lower_limit, ci->upper_limit);
+            var_name, v, ci->lower_limit, ci->upper_limit);
         if (v >= ci->lower_limit && v <= ci->upper_limit)
             hits++;
     }
@@ -403,6 +417,7 @@ sml_ann_bridge_confidence_intervals_distance_sum(struct sml_ann_bridge *iann,
 {
     Confidence_Interval *ci;
     uint16_t i, len;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
     float v, distance = 0.0;
 
     len = sml_ann_variables_list_get_length(inputs);
@@ -413,10 +428,16 @@ sml_ann_bridge_confidence_intervals_distance_sum(struct sml_ann_bridge *iann,
             distance += fabsf(ci->lower_limit - v);
         else if (v > ci->upper_limit)
             distance += fabsf(ci->upper_limit - v);
+
+        if (sml_ann_variable_get_name(sml_ann_variables_list_index(inputs, i),
+            var_name, sizeof(var_name))) {
+            sml_warning("Failed to get variable name for %p",
+                sml_ann_variables_list_index(inputs, i));
+            continue;
+        }
+
         sml_debug("variable:%s value:%f lower:%f upper:%f distance:%f",
-            sml_ann_variable_get_name(
-            sml_ann_variables_list_index(inputs, i)),
-            v, ci->lower_limit, ci->upper_limit, distance);
+            var_name, v, ci->lower_limit, ci->upper_limit, distance);
     }
     return distance;
 }
@@ -512,6 +533,8 @@ _sml_ann_bridge_really_predict_output(struct sml_ann_bridge *iann,
     out = fann_run(iann->ann, in);
 
     if (out) {
+        char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+
         size = sml_ann_variables_list_get_length(outputs);
 
         for (i = 0; i < size; i++) {
@@ -526,9 +549,14 @@ _sml_ann_bridge_really_predict_output(struct sml_ann_bridge *iann,
                 sml_ann_variable_set_value_by_index(var, value, idx);
             else
                 sml_ann_variable_set_value(var, value);
+
+            if (sml_ann_variable_get_name(var, var_name, sizeof(var_name))) {
+                sml_warning("Failed to get variable name for %p", var);
+                continue;
+            }
+
             sml_debug("Predicted value:%f current value:%f variable:%s", value,
-                sml_ann_variable_get_previous_value(var),
-                sml_ann_variable_get_name(var));
+                sml_ann_variable_get_previous_value(var), var_name);
         }
         r = true;
     } else

@@ -32,6 +32,7 @@
 
 #pragma once
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 
 #ifdef __cplusplus
@@ -172,6 +173,8 @@ extern "C" {
  */
 
 #define SML_INTERNAL_ERROR 3 /**< SML error code. Could not complete an operation */
+
+#define SML_VARIABLE_NAME_MAX_LEN (127) /**< Maximum size of variables name */
 
 /**
  * @struct sml_object
@@ -432,7 +435,8 @@ struct sml_variables_list *sml_get_output_list(struct sml_object *sml);
  * New input variables start with NAN set as value.
  *
  * @param sml The ::sml_object object.
- * @param name The variable name.
+ * @param name The variable name. If lenght is greater
+ * than @ref SML_MAX_VARIABLE_LEN variable creation will fail.
  * @return ::sml_variable on success.
  * @return @c NULL on failure.
  */
@@ -445,7 +449,8 @@ struct sml_variable *sml_new_input(struct sml_object *sml, const char *name);
  * the value set on NAN will be used.
  *
  * @param sml The ::sml_object object.
- * @param name The variable name.
+ * @param name The variable name. If lenght is greater
+ * than @ref SML_MAX_VARIABLE_LEN variable creation will fail.
  * @return ::sml_variable on success.
  * @return @c NULL on failure.
  */
@@ -497,10 +502,11 @@ float sml_variable_get_value(struct sml_object *sml, struct sml_variable *sml_va
  *
  * @param sml The ::sml_object object.
  * @param sml_variable The ::sml_variable.
- * @return The variable's name on success.
- * @return @c NULL on failure.
+ * @param var_name Pointer to memory where name should be copied.
+ * @param var_name_size Size of memory pointed by @ref var_name.
+ * @return @c 0 on success or error value.
  */
-const char *sml_variable_get_name(struct sml_object *sml, struct sml_variable *sml_variable);
+int sml_variable_get_name(struct sml_object *sml, struct sml_variable *sml_variable, char *var_name, size_t var_name_size);
 
 /**
  * @brief Enable or disable a variable

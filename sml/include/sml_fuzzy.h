@@ -49,6 +49,8 @@ extern "C" {
  * @{
  */
 
+#define SML_TERM_NAME_MAX_LEN (127) /**< Maximum size of terms name */
+
 /**
  * @enum sml_fuzzy_snorm
  * @brief SNorm rules are also known as disjuction.
@@ -252,7 +254,8 @@ bool sml_fuzzy_output_set_accumulation(struct sml_object *sml, struct sml_variab
  * @remark The term name can not contain spaces!
  * @param sml The ::sml_object object.
  * @param variable The ::sml_variable.
- * @param name The term's name.
+ * @param name The term's name. Its length must be smaller
+ * than @ref SML_TERM_NAME_MAX_LEN.
  * @param start The point on the X axis that the term will start.
  * @param end The point on the X axis that the term will end.
  * @param height The term's height, usually 1.0.
@@ -275,7 +278,8 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_rectangle(struct sml_object *
  * @remark The term name can not contain spaces!
  * @param sml The ::sml_object object.
  * @param variable The ::sml_variable.
- * @param name The term's name.
+ * @param name The term's name. Its length must be smaller
+ * than @ref SML_TERM_NAME_MAX_LEN.
  * @param vertex_a The point on the X axis that the term will start.
  * @param vertex_b The point on the X axis that will be the middle of the triangle.
  * @param vertex_c the point on the X axis that the term will end.
@@ -295,7 +299,8 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_triangle(struct sml_object *s
  * @remark The term name can not contain spaces!
  * @param sml The ::sml_object object.
  * @param variable The ::sml_variable.
- * @param name The term's name.
+ * @param name The term's name. Its length must be smaller
+ * than @ref SML_TERM_NAME_MAX_LEN.
  * @param center The center of the cosine curve.
  * @param width The width of the cosine curve.
  * @param height The term's height, usually 1.0.
@@ -314,7 +319,8 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_cosine(struct sml_object *sml
  * @remark The term name can not contain spaces!
  * @param sml The ::sml_object object.
  * @param variable The ::sml_variable.
- * @param name The term's name.
+ * @param name The term's name. Its length must be smaller
+ * than @ref SML_TERM_NAME_MAX_LEN.
  * @param mean The mean of the gaussian curve.
  * @param standard_deviation The standard deviation of the curve.
  * @param height The term's height, usually 1.0.
@@ -344,7 +350,8 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_gaussian(struct sml_object *s
  * @remark The term name can not contain spaces!
  * @param sml The ::sml_object object.
  * @param variable The ::sml_variable.
- * @param name The term's name.
+ * @param name The term's name. Its length must be smaller
+ * than @ref SML_TERM_NAME_MAX_LEN.
  * @param start The start of the ramp on the X axis.
  * @param end The end of the ramp on the X axis.
  * @param height The term's maximum value, usually 1.0.

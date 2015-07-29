@@ -275,12 +275,26 @@ _sml_new_output(struct sml_engine *engine, const char *name)
     return (struct sml_variable *)var;
 }
 
-static const char *
-_sml_variable_get_name(struct sml_variable *sml_variable)
+static int
+_sml_variable_get_name(struct sml_variable *sml_variable, char *var_name, size_t var_name_size)
 {
     Variable *var = (Variable *)sml_variable;
+    size_t name_len;
 
-    return var->name;
+    if ((!var_name) || var_name_size == 0) {
+        sml_warning("Invalid parameters");
+        return -EINVAL;
+    }
+
+    name_len = strlen(var->name);
+    if (var_name_size <= name_len) {
+        sml_warning("Not enough space to get name %s(%d)",
+            var->name, name_len);
+        return -EINVAL;
+    }
+
+    strcpy(var_name, var->name);
+    return 0;
 }
 
 static float

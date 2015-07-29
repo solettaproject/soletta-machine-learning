@@ -258,6 +258,7 @@ add_term(struct sml_object *sml, int32_t term_index,
     float step, uint16_t number_of_terms, float overlap)
 {
     double min, max;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
 
     if (term_index == 0) {
         min = var_min;
@@ -274,8 +275,8 @@ add_term(struct sml_object *sml, int32_t term_index,
             min + (max - min) / 2, max, 1);
     }
 
-    SOL_DBG("Term %s (%f - %f) added for %s", name, min, max,
-        sml_variable_get_name(sml, sml_var));
+    if (!sml_variable_get_name(sml, sml_var, var_name, sizeof(var_name)))
+        SOL_DBG("Term %s (%f - %f) added for %s", name, min, max, var_name);
 }
 
 #define OVERLAP_PERCENTAGE (0.1)
