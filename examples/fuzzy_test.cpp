@@ -127,11 +127,19 @@ void
 set_value(Context *ctx, struct sml_variable *sml_variable)
 {
     float value;
-    fl::Variable *v = _search_variable(ctx,
-                           sml_variable_get_name(ctx->sml, sml_variable));
+    fl::Variable *v;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
 
-    if (v == NULL) {
-       sml_variable_set_value(ctx->sml, sml_variable, NAN);
+    if (sml_variable_get_name(ctx->sml, sml_variable, var_name,
+            sizeof(var_name))) {
+        printf("Failed to get name for variable %p", sml_variable);
+        return;
+    }
+
+    v = _search_variable(ctx, var_name);
+
+    if (!v) {
+        sml_variable_set_value(ctx->sml, sml_variable, NAN);
         return;
     }
 
@@ -148,7 +156,7 @@ set_value(Context *ctx, struct sml_variable *sml_variable)
             value = v->getMaximum();
     }
     sml_variable_set_value(ctx->sml, sml_variable, value);
-    printf("%s> %f\n", sml_variable_get_name(ctx->sml, sml_variable), value);
+    printf("%s> %f\n", var_name, value);
     for (int i = 0; i < v->numberOfTerms(); i++) {
         fl::Term *t = v->getTerm(i);
         printf(" %s> %f\n", t->getName().c_str(), t->membership(value));
@@ -161,7 +169,8 @@ set_list_values(Context *ctx, struct sml_variables_list *list)
     unsigned int i, len;
     len = sml_variables_list_get_length(ctx->sml, list);
     for (i = 0; i < len; i++) {
-      struct sml_variable *sml_variable = sml_variables_list_index(ctx->sml, list, i);
+        struct sml_variable *sml_variable = sml_variables_list_index(ctx->sml,
+            list, i);
         set_value(ctx, sml_variable);
     }
 }
@@ -211,16 +220,20 @@ static void
 _output_state_changed_cb_test_false_positive (struct sml_object *sml, struct sml_variables_list *changed, void *data)
 {
     Context *ctx = (Context *) data;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    unsigned int i, len;
+
     ctx->false_positive++;
 
     printf("False Posive called:\n");
-    unsigned int i, len;
     len = sml_variables_list_get_length(sml, changed);
     for (i = 0; i < len; i++) {
         struct sml_variable *sml_variable = sml_variables_list_index(sml,
                                                               changed, i);
-        printf("%s> %f\n", sml_variable_get_name(sml, sml_variable),
-               sml_variable_get_value(sml, sml_variable));
+        if (!sml_variable_get_name(sml, sml_variable, var_name,
+                    sizeof(var_name)))
+            printf("%s> %f\n", var_name,
+                sml_variable_get_value(sml, sml_variable));
     }
 }
 
@@ -228,16 +241,20 @@ static void
 _output_state_changed_cb_false_negative (struct sml_object *sml, struct sml_variables_list *changed, void *data)
 {
     Context *ctx = (Context *) data;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    unsigned int i, len;
+
     ctx->positive_count++;
 
     printf("Change State Called:\n");
-    unsigned int i, len;
     len = sml_variables_list_get_length(sml, changed);
     for (i = 0; i < len; i++) {
         struct sml_variable *sml_variable = sml_variables_list_index(sml,
                                                               changed, i);
-        printf("%s> %f\n", sml_variable_get_name(sml, sml_variable),
-               sml_variable_get_value(sml, sml_variable));
+        if (!sml_variable_get_name(sml, sml_variable, var_name,
+                    sizeof(var_name)))
+            printf("%s> %f\n", var_name,
+                sml_variable_get_value(sml, sml_variable));
     }
 }
 

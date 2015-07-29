@@ -251,14 +251,24 @@ API_EXPORT struct sml_variable *
 sml_new_input(struct sml_object *sml, const char *name)
 {
     struct sml_engine *engine = (struct sml_engine *)sml;
+    size_t name_len;
 
     ON_NULL_RETURN_VAL(sml, NULL);
     ON_NULL_RETURN_VAL(name, NULL);
+
+    name_len = strlen(name);
+    if (name_len == 0 || name_len >= SML_VARIABLE_NAME_MAX_LEN) {
+        sml_warning("Invalid name size (%d) for variable %s", name_len,
+            name);
+        return NULL;
+    }
+
     if (!engine->new_input) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_new_input is mandatory for engines.");
         return false;
     }
+
     return engine->new_input(engine, name);
 }
 
@@ -266,14 +276,24 @@ API_EXPORT struct sml_variable *
 sml_new_output(struct sml_object *sml, const char *name)
 {
     struct sml_engine *engine = (struct sml_engine *)sml;
+    size_t name_len;
 
     ON_NULL_RETURN_VAL(sml, NULL);
     ON_NULL_RETURN_VAL(name, NULL);
+
+    name_len = strlen(name);
+    if (name_len == 0 || name_len >= SML_VARIABLE_NAME_MAX_LEN) {
+        sml_warning("Invalid name size (%d) for variable %s", name_len,
+            name);
+        return NULL;
+    }
+
     if (!engine->new_output) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_new_output is mandatory for engines.");
         return false;
     }
+
     return engine->new_output(engine, name);
 }
 
@@ -339,19 +359,25 @@ sml_variable_get_value(struct sml_object *sml,
     return engine->get_value(sml_variable);
 }
 
-API_EXPORT const char *
-sml_variable_get_name(struct sml_object *sml, struct sml_variable *sml_variable)
+API_EXPORT int
+sml_variable_get_name(struct sml_object *sml, struct sml_variable *sml_variable, char *var_name, size_t var_name_size)
 {
     struct sml_engine *engine = (struct sml_engine *)sml;
 
-    ON_NULL_RETURN_VAL(sml_variable, NULL);
-    ON_NULL_RETURN_VAL(sml, NULL);
+    ON_NULL_RETURN_VAL(sml_variable, -EINVAL);
+    ON_NULL_RETURN_VAL(sml, -EINVAL);
+    ON_NULL_RETURN_VAL(var_name, -EINVAL);
+
+    if (var_name_size == 0)
+        return -EINVAL;
+
     if (!engine->get_name) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variable_get_name is mandatory for engines.");
-        return false;
+        return -EINVAL;
     }
-    return engine->get_name(sml_variable);
+
+    return engine->get_name(sml_variable, var_name, var_name_size);
 }
 
 API_EXPORT int

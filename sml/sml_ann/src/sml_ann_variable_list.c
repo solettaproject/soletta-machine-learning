@@ -361,13 +361,29 @@ sml_ann_variables_list_get_length(struct sml_variables_list *list)
     return sol_ptr_vector_get_len(&impl->variables);
 }
 
-const char *
-sml_ann_variable_get_name(struct sml_variable *var)
+int
+sml_ann_variable_get_name(struct sml_variable *var, char *var_name, size_t var_name_size)
 {
     struct sml_variable_impl *impl = (struct sml_variable_impl *)var;
+    size_t name_len;
 
     ON_NULL_RETURN_VAL(var, NULL);
-    return impl->name;
+
+    if ((!var_name) || var_name_size == 0) {
+        sml_warning("Invalid parameters");
+        return -EINVAL;
+    }
+
+    name_len = strlen(impl->name);
+
+    if (var_name_size <= name_len) {
+        sml_warning("Not enough space to get name %s(%d)",
+            impl->name, name_len);
+        return -EINVAL;
+    }
+
+    strcpy(var_name, impl->name);
+    return 0;
 }
 
 bool
