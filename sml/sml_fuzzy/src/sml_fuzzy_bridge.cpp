@@ -488,11 +488,24 @@ sml_fuzzy_variables_list_index(struct sml_variables_list *list, uint16_t index)
     return (struct sml_variable *) variables->at(index);
 }
 
-const char *
-sml_fuzzy_variable_get_name(struct sml_variable *variable)
+int
+sml_fuzzy_variable_get_name(struct sml_variable *variable, char *var_name, size_t var_name_size)
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
-    return fl_var->getName().c_str();
+
+    if ((!var_name) || var_name_size == 0) {
+        sml_warning("Invalid parameters");
+        return -EINVAL;
+    }
+
+    if (var_name_size <= fl_var->getName().length()) {
+        sml_warning("Not enough space to get name %s(%d)",
+            fl_var->getName().c_str(), fl_var->getName().length());
+        return -EINVAL;
+    }
+
+    strcpy(var_name, fl_var->getName().c_str());
+    return 0;
 }
 
 uint16_t
@@ -509,11 +522,24 @@ sml_fuzzy_variable_get_term(struct sml_variable *variable, uint16_t index)
     return (struct sml_fuzzy_term *)fl_var->getTerm(index);
 }
 
-const char *
-sml_fuzzy_term_get_name(struct sml_fuzzy_term *term)
+int
+sml_fuzzy_term_get_name(struct sml_fuzzy_term *term, char *term_name, size_t term_name_size)
 {
     fl::Term *fl_term = (fl::Term*) term;
-    return fl_term->getName().c_str();
+
+    if ((!term_name) || term_name_size == 0) {
+        sml_warning("Invalid parameters");
+        return -EINVAL;
+    }
+
+    if (term_name_size <= fl_term->getName().length()) {
+        sml_warning("Not enough space to get name %s(%d)",
+            fl_term->getName().c_str(), fl_term->getName().length());
+        return -EINVAL;
+    }
+
+    strcpy(term_name, fl_term->getName().c_str());
+    return 0;
 }
 
 static float
@@ -755,20 +781,31 @@ _find_variable(std::vector<fl::Variable*> *list, fl::Variable *var,
 static void
 _debug_variables(struct sml_variables_list *list)
 {
-    uint16_t i, len, j, len_j;
+    float val;
     struct sml_variable *var;
     struct sml_fuzzy_term *term;
-    float val;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    char term_name[SML_TERM_NAME_MAX_LEN + 1];
+    uint16_t i, len, j, len_j;
 
     len = sml_fuzzy_variables_list_get_length(list);
     for (i = 0; i < len; i++) {
         var = sml_fuzzy_variables_list_index(list, i);
         val = sml_fuzzy_variable_get_value(var);
-        sml_debug("\t\t%s: %g", sml_fuzzy_variable_get_name(var), val);
+
+        if (sml_fuzzy_variable_get_name(var, var_name, sizeof(var_name)))
+            sml_warning("Failed to get name of variable %p", var);
+        else
+            sml_debug("\t\t%s: %g", var_name, val);
+
         len_j = sml_fuzzy_variable_terms_count(var);
         for (j = 0; j < len_j; j++) {
             term = sml_fuzzy_variable_get_term(var, j);
-            sml_debug("\t\t\t%s: %g", sml_fuzzy_term_get_name(term),
+            if (sml_fuzzy_term_get_name(term, term_name, sizeof(term_name))) {
+                sml_warning("Failed to get name of term %p", term);
+                continue;
+            }
+            sml_debug("\t\t\t%s: %g", term_name,
                       ((fl::Term *)term)->membership(val));
         }
     }
@@ -824,6 +861,26 @@ sml_fuzzy_variable_find_term(struct sml_variable *var, struct sml_fuzzy_term *te
     return false;
 }
 
+static bool
+_check_name(const char *name)
+{
+    size_t name_len;
+
+    if (!name) {
+        sml_warning("Name must be provided to add term");
+        return false;
+    }
+
+    name_len = strlen(name);
+    if (name_len == 0 || name_len >= SML_TERM_NAME_MAX_LEN) {
+        sml_warning("Invalid name size (%d) for variable %s", name_len,
+            name);
+        return false;
+    }
+
+    return true;
+}
+
 struct sml_fuzzy_term*
 sml_fuzzy_bridge_variable_add_term_rectangle(struct sml_fuzzy *fuzzy,
                                              struct sml_variable *variable,
@@ -832,6 +889,9 @@ sml_fuzzy_bridge_variable_add_term_rectangle(struct sml_fuzzy *fuzzy,
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
+
+    if (!_check_name(name))
+        return NULL;
 
     term = new (std::nothrow) fl::Rectangle(name, start, end, height);
 
@@ -863,7 +923,10 @@ sml_fuzzy_bridge_variable_add_term_triangle(struct sml_fuzzy *fuzzy,
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
 
-   term = new (std::nothrow) fl::Triangle(name, vertex_a, vertex_b, vertex_c,
+    if (!_check_name(name))
+        return NULL;
+
+    term = new (std::nothrow) fl::Triangle(name, vertex_a, vertex_b, vertex_c,
                                           height);
 
     if (!term) {
@@ -892,6 +955,9 @@ sml_fuzzy_bridge_variable_add_term_cosine(struct sml_fuzzy *fuzzy,
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
+
+    if (!_check_name(name))
+        return NULL;
 
     term = new (std::nothrow) fl::Cosine(name, center, width, height);
     if (!term) {
@@ -922,6 +988,9 @@ sml_fuzzy_bridge_variable_add_term_gaussian(struct sml_fuzzy *fuzzy,
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
 
+    if (!_check_name(name))
+        return NULL;
+
     term = new (std::nothrow) fl::Gaussian(name, mean, standard_deviation,
                                            height);
     if (!term) {
@@ -950,6 +1019,9 @@ sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy,
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
+
+    if (!_check_name(name))
+        return NULL;
 
     term = new (std::nothrow) fl::Ramp(name, start, end, height);
     if (!term) {

@@ -127,6 +127,11 @@ main(int argc, char *argv[])
     else
         srand(time(NULL));
 
+    if (num_terms < 1) {
+        fprintf(stderr, "num_terms must be a positive value\n");
+        return 1;
+    }
+
     sml = _sml_new(atoi(argv[1]));
     if (!sml) {
         fprintf(stderr, "Failed to create sml\n");

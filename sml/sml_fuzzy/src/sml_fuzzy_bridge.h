@@ -72,7 +72,7 @@ struct sml_variable *sml_fuzzy_new_input(struct sml_fuzzy *fuzzy, const char *na
 struct sml_variable *sml_fuzzy_new_output(struct sml_fuzzy *fuzzy, const char *name);
 struct sml_variable *sml_fuzzy_get_input(struct sml_fuzzy *fuzzy, const char *name);
 struct sml_variable *sml_fuzzy_get_output(struct sml_fuzzy *fuzzy, const char *name);
-const char *sml_fuzzy_variable_get_name(struct sml_variable *variable);
+int sml_fuzzy_variable_get_name(struct sml_variable *variable, char *var_name, size_t var_name_size);
 float sml_fuzzy_variable_get_value(struct sml_variable *variable);
 void sml_fuzzy_variable_set_value(struct sml_variable *variable, float value);
 uint16_t sml_fuzzy_variable_terms_count(struct sml_variable *variable);
@@ -93,7 +93,7 @@ struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_gaussian(struct sml_fu
 struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float start, float end, float height);
 int sml_fuzzy_bridge_variable_remove_term(struct sml_variable *variable, uint16_t term_num);
 struct sml_fuzzy_term *sml_fuzzy_variable_get_term(struct sml_variable *variable, uint16_t index);
-const char *sml_fuzzy_term_get_name(struct sml_fuzzy_term *term);
+int sml_fuzzy_term_get_name(struct sml_fuzzy_term *term, char *term_name, size_t term_name_size);
 bool sml_fuzzy_term_get_range(struct sml_fuzzy_term *term, float *min, float *max);
 bool sml_fuzzy_term_set_range(struct sml_fuzzy_term *term, float min, float max);
 

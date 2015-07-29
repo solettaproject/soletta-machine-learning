@@ -55,7 +55,7 @@ typedef struct sml_variable *(*sml_engine_get_input)(struct sml_engine *engine, 
 typedef struct sml_variable *(*sml_engine_get_output)(struct sml_engine *engine, const char *name);
 typedef bool (*sml_engine_variable_set_value)(struct sml_variable *sml_variable, float value);
 typedef float (*sml_engine_variable_get_value)(struct sml_variable *sml_variable);
-typedef const char *(*sml_engine_variable_get_name)(struct sml_variable *sml_variable);
+typedef int (*sml_engine_variable_get_name)(struct sml_variable *sml_variable, char *var_name, size_t var_name_size);
 typedef int (*sml_engine_variable_set_enabled)(struct sml_engine *engine, struct sml_variable *variable, bool enabled);
 typedef bool (*sml_engine_variable_is_enabled)(struct sml_variable *variable);
 typedef bool (*sml_engine_remove_variable)(struct sml_engine *engine, struct sml_variable *variable);

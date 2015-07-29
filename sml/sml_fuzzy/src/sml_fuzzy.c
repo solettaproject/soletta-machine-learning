@@ -262,14 +262,21 @@ _act(struct sml_fuzzy_engine *fuzzy_engine, bool *should_learn)
         return error;
 
 #ifdef Debug
-    sml_debug("Fuzzy output values");
-    uint16_t i, len;
     struct sml_variables_list *outputs;
+    uint16_t i, len;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+
+    sml_debug("Fuzzy output values");
+
     outputs = fuzzy_engine->fuzzy->output_list;
     len = sml_fuzzy_variables_list_get_length(outputs);
     for (i = 0; i < len; i++) {
         variable = sml_fuzzy_variables_list_index(outputs, i);
-        sml_debug("%s\t%g", sml_fuzzy_variable_get_name(variable),
+        if (sml_fuzzy_variable_get_name(variable, var_name, sizeof(var_name))) {
+            sml_warning("Failed to get variable %p name", variable);
+            continue;
+        }
+        sml_debug("%s\t%g", var_name,
             sml_fuzzy_variable_get_value(variable));
     }
 #endif
@@ -765,9 +772,18 @@ _sml_new_output(struct sml_engine *engine, const char *name)
 static bool
 _sml_variable_set_value(struct sml_variable *sml_variable, float value)
 {
-    if (!sml_fuzzy_variable_is_enabled(sml_variable))
-        sml_warning("Trying to set a value in a disabled variable: %s.",
-            sml_fuzzy_variable_get_name(sml_variable));
+    if (!sml_fuzzy_variable_is_enabled(sml_variable)) {
+        char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+
+        if (sml_fuzzy_variable_get_name(sml_variable, var_name,
+            sizeof(var_name))) {
+            sml_warning("Trying to set a value in a disabled variable: %p.",
+                sml_variable);
+        } else
+            sml_warning("Trying to set a value in a disabled variable: %s.",
+                var_name);
+    }
+
     sml_fuzzy_variable_set_value(sml_variable, value);
     return true;
 }

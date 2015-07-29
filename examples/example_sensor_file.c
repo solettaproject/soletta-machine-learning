@@ -137,6 +137,7 @@ _read_state_cb(struct sml_object *sml, void *data)
     Context *ctx = data;
     struct sml_variables_list *input_list, *output_list;
     struct sml_variable *sml_variable;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
 
     input_list = sml_get_input_list(sml);
     output_list = sml_get_output_list(sml);
@@ -164,7 +165,9 @@ _read_state_cb(struct sml_object *sml, void *data)
         sml_variable_set_value(sml, sml_variable, value);
         if (i != 0)
             printf(", ");
-        printf("%s: %f", sml_variable_get_name(sml, sml_variable), value);
+        if (!sml_variable_get_name(sml, sml_variable, var_name,
+            sizeof(var_name)))
+            printf("%s: %f", var_name, value);
     }
     printf("}, Outputs {");
 
@@ -175,7 +178,9 @@ _read_state_cb(struct sml_object *sml, void *data)
         sml_variable_set_value(sml, sml_variable, value);
         if (i != 0)
             printf(", ");
-        printf("%s: %f", sml_variable_get_name(sml, sml_variable), value);
+        if (!sml_variable_get_name(sml, sml_variable, var_name,
+            sizeof(var_name)))
+            printf("%s: %f", var_name, value);
     }
     printf("}, Expected {");
 
@@ -184,7 +189,9 @@ _read_state_cb(struct sml_object *sml, void *data)
         sml_variable = sml_variables_list_index(sml, output_list, i);
         if (i != 0)
             printf(", ");
-        printf("%s: ", sml_variable_get_name(sml, sml_variable));
+        if (!sml_variable_get_name(sml, sml_variable, var_name,
+            sizeof(var_name)))
+            printf("%s: ", var_name);
         if (ind < tokens_len && tokens[ind][0] != 0 && tokens[ind][0] != '?') {
             ctx->expected_outputs[i] = atof(tokens[ind]);
             printf("%f", ctx->expected_outputs[i]);
@@ -211,6 +218,7 @@ _output_state_changed_cb(struct sml_object *sml,
     struct sml_variable *var, *changed_var;
     struct sml_variables_list *list;
     Context *ctx = data;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
 
     printf("SML Change State {");
     list = sml_get_output_list(sml);
@@ -225,8 +233,10 @@ _output_state_changed_cb(struct sml_object *sml,
                     sml, var);
                 if (found++ > 0)
                     printf(", ");
-                printf("%s: %f", sml_variable_get_name(sml, var),
-                    ctx->output_state_changed_outputs[i]);
+                if (!sml_variable_get_name(sml, var, var_name,
+                    sizeof(var_name)))
+                    printf("%s: %f", var_name,
+                        ctx->output_state_changed_outputs[i]);
             }
         }
     }

@@ -729,9 +729,10 @@ add_expectation_block(GList **list, char *name, int begin, int end)
     eblock->begin = begin;
     eblock->end = end;
     eblock->error = false;
-    if (name && strlen(name))
+    if (name && strlen(name)) {
         strncpy(eblock->name, name, NAME_SIZE);
-    else
+        eblock->name[NAME_SIZE - 1] = '\0';
+    } else
         snprintf(eblock->name, NAME_SIZE, "%s%d",
             DEFAULT_EXPECTATION_BLOCK_NAME, g_list_length(*list));
 
@@ -896,6 +897,7 @@ add_input(Context *ctx, const char *name, float min, float max)
     Variable *var = calloc(1, sizeof(Variable));
 
     strncpy(var->name, name, NAME_SIZE);
+    var->name[NAME_SIZE - 1] = '\0';
     var->sml_var = sml_new_input(ctx->sml, name);
     var->min = min;
     var->max = max;
@@ -910,6 +912,7 @@ add_output(Context *ctx, const char *name, float min, float max)
     Variable *var = calloc(1, sizeof(Variable));
 
     strncpy(var->name, name, NAME_SIZE);
+    var->name[NAME_SIZE - 1] = '\0';
     var->sml_var = sml_new_output(ctx->sml, name);
     var->min = min;
     var->max = max;
@@ -934,6 +937,7 @@ add_term(Context *ctx, Variable *var, const char *name, float min, float max)
     Term *term = calloc(1, sizeof(Term));
 
     strncpy(term->name, name, NAME_SIZE);
+    term->name[NAME_SIZE - 1] = '\0';
     term->min = min;
     term->max = max;
     var->terms = g_list_append(var->terms, term);
@@ -1307,12 +1311,26 @@ main(int argc, char *argv[])
     if (ctx.engine_type == FUZZY_ENGINE_NO_SIMPLIFICATION)
         sml_fuzzy_set_simplification_disabled(ctx.sml, true);
 
-    if (argc >= 7)
-        sml_set_max_memory_for_observations(ctx.sml, atoi(argv[6]));
+    if (argc >= 7) {
+        int observations = atoi(argv[6]);
+        if (observations < 0) {
+            fprintf(stderr, "MAX_MEMORY_FOR_OBSERVATIOS (%s) must be a non "
+                "negative value\n", argv[6]);
+            return 5;
+        }
+        sml_set_max_memory_for_observations(ctx.sml, observations);
+    }
 
     if (ctx.engine_type == ANN_ENGINE) {
-        if (argc >= 8)
-            sml_ann_set_cache_max_size(ctx.sml, atoi(argv[7]));
+        if (argc >= 8) {
+            int cache_size = atoi(argv[7]);
+            if (cache_size < 0 || cache_size >= UINT16_MAX) {
+                fprintf(stderr, "ANN_CACHE_SIZE (%s) must be greater or equal "
+                    "to 0 an less or equal to %d\n", argv[7], UINT16_MAX);
+                return 6;
+            }
+            sml_ann_set_cache_max_size(ctx.sml, cache_size);
+        }
         if (argc >= 9)
             sml_ann_use_pseudorehearsal_strategy(ctx.sml, atoi(argv[8]) != 0);
     }

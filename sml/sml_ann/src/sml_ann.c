@@ -275,6 +275,7 @@ _sml_ann_find_variable_by_name(struct sml_ann_engine *ann_engine,
 {
     struct sml_variables_list *list;
     struct sml_variable *var;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
     uint16_t i, size;
 
     if (input)
@@ -285,7 +286,11 @@ _sml_ann_find_variable_by_name(struct sml_ann_engine *ann_engine,
     size = sml_ann_variables_list_get_length(list);
     for (i = 0; i < size; i++) {
         var = sml_ann_variables_list_index(list, i);
-        if (!strcmp(name, sml_ann_variable_get_name(var)))
+        if (sml_ann_variable_get_name(var, var_name, sizeof(var_name))) {
+            sml_warning("Failed to get name of var %p", var);
+            continue;
+        }
+        if (!strcmp(name, var_name))
             return var;
     }
     return NULL;
@@ -1101,14 +1106,18 @@ _sml_ann_variable_set_enabled(struct sml_engine *engine,
 static void
 _sml_ann_print_variables_list(struct sml_variables_list *list)
 {
-    uint16_t i, len;
     struct sml_variable *var;
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    uint16_t i, len;
 
     len = sml_ann_variables_list_get_length(list);
     for (i = 0; i < len; i++) {
         var = sml_ann_variables_list_index(list, i);
-        sml_debug("\t%s: %g", sml_ann_variable_get_name(var),
-            sml_ann_variable_get_value(var));
+        if (sml_ann_variable_get_name(var, var_name, sizeof(var_name))) {
+            sml_warning("Failed to get name of var %p", var);
+            continue;
+        }
+        sml_debug("\t%s: %g", var_name, sml_ann_variable_get_value(var));
     }
 }
 
