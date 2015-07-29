@@ -334,7 +334,7 @@ sml_variable_get_value(struct sml_object *sml,
     if (!engine->get_value) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variable_get_value is mandatory for engines.");
-        return false;
+        return NAN;
     }
     return engine->get_value(sml_variable);
 }
@@ -460,12 +460,26 @@ sml_variable_set_range(struct sml_object *sml,
 
     ON_NULL_RETURN_VAL(sml_variable, false);
     ON_NULL_RETURN_VAL(sml, false);
+
     if (!engine->variable_set_range) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_variable_set_range is mandatory for engines.");
         return false;
     }
-    return engine->variable_set_range(sml_variable, min, max);
+
+    if (isnan(min) && !sml_variable_get_range(sml, sml_variable, &min, NULL))
+        return false;
+
+    if (isnan(max) && !sml_variable_get_range(sml, sml_variable, NULL, &max))
+        return false;
+
+    if (max < min) {
+        sml_warning("Max value (%f) is lower than min value (%f). Inverting.",
+            min, max);
+        return engine->variable_set_range(engine, sml_variable, max, min);
+    }
+
+    return engine->variable_set_range(engine, sml_variable, min, max);
 }
 
 API_EXPORT bool

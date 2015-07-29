@@ -76,12 +76,12 @@ striker1(hub/int)
 goalkeeper2(hub/int)
 striker2(hub/int)
 
-sml_goalkeeper1(converter/int-to-float) OUT -> IN_VAR sml
-sml_striker1(converter/int-to-float) OUT -> IN_VAR sml
-sml_goalkeeper2(converter/int-to-float) OUT -> IN_VAR sml
-sml_striker2(converter/int-to-float) OUT -> IN_VAR sml
+sml_goalkeeper1(converter/int-to-float) OUT -> IN_ID_VAR sml
+sml_striker1(converter/int-to-float) OUT -> IN_ID_VAR sml
+sml_goalkeeper2(converter/int-to-float) OUT -> IN_ID_VAR sml
+sml_striker2(converter/int-to-float) OUT -> IN_ID_VAR sml
 sml_winner(converter/int-to-float) OUT -> IN tagger(machine-learning/tagger:tag=winner)
-tagger OUT -> OUT_VAR sml
+tagger OUT -> OUT_ID_VAR sml
 
 sml OUT -> IN FilterSml(machine-learning/filter:tag=winner)
 FilterSml OUT -> IN _(converter/float-to-empty:range=min:0.5|max:1.5) OUT -> IN predicted_winner1(hub/empty)

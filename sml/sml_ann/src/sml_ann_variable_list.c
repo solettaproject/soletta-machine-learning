@@ -192,7 +192,7 @@ sml_ann_variable_new(const char *name, bool input)
     var->current_value = NAN;
     var->previous_value = NAN;
     var->last_stable_value = NAN;
-    var->min_value = FLT_MIN;
+    var->min_value = -FLT_MAX;
     var->max_value = FLT_MAX;
     var->enabled = true;
     var->input = input;
@@ -371,7 +371,8 @@ sml_ann_variable_get_name(struct sml_variable *var)
 }
 
 bool
-sml_ann_variable_set_range(struct sml_variable *var, float min, float max)
+sml_ann_variable_set_range(struct sml_engine *engine, struct sml_variable *var,
+    float min, float max)
 {
     struct sml_variable_impl *impl = (struct sml_variable_impl *)var;
 

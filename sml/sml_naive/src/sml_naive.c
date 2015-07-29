@@ -325,7 +325,8 @@ _sml_variables_list_get_length(struct sml_variables_list *list)
 }
 
 static bool
-_sml_variable_set_range(struct sml_variable *variable, float min, float max)
+_sml_variable_set_range(struct sml_engine *engine,
+    struct sml_variable *variable, float min, float max)
 {
     Variable *var = (Variable *)variable;
 
