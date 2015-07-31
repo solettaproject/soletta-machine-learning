@@ -987,12 +987,11 @@ static bool
 _rearrange_fuzzy_terms(struct sml_engine *engine,
     struct sml_variable *variable, float min, float max)
 {
+    struct sml_fuzzy_term *term, *first_term = NULL, *last_term = NULL;
     struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)engine;
     struct sml_fuzzy *fuzzy = fuzzy_engine->fuzzy;
-    struct sml_fuzzy_term *term;
     float width, term_min, term_max, first_min, first_max, last_max, last_min;
     float overlap;
-    struct sml_fuzzy_term *first_term, *last_term;
     uint16_t i, num_terms;
     bool is_id;
 
@@ -1015,12 +1014,12 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
             sml_fuzzy_variable_remove_term((struct sml_object *)engine,
                 variable, term);
         else {
-            if (term_min < first_min) {
+            if (term_min <= first_min) {
                 first_min = term_min;
                 first_max = term_max;
                 first_term = term;
             }
-            if (term_max > last_max) {
+            if (term_max >= last_max) {
                 last_max = term_max;
                 last_min = term_min;
                 last_term = term;
@@ -1028,7 +1027,7 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
         }
     }
 
-    if (min < first_min) {
+    if (first_term && (min < first_min)) {
         if (first_max - min <= width) {
             if (!sml_fuzzy_bridge_variable_term_triangle_update(first_term, min,
                 min, first_max))
@@ -1048,7 +1047,7 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
         }
     }
 
-    if (max > last_max) {
+    if (last_term && (max > last_max)) {
         if (max - last_min <= width) {
             if (!sml_fuzzy_bridge_variable_term_triangle_update(last_term,
                 last_min, max, max))
@@ -1065,6 +1064,9 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
                 return false;
         }
     }
+
+    if (!(first_term || last_term))
+        _create_fuzzy_terms(fuzzy_engine, variable, min, max, true, true);
 
     return true;
 }
