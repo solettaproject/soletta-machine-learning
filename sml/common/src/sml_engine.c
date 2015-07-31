@@ -170,7 +170,7 @@ sml_process(struct sml_object *sml)
     if (!engine->process) {
         sml_critical("Unexpected error. Implementation of function "
             "sml_process is mandatory for engines.");
-        return false;
+        return -EINVAL;
     }
     return engine->process(engine);
 }

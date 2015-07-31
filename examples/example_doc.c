@@ -145,7 +145,7 @@ main(int argc, char *argv[])
     sml_set_output_state_changed_callback(sml, output_state_changed_cb, NULL);
 
     for (int i = 0; i < 150; i++) {
-        if (!sml_process(sml)) {
+        if (sml_process(sml) < 0) {
             printf("Failed to process\n");
         }
     }
