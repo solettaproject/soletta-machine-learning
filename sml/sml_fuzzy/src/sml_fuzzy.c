@@ -657,40 +657,63 @@ _sml_process(struct sml_engine *engine)
 
     if (!sml_observation_controller_update_cache_size(
         fuzzy_engine->observation_controller,
-        fuzzy_engine->engine.obs_max_size))
+        fuzzy_engine->engine.obs_max_size)) {
+        sml_error("Failed to update observation cache size.");
         return -ENOMEM;
+    }
 
-    if ((error = _handle_removals(fuzzy_engine)))
+    if ((error = _handle_removals(fuzzy_engine))) {
+        sml_error("Failed to remove variables or terms.");
         return error;
+    }
 
-    if (fuzzy_engine->variable_terms_auto_balance &&
-        ((error = _initialize_terms_list(fuzzy_engine->fuzzy,
-            fuzzy_engine->fuzzy->input_list)) ||
-        (error = _initialize_terms_list(fuzzy_engine->fuzzy,
-            fuzzy_engine->fuzzy->output_list))))
-        return error;
+    if (fuzzy_engine->variable_terms_auto_balance) {
+        error = _initialize_terms_list(fuzzy_engine->fuzzy,
+            fuzzy_engine->fuzzy->input_list);
+        if (error) {
+            sml_error("Failed to initialize input list.");
+            return error;
+        }
 
-    if ((error = _read_variables(fuzzy_engine)))
-        return error;
+        error = _initialize_terms_list(fuzzy_engine->fuzzy,
+            fuzzy_engine->fuzzy->output_list);
+        if (error) {
+            sml_error("Failed to initialize output list.");
+            return error;
+        }
+    }
 
-    if ((error = _pre_process(fuzzy_engine, &should_act, &should_learn)))
+    if ((error = _read_variables(fuzzy_engine))) {
+        sml_error("Failed to read variables.");
         return error;
+    }
 
-    if (should_act && (error = _act(fuzzy_engine, &should_learn)))
+    if ((error = _pre_process(fuzzy_engine, &should_act, &should_learn))) {
+        sml_error("Failed to pre process.");
         return error;
+    }
+
+    if (should_act && (error = _act(fuzzy_engine, &should_learn))) {
+        sml_error("Failed to process output.");
+        return error;
+    }
 
     if (should_learn && !fuzzy_engine->engine.learn_disabled &&
         (error = sml_observation_controller_observation_hit(
             fuzzy_engine->observation_controller,
-            fuzzy_engine->last_stable_measure)))
+            fuzzy_engine->last_stable_measure))) {
+        sml_error("Failed to log observation.");
         return error;
+    }
 
     if (fuzzy_engine->variable_terms_auto_balance &&
         (error = sml_terms_manager_hit(&fuzzy_engine->terms_manager,
             fuzzy_engine->fuzzy,
             fuzzy_engine->observation_controller,
-            fuzzy_engine->last_stable_measure)))
+            fuzzy_engine->last_stable_measure))) {
+        sml_error("Failed to auto balance.");
         return error;
+    }
 
     return 0;
 }
