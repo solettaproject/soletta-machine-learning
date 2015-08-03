@@ -20,14 +20,22 @@
   {
    "name": "Led1",
    "options": {
-    "rgb": "255|0|0"
+    "rgb": {
+     "red": 255,
+     "green": 0,
+     "blue": 0
+    }
    },
    "type": "gtk/led"
   },
   {
    "name": "Led2",
    "options": {
-    "rgb": "255|255|0"
+    "rgb": {
+     "red": 255,
+     "green": 255,
+     "blue": 0
+    }
    },
    "type": "gtk/led"
   },
