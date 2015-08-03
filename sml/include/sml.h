@@ -440,7 +440,7 @@ struct sml_variables_list *sml_get_output_list(struct sml_object *sml);
  *
  * @param sml The ::sml_object object.
  * @param name The variable name. If lenght is greater
- * than @ref SML_MAX_VARIABLE_LEN variable creation will fail.
+ * than ::SML_VARIABLE_NAME_MAX_LEN variable creation will fail.
  * @return ::sml_variable on success.
  * @return @c NULL on failure.
  */
@@ -454,7 +454,7 @@ struct sml_variable *sml_new_input(struct sml_object *sml, const char *name);
  *
  * @param sml The ::sml_object object.
  * @param name The variable name. If lenght is greater
- * than @ref SML_MAX_VARIABLE_LEN variable creation will fail.
+ * than ::SML_VARIABLE_NAME_MAX_LEN variable creation will fail.
  * @return ::sml_variable on success.
  * @return @c NULL on failure.
  */
@@ -507,7 +507,7 @@ float sml_variable_get_value(struct sml_object *sml, struct sml_variable *sml_va
  * @param sml The ::sml_object object.
  * @param sml_variable The ::sml_variable.
  * @param var_name Pointer to memory where name should be copied.
- * @param var_name_size Size of memory pointed by @ref var_name.
+ * @param var_name_size Size of memory pointed by var_name.
  * @return @c 0 on success or error value.
  */
 int sml_variable_get_name(struct sml_object *sml, struct sml_variable *sml_variable, char *var_name, size_t var_name_size);
