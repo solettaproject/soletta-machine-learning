@@ -123,7 +123,7 @@ struct sml_object *sml_ann_new(void);
 bool sml_is_ann(struct sml_object *sml);
 
 /**
- * @brief Check if SML was built with neural networks support support.
+ * @brief Check if SML was built with neural networks support.
  *
  * @return @c true If it has neural network support.
  * @return @c false If it is has not neural network support.
@@ -147,7 +147,7 @@ bool sml_ann_set_training_algorithm(struct sml_object *sml, enum sml_ann_trainin
  *
  * Activation functions resides inside the neurons and they are responsible for producing the
  * neuron output value. As choosing the correct activation functions may required a
- * lot of trail and error tests, the SML uses an algorithm that tries to suit the best
+ * lot of trial and error tests, the SML uses an algorithm that tries to suit the best
  * activiation functions for a given problem.
  *
  * @remark By default all ::sml_ann_activation_function are used as candidates.
