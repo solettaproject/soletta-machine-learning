@@ -235,6 +235,10 @@ bool sml_ann_set_desired_error(struct sml_object *sml, float desired_error);
 /**
  * @brief Set the maximum number of neural networks in the cache.
  *
+ * This cache is used to store the neural networks that will be used to predict
+ * output values. Setting this limit is only necessary if one sets pseudorehearsal
+ * strategy to @c false, otherwise it's ignored.
+ *
  * @remark The default cache size is 30.
  * @remark 0 means "infinite" cache size.
  *
@@ -242,6 +246,8 @@ bool sml_ann_set_desired_error(struct sml_object *sml, float desired_error);
  * @param max_size The max cache size
  * @return @c true on success.
  * @return @c false on failure.
+ *
+ * @see ::sml_ann_use_pseudorehearsal_strategy
  */
 bool sml_ann_set_cache_max_size(struct sml_object *sml, unsigned int max_size);
 
