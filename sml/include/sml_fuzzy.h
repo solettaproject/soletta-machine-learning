@@ -53,12 +53,11 @@ extern "C" {
 
 /**
  * @enum sml_fuzzy_snorm
- * @brief SNorm rules are also known as disjuction.
+ * @brief SNorm rules are also known as accumulation.
  *
- * @see ::sml_fuzzy_disjunction_set
+ * @see ::sml_fuzzy_output_set_accumulation
  */
 enum sml_fuzzy_snorm {
-    SML_FUZZY_SNORM_NONE,     /**< No SNorm rule will be applied */
     SML_FUZZY_SNORM_ALGEBRAIC_SUM,     /**< A or B ->  A+B - (A*B)*/
     SML_FUZZY_SNORM_BOUNDED_SUM,     /**< A or B -> min(A+B,1) */
     SML_FUZZY_SNORM_DRASTIC_SUM,     /**< A or B -> if A=0 then B else if B=0 then A else 0 */
@@ -76,7 +75,6 @@ enum sml_fuzzy_snorm {
  * @see ::sml_fuzzy_conjunction_set
  */
 enum sml_fuzzy_tnorm {
-    SML_FUZZY_TNORM_NONE,     /**< No TNorm rule will be applied */
     SML_FUZZY_TNORM_ALGEBRAIC_PRODUCT,     /**< A and B -> A*B */
     SML_FUZZY_TNORM_BOUNDED_DIFFERENCE,     /**< A and B -> max(A+B-1, 0)*/
     SML_FUZZY_TNORM_DRASTIC_PRODUCT,     /**< A and B -> if A=1 then B else if B=1 then A else 0*/
@@ -156,7 +154,7 @@ bool sml_fuzzy_supported(void);
  * The conjuction rule is equivalent to the boolean and operation.
  * Example:
  * If the fuzzy engie encounters the following expression in a fuzzy rule, "... A and B ...".
- * Given that A is 0.6 and B is 0.8 and the disjuction operator is ::SML_FUZZY_TNORM_MINIMUM,
+ * Given that A is 0.6 and B is 0.8 and the conjunction operator is ::SML_FUZZY_TNORM_MINIMUM,
  * the result of the operation will be 0.6
  *
  * @remark The default value is ::SML_FUZZY_TNORM_MINIMUM
@@ -170,27 +168,6 @@ bool sml_fuzzy_supported(void);
  * @see ::sml_fuzzy_tnorm
  */
 bool sml_fuzzy_conjunction_set(struct sml_object *sml, enum sml_fuzzy_tnorm norm);
-
-/**
- * @brief Set the disjuction fuzzy rule.
- *
- * The disjunction rule is equivalent to the boolean or operation.
- * Example:
- * If the fuzzy engie encounters the following expression in a fuzzy rule, "... A or B ...".
- * Given that A is 0.6 and B is 0.8 and the disjuction operator is ::SML_FUZZY_SNORM_MAXIMUM,
- * the result of the operation will be 0.8
- *
- * @remark The default value is ::SML_FUZZY_SNORM_MAXIMUM
- *
- * @param sml The ::sml_object object.
- * @param norm The desired ::sml_fuzzy_snorm.
- *
- * @return @c true on success.
- * @return @c false on failure.
- *
- * @see ::sml_fuzzy_snorm
- */
-bool sml_fuzzy_disjunction_set(struct sml_object *sml, enum sml_fuzzy_snorm norm);
 
 /**
  * @brief Rules below a given value will be ignored.

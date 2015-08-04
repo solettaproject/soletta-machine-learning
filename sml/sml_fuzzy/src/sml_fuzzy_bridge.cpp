@@ -110,7 +110,6 @@ static bool
 _create_rule_block(fl::Engine *engine)
 {
     fl::RuleBlock *rule_block;
-    fl::SNorm *snorm;
     fl::TNorm *tnorm;
     fl::TNorm *activation;
 
@@ -126,10 +125,6 @@ _create_rule_block(fl::Engine *engine)
     if (!tnorm)
         goto err_tnorm;
 
-    snorm = new (std::nothrow) fl::Maximum();
-    if (!snorm)
-        goto err_snorm;
-
     activation = new (std::nothrow) fl::Minimum();
     if (!activation)
         goto err_activation;
@@ -137,15 +132,12 @@ _create_rule_block(fl::Engine *engine)
     rule_block->setEnabled(true);
     rule_block->setName("");
     rule_block->setConjunction(tnorm);
-    rule_block->setDisjunction(snorm);
     rule_block->setActivation(activation);
 
     engine->addRuleBlock(rule_block);
     return true;
 
 err_activation:
-    delete snorm;
-err_snorm:
     delete tnorm;
 err_tnorm:
     delete rule_block;
@@ -211,7 +203,6 @@ sml_fuzzy_save_file(struct sml_fuzzy *fuzzy, const char *filename)
 
     new_block->setActivation(block->getActivation()->clone());
     new_block->setConjunction(block->getConjunction()->clone());
-    new_block->setDisjunction(block->getDisjunction()->clone());
     engine->addRuleBlock(new_block);
     fprintf(f, "%s\n", exporter.toString(engine).c_str());
     if (fclose(f))
@@ -360,9 +351,6 @@ _get_tnorm(enum sml_fuzzy_tnorm norm) {
     fl::TNorm *fl_norm;
 
     switch (norm) {
-    case SML_FUZZY_TNORM_NONE:
-        sml_debug("Conjunction set to none");
-        return NULL;
     case SML_FUZZY_TNORM_ALGEBRAIC_PRODUCT:
         sml_debug("Conjunction set to algebraic product");
         fl_norm =  new (std::nothrow) fl::AlgebraicProduct();
@@ -425,9 +413,6 @@ _get_snorm(enum sml_fuzzy_snorm norm)
     fl::SNorm *fl_norm;
 
     switch (norm) {
-    case SML_FUZZY_SNORM_NONE:
-        sml_debug("SNorm is none");
-        return NULL;
     case SML_FUZZY_SNORM_ALGEBRAIC_SUM:
         sml_debug("SNorm is algebraic sum");
         fl_norm = new (std::nothrow) fl::AlgebraicSum();
@@ -469,23 +454,6 @@ _get_snorm(enum sml_fuzzy_snorm norm)
         sml_critical("Could not alloc the snorm");
 
     return fl_norm;
-}
-
-bool
-sml_fuzzy_bridge_disjunction_set(struct sml_fuzzy *fuzzy, enum sml_fuzzy_snorm norm)
-{
-    fl::Engine *engine = (fl::Engine*)fuzzy->engine;
-    fl::SNorm *fl_norm = _get_snorm(norm);
-    if (!fl_norm)
-        return false;
-
-    if (!_create_rule_block(engine)) {
-        sml_critical("Could not alloc the rule block");
-        return false;
-    }
-    engine->getRuleBlock(0)->setDisjunction(fl_norm);
-
-    return true;
 }
 
 uint16_t
