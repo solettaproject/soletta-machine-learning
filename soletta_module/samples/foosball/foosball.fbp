@@ -139,18 +139,18 @@ red_winner OUT -> INC state
 yellow_winner OUT -> STOP time
 red_winner OUT -> STOP time
 
-sml PROCESS_END -> IN game_over(hub/empty)
-game_over OUT -> RESET time
-game_over OUT -> INC state
-game_over OUT -> RESET yellow_goalkeeper
-game_over OUT -> RESET yellow_striker
-game_over OUT -> RESET red_goalkeeper
-game_over OUT -> RESET red_striker
+sml PROCESS_END -> IN game_over(switcher/empty)
+game_over OUT[0] -> RESET time
+game_over OUT[0] -> INC state
+game_over OUT[0] -> RESET yellow_goalkeeper
+game_over OUT[0] -> RESET yellow_striker
+game_over OUT[0] -> RESET red_goalkeeper
+game_over OUT[0] -> RESET red_striker
 
 #prediction
 game_start OUT -> PREDICTION_TRIGGER sml
 predicted_winner_led(Led)
-game_over OUT -> IN _(converter/empty-to-rgb:output_value=0|0|0|255|255|255) OUT -> IN predicted_winner_led
+game_over OUT[0] -> IN _(converter/empty-to-rgb:output_value=0|0|0|255|255|255) OUT -> IN predicted_winner_led
 sml PREDICTED_WINNER1 -> IN pred_yellow_winner (converter/empty-to-rgb:output_value=255|255|0|255|255|255)
 pred_yellow_winner OUT -> IN predicted_winner_led
 sml PREDICTED_WINNER2 -> IN pred_red_winner (converter/empty-to-rgb:output_value=255|0|0|255|255|255)

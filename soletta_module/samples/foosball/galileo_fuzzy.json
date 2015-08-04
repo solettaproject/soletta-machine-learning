@@ -23,7 +23,7 @@
   },
   {
    "name": "ButtonReset",
-   "type": "hub/boolean"
+   "type": "converter/empty-to-boolean"
   },
   {
    "name": "Lcd",

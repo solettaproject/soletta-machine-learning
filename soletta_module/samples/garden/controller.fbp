@@ -31,9 +31,9 @@
 INPORT=acc.IN:IN
 OUTPORT=acc.OUT:OUT
 
-acc(hub/float) OUT -> OUTPUT_VALUE acc_flush
+acc(switcher/float) OUT[0] -> OUTPUT_VALUE acc_flush
 _(constant/float:value=min:0|val:0|max:100|step:1) OUT -> IN acc
-acc OUT -> IN _(converter/float-to-string) OUT -> IN value(Label)
+acc OUT[0] -> IN _(converter/float-to-string) OUT -> IN value(Label)
 sum(float/addition) OUT -> IN _(float/filter:min=0,max=100,range_override=true) OUT -> IN acc
 
 inc(PushButton) OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-float:output_value=val:5|min:0|max:100|step:1) OUT -> OPERAND[0] sum

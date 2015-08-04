@@ -36,8 +36,8 @@ INPORT=striker2.IN:STRIKER2
 INPORT=winner1.IN:WINNER1
 INPORT=winner2.IN:WINNER2
 INPORT=sml.PREDICTION_TRIGGER:PREDICTION_TRIGGER
-OUTPORT=predicted_winner1.OUT:PREDICTED_WINNER1
-OUTPORT=predicted_winner2.OUT:PREDICTED_WINNER2
+OUTPORT=predicted_winner1.OUT[0]:PREDICTED_WINNER1
+OUTPORT=predicted_winner2.OUT[0]:PREDICTED_WINNER2
 OUTPORT=state_end.OUT:PROCESS_END
 
 #state machine
@@ -65,16 +65,16 @@ state_end_eq OUT -> PULSE_IF_TRUE state_end(converter/boolean-to-empty)
 #state machine timer
 timer(timer:interval=100) OUT -> INC sml_state_machine
 sml_state_machine OUT -> IN timer_stop(converter/int-to-boolean:true_range=min:1|max:5) OUT -> ENABLED timer
-winner1 OUT -> IN _(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
-winner2 OUT -> IN _(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
+winner1 OUT[0] -> IN _(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
+winner2 OUT[0] -> IN _(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
 
 #SML Definition
 sml(SML)
 
-goalkeeper1(hub/int)
-striker1(hub/int)
-goalkeeper2(hub/int)
-striker2(hub/int)
+goalkeeper1(switcher/int)
+striker1(switcher/int)
+goalkeeper2(switcher/int)
+striker2(switcher/int)
 
 sml_goalkeeper1(converter/int-to-float) OUT -> IN_ID_VAR sml
 sml_striker1(converter/int-to-float) OUT -> IN_ID_VAR sml
@@ -84,8 +84,8 @@ sml_winner(converter/int-to-float) OUT -> IN tagger(machine-learning/tagger:tag=
 tagger OUT -> OUT_ID_VAR sml
 
 sml OUT -> IN FilterSml(machine-learning/filter:tag=winner)
-FilterSml OUT -> IN _(converter/float-to-empty:range=min:0.5|max:1.5) OUT -> IN predicted_winner1(hub/empty)
-FilterSml OUT -> IN _(converter/float-to-empty:range=min:1.5|max:2) OUT -> IN predicted_winner2(hub/empty)
+FilterSml OUT -> IN _(converter/float-to-empty:range=min:0.5|max:1.5) OUT -> IN predicted_winner1(switcher/empty)
+FilterSml OUT -> IN _(converter/float-to-empty:range=min:1.5|max:2) OUT -> IN predicted_winner2(switcher/empty)
 
 #Phase 1 - start
 state_start_phase1 OUT -> IN phase1_goalkeeper1(converter/empty-to-int)
@@ -94,12 +94,12 @@ state_start_phase1 OUT -> IN phase1_goalkeeper2(converter/empty-to-int)
 state_start_phase1 OUT -> IN phase1_striker2(converter/empty-to-int)
 state_start_phase1 OUT -> IN phase1_winner(converter/empty-to-int)
 
-goalkeeper1 OUT -> OUTPUT_VALUE phase1_goalkeeper1
-striker1 OUT -> OUTPUT_VALUE phase1_striker1
-goalkeeper2 OUT -> OUTPUT_VALUE phase1_goalkeeper2
-striker2 OUT -> OUTPUT_VALUE phase1_striker2
-winner1(hub/empty) OUT -> IN _(converter/empty-to-int:output_value=val:1|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
-winner2(hub/empty) OUT -> IN _(converter/empty-to-int:output_value=val:2|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
+goalkeeper1 OUT[0] -> OUTPUT_VALUE phase1_goalkeeper1
+striker1 OUT[0] -> OUTPUT_VALUE phase1_striker1
+goalkeeper2 OUT[0] -> OUTPUT_VALUE phase1_goalkeeper2
+striker2 OUT[0] -> OUTPUT_VALUE phase1_striker2
+winner1(switcher/empty) OUT[0] -> IN _(converter/empty-to-int:output_value=val:1|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
+winner2(switcher/empty) OUT[0] -> IN _(converter/empty-to-int:output_value=val:2|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
 
 phase1_goalkeeper1 OUT -> IN sml_goalkeeper1
 phase1_striker1 OUT -> IN sml_striker1
@@ -119,12 +119,12 @@ state_start_phase2 OUT -> IN phase2_goalkeeper2(converter/empty-to-int)
 state_start_phase2 OUT -> IN phase2_striker2(converter/empty-to-int)
 state_start_phase2 OUT -> IN phase2_winner(converter/empty-to-int)
 
-goalkeeper1 OUT -> OUTPUT_VALUE phase2_goalkeeper1
-striker1 OUT -> OUTPUT_VALUE phase2_striker1
-goalkeeper2 OUT -> OUTPUT_VALUE phase2_goalkeeper2
-striker2 OUT -> OUTPUT_VALUE phase2_striker2
-winner1 OUT -> IN _(converter/empty-to-int:output_value=val:2|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
-winner2 OUT -> IN _(converter/empty-to-int:output_value=val:1|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
+goalkeeper1 OUT[0] -> OUTPUT_VALUE phase2_goalkeeper1
+striker1 OUT[0] -> OUTPUT_VALUE phase2_striker1
+goalkeeper2 OUT[0] -> OUTPUT_VALUE phase2_goalkeeper2
+striker2 OUT[0] -> OUTPUT_VALUE phase2_striker2
+winner1 OUT[0] -> IN _(converter/empty-to-int:output_value=val:2|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
+winner2 OUT[0] -> IN _(converter/empty-to-int:output_value=val:1|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
 
 phase2_goalkeeper2 OUT -> IN sml_goalkeeper1
 phase2_striker2 OUT -> IN sml_striker1
@@ -140,7 +140,7 @@ state_run_phase2 OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT 
 state_end OUT -> IN _(converter/empty-to-int:output_value=val:0|min:0|max:2|step:1) OUT -> IN sml_winner
 
 #Prediction phase
-goalkeeper1 OUT -> IN sml_goalkeeper1
-striker1 OUT -> IN sml_striker1
-goalkeeper2 OUT -> IN sml_goalkeeper2
-striker2 OUT -> IN sml_striker2
+goalkeeper1 OUT[0] -> IN sml_goalkeeper1
+striker1 OUT[0] -> IN sml_striker1
+goalkeeper2 OUT[0] -> IN sml_goalkeeper2
+striker2 OUT[0] -> IN sml_striker2
