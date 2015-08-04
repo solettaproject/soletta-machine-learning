@@ -794,6 +794,12 @@ sml_fuzzy_set_rule_weight_threshold(struct sml_object *sml,
 {
     if (!sml_is_fuzzy(sml))
         return false;
+
+    if (weight_threshold < 0 || weight_threshold > 1) {
+        sml_warning("Invalid weight_threshold value. weight_threshold should "
+            "be a value between 0 and 1.");
+        return false;
+    }
     struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)sml;
 
     sml_observation_controller_set_weight_threshold(
