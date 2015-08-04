@@ -282,15 +282,15 @@ _create_fuzzy_terms(struct sml_fuzzy_engine *fuzzy_engine,
             term_name_id, 0);
         if (real_min && real_max)
             return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
-                term_name, min, min + (max - min) / 2, max, 1);
+                term_name, min, min + (max - min) / 2, max);
         if (real_min)
             return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
-                term_name, min, min, max + overlap, 1);
+                term_name, min, min, max + overlap);
         if (real_max)
             return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
-                term_name, min - overlap, max, max, 1);
+                term_name, min - overlap, max, max);
         return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
-            term_name, min - overlap, min + (max - min) / 2, max + overlap, 1);
+            term_name, min - overlap, min + (max - min) / 2, max + overlap);
     }
 
     for (i = 0; i < num_terms; i++) {
@@ -299,15 +299,15 @@ _create_fuzzy_terms(struct sml_fuzzy_engine *fuzzy_engine,
         if (real_min && i == 0) {
             last_stop = min + first_width;
             sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var, term_name,
-                min, min, last_stop + overlap, 1);
+                min, min, last_stop + overlap);
         } else if (real_max && i == num_terms - 1)
             sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var, term_name,
-                last_stop - overlap, max, max, 1);
+                last_stop - overlap, max, max);
         else {
             cur = last_stop + width;
             sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var, term_name,
                 last_stop - overlap, last_stop + (cur - last_stop) / 2,
-                cur + overlap, 1);
+                cur + overlap);
             last_stop = cur;
         }
     }
@@ -1077,8 +1077,7 @@ _fuzzy_variable_set_range(struct sml_engine *engine,
 
 API_EXPORT struct sml_fuzzy_term *
 sml_fuzzy_variable_add_term_rectangle(struct sml_object *sml,
-    struct sml_variable *variable, const char *name, float start, float end,
-    float height)
+    struct sml_variable *variable, const char *name, float start, float end)
 {
     ON_NULL_RETURN_VAL(variable, false);
     if (!sml_is_fuzzy(sml))
@@ -1086,13 +1085,13 @@ sml_fuzzy_variable_add_term_rectangle(struct sml_object *sml,
 
     return sml_fuzzy_bridge_variable_add_term_rectangle(
         sml_get_fuzzy((struct sml_engine *)sml),
-        variable, name, start, end, height);
+        variable, name, start, end);
 }
 
 API_EXPORT struct sml_fuzzy_term *
 sml_fuzzy_variable_add_term_triangle(struct sml_object *sml,
     struct sml_variable *variable, const char *name, float vertex_a,
-    float vertex_b, float vertex_c, float height)
+    float vertex_b, float vertex_c)
 {
     ON_NULL_RETURN_VAL(variable, false);
     if (!sml_is_fuzzy(sml))
@@ -1100,13 +1099,12 @@ sml_fuzzy_variable_add_term_triangle(struct sml_object *sml,
 
     return sml_fuzzy_bridge_variable_add_term_triangle(
         sml_get_fuzzy((struct sml_engine *)sml),
-        variable, name, vertex_a, vertex_b, vertex_c, height);
+        variable, name, vertex_a, vertex_b, vertex_c);
 }
 
 API_EXPORT struct sml_fuzzy_term *
 sml_fuzzy_variable_add_term_cosine(struct sml_object *sml,
-    struct sml_variable *variable, const char *name, float center, float width,
-    float height)
+    struct sml_variable *variable, const char *name, float center, float width)
 {
     ON_NULL_RETURN_VAL(variable, false);
     if (!sml_is_fuzzy(sml))
@@ -1114,13 +1112,13 @@ sml_fuzzy_variable_add_term_cosine(struct sml_object *sml,
 
     return sml_fuzzy_bridge_variable_add_term_cosine(
         sml_get_fuzzy((struct sml_engine *)sml),
-        variable, name, center, width, height);
+        variable, name, center, width);
 }
 
 API_EXPORT struct sml_fuzzy_term *
 sml_fuzzy_variable_add_term_gaussian(struct sml_object *sml,
     struct sml_variable *variable, const char *name, float mean,
-    float standard_deviation, float height)
+    float standard_deviation)
 {
     ON_NULL_RETURN_VAL(variable, false);
     if (!sml_is_fuzzy(sml))
@@ -1128,13 +1126,12 @@ sml_fuzzy_variable_add_term_gaussian(struct sml_object *sml,
 
     return sml_fuzzy_bridge_variable_add_term_gaussian(
         sml_get_fuzzy((struct sml_engine *)sml),
-        variable, name, mean, standard_deviation, height);
+        variable, name, mean, standard_deviation);
 }
 
 API_EXPORT struct sml_fuzzy_term *
 sml_fuzzy_variable_add_term_ramp(struct sml_object *sml,
-    struct sml_variable *variable, const char *name, float start, float end,
-    float height)
+    struct sml_variable *variable, const char *name, float start, float end)
 {
     ON_NULL_RETURN_VAL(variable, false);
     if (!sml_is_fuzzy(sml))
@@ -1142,7 +1139,7 @@ sml_fuzzy_variable_add_term_ramp(struct sml_object *sml,
 
     return sml_fuzzy_bridge_variable_add_term_ramp(
         sml_get_fuzzy((struct sml_engine *)sml), variable,
-        name, start, end, height);
+        name, start, end);
 }
 
 static struct sml_variable *

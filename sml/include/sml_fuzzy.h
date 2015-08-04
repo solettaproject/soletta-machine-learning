@@ -348,8 +348,8 @@ bool sml_fuzzy_variable_get_is_id(struct sml_object *sml, struct sml_variable *s
  * @brief Add a rectangle term for a variable.
  *
  * A rectangle term uses a mathematical function defined by its start and end
- * points and its height. For any X value from start to end, the function
- * value will be height. For all other X values, the function value will be
+ * points. For any X value from start to end, the function
+ * value will be 1.0. For all other X values, the function value will be
  * @c zero.
  *
  * @remark The term name can not contain spaces!
@@ -359,21 +359,20 @@ bool sml_fuzzy_variable_get_is_id(struct sml_object *sml, struct sml_variable *s
  * than @ref SML_TERM_NAME_MAX_LEN.
  * @param start The point on the X axis that the term will start.
  * @param end The point on the X axis that the term will end.
- * @param height The term's height, usually 1.0.
  * @return @c ::sml_fuzzy_term on success.
  * @return @c NULL on failure.
  */
-struct sml_fuzzy_term *sml_fuzzy_variable_add_term_rectangle(struct sml_object *sml, struct sml_variable *variable, const char *name, float start, float end, float height);
+struct sml_fuzzy_term *sml_fuzzy_variable_add_term_rectangle(struct sml_object *sml, struct sml_variable *variable, const char *name, float start, float end);
 
 /**
  * @brief Add a tirangle term for a variable.
  *
- * A triangle term uses is a mathematical function defined by 3 vertex (a, b c)
- * and its height. For X coordinates between vertex a and b, function value is
+ * A triangle term uses is a mathematical function defined by 3 vertex (a, b c).
+ * For X coordinates between vertex a and b, function value is
  * obtained by the linear function connecting points (vertex_a; 0) to
- * (vertex_b; height). In vertex_b, function value will be the maximum possible
- * value (height) and from vertex_b to vertex_c, function value is obtained by
- * the linear function connecting opints (vertex_b; height) to (vertex_c; 0).
+ * (vertex_b; 1). In vertex_b, function value will 1.0  and from vertex_b to vertex_c,
+ * function value is obtained by the linear function connecting opints (vertex_b; 1.0)
+ * to (vertex_c; 0).
  * For all other X values, the function value will be @c zero.
  *
  * @remark The term name can not contain spaces!
@@ -384,18 +383,17 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_rectangle(struct sml_object *
  * @param vertex_a The point on the X axis that the term will start.
  * @param vertex_b The point on the X axis that will be the middle of the triangle.
  * @param vertex_c the point on the X axis that the term will end.
- * @param height The term's height, usually 1.0.
  * @return @c ::sml_fuzzy_term on success.
  * @return @c NULL on failure.
  */
-struct sml_fuzzy_term *sml_fuzzy_variable_add_term_triangle(struct sml_object *sml, struct sml_variable *variable, const char *name, float vertex_a, float vertex_b, float vertex_c, float height);
+struct sml_fuzzy_term *sml_fuzzy_variable_add_term_triangle(struct sml_object *sml, struct sml_variable *variable, const char *name, float vertex_a, float vertex_b, float vertex_c);
 
 /**
  * @brief Add a cosine term for a variable.
  *
  * Cosine term value is obtained by the function value from a cosine function
  * centered in X coordinate center and with width defined by width paramenter.
- * The maximum value (height) of the cosine function is in X coordinate center.
+ * The maximum value (1.0) of the cosine function is in X coordinate center.
  *
  * @remark The term name can not contain spaces!
  * @param sml The ::sml_object object.
@@ -404,18 +402,17 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_triangle(struct sml_object *s
  * than @ref SML_TERM_NAME_MAX_LEN.
  * @param center The center of the cosine curve.
  * @param width The width of the cosine curve.
- * @param height The term's height, usually 1.0.
  * @return @c ::sml_fuzzy_term on success.
  * @return @c NULL on failure.
  */
-struct sml_fuzzy_term *sml_fuzzy_variable_add_term_cosine(struct sml_object *sml, struct sml_variable *variable, const char *name, float center, float width, float height);
+struct sml_fuzzy_term *sml_fuzzy_variable_add_term_cosine(struct sml_object *sml, struct sml_variable *variable, const char *name, float center, float width);
 
 /**
  * @brief Add a gaussian term for a variable.
  *
  * Gaussian term value is obtained by the function value from a gaussian
  * function defined by the parametes mean, standard_deviation. The maximum
- * value of the gaussian function is the value of height parameter.
+ * value in Y axis of the gaussian function is 1.0.
  *
  * @remark The term name can not contain spaces!
  * @param sml The ::sml_object object.
@@ -424,28 +421,27 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_cosine(struct sml_object *sml
  * than @ref SML_TERM_NAME_MAX_LEN.
  * @param mean The mean of the gaussian curve.
  * @param standard_deviation The standard deviation of the curve.
- * @param height The term's height, usually 1.0.
  * @return @c ::sml_fuzzy_term on success.
  * @return @c NULL on failure.
  */
-struct sml_fuzzy_term *sml_fuzzy_variable_add_term_gaussian(struct sml_object *sml, struct sml_variable *variable, const char *name, float mean, float standard_deviation, float height);
+struct sml_fuzzy_term *sml_fuzzy_variable_add_term_gaussian(struct sml_object *sml, struct sml_variable *variable, const char *name, float mean, float standard_deviation);
 
 /**
  * @brief Add a ramp term for a variable.
  *
- * A ramp term uses a mathematical function defined by its start and end points
- * and its height. Start parameters is the coordinate in X axis where the ramp
+ * A ramp term uses a mathematical function defined by its start and end points.
+ * Start parameters is the coordinate in X axis where the ramp
  * is in its minimum value (@c zero). End parameter is the coordinate in Y axis
- * where the ramp is in its maximum value (height). If start < end we will have
+ * where the ramp is in its maximum value (1.0). If start < end we will have
  * a positive ramp. If end < start we will have a negative ramp.
  * <BR> For example:
  *
  * @code{.c}
  * //this will create a ramp going up, connecting points (0.3; 0.0) and (0.7; 1.0). In X position 0.3, the ramp value will be 0.0. In X position 0.7, the ramp value will be 1.0
- *   sml_fuzzy_variable_add_term_ramp    (sml, var, "ramp_up", 0.3, 0.7, 1.0);
+ *   sml_fuzzy_variable_add_term_ramp    (sml, var, "ramp_up", 0.3, 0.7);
  *
  * //this will create a ramp going down, connecting points (0.3; 1.0) and (0.7; 0.0). In X position 0.3, the ramp value will be 1.0. In X position 0.7, the ramp value will be 0.0
- * sml_fuzzy_variable_add_term_ramp  (sml, var, "ramp_up", 0.7, 0.3, 1.0);
+ * sml_fuzzy_variable_add_term_ramp  (sml, var, "ramp_up", 0.7, 0.3);
  * @endcode
  *
  * @remark The term name can not contain spaces!
@@ -455,11 +451,10 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_gaussian(struct sml_object *s
  * than @ref SML_TERM_NAME_MAX_LEN.
  * @param start The start of the ramp on the X axis.
  * @param end The end of the ramp on the X axis.
- * @param height The term's maximum value, usually 1.0.
  * @return @c ::sml_fuzzy_term on success.
  * @return @c NULL on failure.
  */
-struct sml_fuzzy_term *sml_fuzzy_variable_add_term_ramp(struct sml_object *sml, struct sml_variable *variable, const char *name, float start, float end, float height);
+struct sml_fuzzy_term *sml_fuzzy_variable_add_term_ramp(struct sml_object *sml, struct sml_variable *variable, const char *name, float start, float end);
 
 /**
  * @brief Set terms autobalance

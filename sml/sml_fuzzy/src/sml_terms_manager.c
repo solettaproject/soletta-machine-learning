@@ -58,13 +58,13 @@ _create_term(struct sml_fuzzy *fuzzy, struct sml_variable *var,
 
     if (fabs(var_min - min) < FLOAT_THREASHOLD)
         return sml_fuzzy_variable_add_term_ramp((struct sml_object *)fuzzy,
-            var, name, min, max, 1);
+            var, name, min, max);
     if (fabs(var_max - max) < FLOAT_THREASHOLD)
         return sml_fuzzy_variable_add_term_ramp((struct sml_object *)fuzzy,
-            var, name, max, min, 1);
+            var, name, max, min);
 
     return sml_fuzzy_variable_add_term_triangle((struct sml_object *)fuzzy,
-        var, name, min, min + (max - min) / 2, max, 1);
+        var, name, min, min + (max - min) / 2, max);
 }
 
 static bool
@@ -367,19 +367,19 @@ sml_terms_manager_initialize_variable(struct sml_fuzzy *fuzzy,
 
     snprintf(buf, TERM_LEN, TERM_PREFIX, var_name, 0);
     if (!sml_fuzzy_variable_add_term_ramp((struct sml_object *)fuzzy,
-        var, buf, min, min + step + overlap, 1))
+        var, buf, min, min + step + overlap))
         return SML_INTERNAL_ERROR;
 
     for (i = 1; i < START_TERMS_COUNT - 1; i++) {
         snprintf(buf, TERM_LEN, TERM_PREFIX, var_name, i);
         if (!sml_fuzzy_variable_add_term_triangle((struct sml_object *)fuzzy,
             var, buf, min + step * i - overlap, min + step / 2,
-            min + step * (i + 1) + overlap, 1))
+            min + step * (i + 1) + overlap))
             return SML_INTERNAL_ERROR;
     }
     snprintf(buf, TERM_LEN, TERM_PREFIX, var_name, START_TERMS_COUNT - 1);
     if (!sml_fuzzy_variable_add_term_ramp((struct sml_object *)fuzzy,
-        var, buf, max, max - step - overlap, 1))
+        var, buf, max, max - step - overlap))
         return SML_INTERNAL_ERROR;
 
     return 0;
