@@ -360,9 +360,6 @@ _get_tnorm(enum sml_fuzzy_tnorm norm) {
     fl::TNorm *fl_norm;
 
     switch (norm) {
-    case SML_FUZZY_TNORM_NONE:
-        sml_debug("Conjunction set to none");
-        return NULL;
     case SML_FUZZY_TNORM_ALGEBRAIC_PRODUCT:
         sml_debug("Conjunction set to algebraic product");
         fl_norm =  new (std::nothrow) fl::AlgebraicProduct();
@@ -425,9 +422,6 @@ _get_snorm(enum sml_fuzzy_snorm norm)
     fl::SNorm *fl_norm;
 
     switch (norm) {
-    case SML_FUZZY_SNORM_NONE:
-        sml_debug("SNorm is none");
-        return NULL;
     case SML_FUZZY_SNORM_ALGEBRAIC_SUM:
         sml_debug("SNorm is algebraic sum");
         fl_norm = new (std::nothrow) fl::AlgebraicSum();
