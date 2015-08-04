@@ -112,7 +112,7 @@ _process_timeout(gpointer data)
 {
     struct sml_object *sml = data;
 
-    if (sml_process(sml)) {
+    if (sml_process(sml) < 0) {
         sml_critical("Failed to process, removing timer");
         return G_SOURCE_REMOVE;
     }

@@ -45,7 +45,8 @@ extern "C" {
  * The SML may use a modified fuzzy engine to predict values. The main difference
  * from a normal fuzzy engine, is that the SML engine will create the fuzzy rules by
  * itself.
- * A good start to know more about fuzzy logic is visiting https://en.wikipedia.org/wiki/Fuzzy_logic
+ * A good start to know more about fuzzy logic is visiting
+ * https://github.com/solettaproject/soletta/wiki/Soletta-Machine-Learning#fuzzy-logic
  * @{
  */
 
@@ -172,8 +173,18 @@ bool sml_fuzzy_conjunction_set(struct sml_object *sml, enum sml_fuzzy_tnorm norm
 /**
  * @brief Rules below a given value will be ignored.
  *
- * Fuzzy rules may have weights associated with it, bigger weights
- * means bigger the relevance.
+ * Fuzzy rules created by fuzzy engine have weights associated with it, bigger
+ * weights means bigger relevance. The range of weight value is from
+ * @c zero (no relevance) to @c 1 (very relevant).
+ *
+ * Weight threshold property is used to select if rules with low relevance are
+ * going to be used in output predictions. If weight_threshold is a value close
+ * to @c zero, even low relevance rules are going to be used. If
+ * weight_threshold is close to @c 1, only very relevant rules are going to be
+ * used.
+ *
+ * Values greater than @c 1 or lower than @c 0 are not accepted and rules with
+ * weight @c zero are always ignored.
  *
  * @remark The default weight treshold is 0.05
  *
@@ -210,7 +221,14 @@ bool sml_fuzzy_output_set_defuzzifier(struct sml_object *sml, struct sml_variabl
 /**
  * @brief Set the output accumulation
  *
- * @remarks The default accumulation is ::SML_FUZZY_SNORM_MAXIMUM
+ * The output accumulation rule is the strategy that will be used by fuzzy
+ * lib to select the final result output value using the output values
+ * calculated for each fuzzy rule.
+ *
+ * Example:
+ * If the output value for variable A is 0.6 for Rule 1, the output value for
+ * variable A is 0.4 for Rule 2 and the selected accumulator is
+ * ::SML_FUZZY_SNORM_MAXIMUM, then the final output value will be 0.6
  *
  * @param sml The ::sml_object object.
  * @param sml_variable The ::sml_variable.
