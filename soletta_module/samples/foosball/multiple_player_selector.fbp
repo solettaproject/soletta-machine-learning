@@ -36,22 +36,22 @@ OUTPORT=player1.OUT:PLAYER1
 OUTPORT=player2.OUT:PLAYER2
 OUTPORT=player3.OUT:PLAYER3
 OUTPORT=player4.OUT:PLAYER4
-OUTPORT=lcd.OUT:LCD
+OUTPORT=lcd.OUT[0]:LCD
 OUTPORT=done.OUT:DONE
 
 #inputs
-reset(hub/empty)
-_(constant/boolean:value=true) OUT -> IN enabled_hub(hub/boolean)
+reset(switcher/empty)
+_(constant/boolean:value=true) OUT -> IN enabled_hub(switcher/boolean)
 btn_hub(boolean/and)
-enabled_hub OUT -> IN[1] btn_hub
+enabled_hub OUT[0] -> IN[1] btn_hub
 next_hub(boolean/and)
-enabled_hub OUT -> IN[1] next_hub
+enabled_hub OUT[0] -> IN[1] next_hub
 next_hub OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player_selection
 
 #reset timer
 timer(timer:interval=10) OUT -> INC player_selection
 timer OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> ENABLED timer
-reset OUT -> IN enable_timer(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
+reset OUT[0] -> IN enable_timer(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
 enable_timer OUT -> IN enabled_hub
 
 #state machine
@@ -61,28 +61,28 @@ player_selection OUT -> IN state_player2(converter/int-to-boolean:true_range=min
 player_selection OUT -> IN state_player3(converter/int-to-boolean:true_range=min:3|max:3)
 player_selection OUT -> IN state_player4(converter/int-to-boolean:true_range=min:4|max:4)
 player_selection OUT -> IN done(converter/int-to-empty:range=min:5|max:5) OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> IN enabled_hub
-reset OUT -> RESET player_selection
+reset OUT[0] -> RESET player_selection
 
 #Player1
-reset OUT -> RESET player1(int/accumulator:setup_value=min:0|max:14)
+reset OUT[0] -> RESET player1(int/accumulator:setup_value=min:0|max:14)
 btn_hub OUT -> IN[0] player1_enabled(boolean/and)
 state_player1 OUT -> IN[1] player1_enabled
 player1_enabled OUT -> IN _(boolean/filter) TRUE -> INC player1
 
 #Player2
-reset OUT -> RESET player2(int/accumulator:setup_value=min:0|max:14)
+reset OUT[0] -> RESET player2(int/accumulator:setup_value=min:0|max:14)
 btn_hub OUT -> IN[0] player2_enabled(boolean/and)
 state_player2 OUT -> IN[1] player2_enabled
 player2_enabled OUT -> IN _(boolean/filter) TRUE -> INC player2
 
 #Player3
-reset OUT -> RESET player3(int/accumulator:setup_value=min:0|max:14)
+reset OUT[0] -> RESET player3(int/accumulator:setup_value=min:0|max:14)
 btn_hub OUT -> IN[0] player3_enabled(boolean/and)
 state_player3 OUT -> IN[1] player3_enabled
 player3_enabled OUT -> IN _(boolean/filter) TRUE -> INC player3
 
 #player4
-reset OUT -> RESET player4(int/accumulator:setup_value=min:0|max:14)
+reset OUT[0] -> RESET player4(int/accumulator:setup_value=min:0|max:14)
 btn_hub OUT -> IN[0] player4_enabled(boolean/and)
 state_player4 OUT -> IN[1] player4_enabled
 player4_enabled OUT -> IN _(boolean/filter) TRUE -> INC player4
@@ -105,7 +105,7 @@ _(constant/string:value="Player 4: ") OUT -> IN[0] lcd4(string/concatenate)
 player4 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd4
 state_player4 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 4: 0") OUT -> IN lcd
 
-lcd1 OUT -> IN lcd(hub/string)
+lcd1 OUT -> IN lcd(switcher/string)
 lcd2 OUT -> IN lcd
 lcd3 OUT -> IN lcd
 lcd4 OUT -> IN lcd
