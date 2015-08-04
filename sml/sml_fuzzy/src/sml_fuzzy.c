@@ -812,16 +812,6 @@ sml_fuzzy_conjunction_set(struct sml_object *sml, enum sml_fuzzy_tnorm norm)
     return sml_fuzzy_bridge_conjunction_set(fuzzy_engine->fuzzy, norm);
 }
 
-API_EXPORT bool
-sml_fuzzy_disjunction_set(struct sml_object *sml, enum sml_fuzzy_snorm norm)
-{
-    if (!sml_is_fuzzy(sml))
-        return false;
-    struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)sml;
-
-    return sml_fuzzy_bridge_disjunction_set(fuzzy_engine->fuzzy, norm);
-}
-
 static void
 _sml_print_debug(struct sml_engine *engine, bool full)
 {
