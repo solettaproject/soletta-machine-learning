@@ -371,7 +371,7 @@ main(int argc, char *argv[])
     sml_set_stabilization_hits(ctx.sml, 0);
 
     printf("Learning...\n");
-    while (!sml_process(ctx.sml));
+    while (sml_process(ctx.sml) == 0);
 
     printf("Testing false positives...\n");
 
@@ -384,7 +384,7 @@ main(int argc, char *argv[])
 
     _engine_initialize(&ctx);
 
-    while (!sml_process(ctx.sml));
+    while (sml_process(ctx.sml) == 0);
 
     printf("Testing false negatives...\n");
     sml_set_output_state_changed_callback(ctx.sml, _output_state_changed_cb_false_negative,
@@ -393,7 +393,7 @@ main(int argc, char *argv[])
     ctx.use_incorrect_output = true;
     _engine_initialize(&ctx);
 
-    while (!sml_process(ctx.sml));
+    while (sml_process(ctx.sml) == 0);
 
     sml_print_debug(ctx.sml, false);
 

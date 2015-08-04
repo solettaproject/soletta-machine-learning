@@ -309,7 +309,7 @@ bool sml_set_learn_disabled(struct sml_object *sml, bool disable);
  *
  * @param sml The ::sml_object object.
  * @return ::0 on success
- * @return other values on failure.
+ * @return A negative value on failure.
  * @see ::sml_set_read_state_callback
  */
 int sml_process(struct sml_object *sml);

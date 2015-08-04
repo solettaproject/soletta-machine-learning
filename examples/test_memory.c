@@ -159,7 +159,7 @@ main(int argc, char *argv[])
         outputs--;
     }
 
-    while (!sml_process(sml)) ;
+    while (sml_process(sml) == 0) ;
     sml_free(sml);
 
     return 0;

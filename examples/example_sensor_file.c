@@ -366,7 +366,7 @@ main(int argc, char *argv[])
     sml_set_read_state_callback(sml, _read_state_cb, &ctx);
     sml_set_output_state_changed_callback(sml, _output_state_changed_cb, &ctx);
     sml_ann_set_initial_required_observations(sml, INITIAL_REQUIRED_OBS);
-    while (!sml_process(sml))
+    while (sml_process(sml) == 0)
         _process_state(sml, &ctx);
 
     _print_results(&ctx, sml);
