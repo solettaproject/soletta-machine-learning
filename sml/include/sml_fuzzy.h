@@ -67,7 +67,7 @@ enum sml_fuzzy_snorm {
     SML_FUZZY_SNORM_MAXIMUM,     /**< A or B -> max(A,B) */
     SML_FUZZY_SNORM_NILPOTENT_MAXIMUM,     /**< A or B -> if A+B < 1 then max(A,B) else 1 */
     SML_FUZZY_SNORM_NORMALIZED_SUM,     /**< A or B ->  A+B/max(1, max(A,B))*/
-};     /**< A fuzzy TNorm type. */
+};     /**< A fuzzy SNorm type. */
 
 /**
  * @enum sml_fuzzy_tnorm
