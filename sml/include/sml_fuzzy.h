@@ -58,7 +58,6 @@ extern "C" {
  * @see ::sml_fuzzy_disjunction_set
  */
 enum sml_fuzzy_snorm {
-    SML_FUZZY_SNORM_NONE,     /**< No SNorm rule will be applied */
     SML_FUZZY_SNORM_ALGEBRAIC_SUM,     /**< A or B ->  A+B - (A*B)*/
     SML_FUZZY_SNORM_BOUNDED_SUM,     /**< A or B -> min(A+B,1) */
     SML_FUZZY_SNORM_DRASTIC_SUM,     /**< A or B -> if A=0 then B else if B=0 then A else 0 */
@@ -76,7 +75,6 @@ enum sml_fuzzy_snorm {
  * @see ::sml_fuzzy_conjunction_set
  */
 enum sml_fuzzy_tnorm {
-    SML_FUZZY_TNORM_NONE,     /**< No TNorm rule will be applied */
     SML_FUZZY_TNORM_ALGEBRAIC_PRODUCT,     /**< A and B -> A*B */
     SML_FUZZY_TNORM_BOUNDED_DIFFERENCE,     /**< A and B -> max(A+B-1, 0)*/
     SML_FUZZY_TNORM_DRASTIC_PRODUCT,     /**< A and B -> if A=1 then B else if B=1 then A else 0*/
