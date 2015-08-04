@@ -76,6 +76,8 @@ _sml_ann_bridge_new(struct fann *ann, bool trained)
     iann->ann = ann;
     iann->trained = trained;
     iann->last_train_error = NAN;
+    if (iann->trained)
+        fann_set_training_algorithm(iann->ann, FANN_TRAIN_INCREMENTAL);
     return iann;
 }
 
@@ -291,7 +293,6 @@ _sml_really_train(struct sml_ann_bridge *iann,
             max_neurons,
             REPORTS_BETWEEN_EPOCHS, desired_train_error);
     } else {
-        fann_set_training_algorithm(iann->ann, FANN_TRAIN_INCREMENTAL);
         fann_train_on_data(iann->ann, train_data, MAX_EPOCHS,
             REPORTS_BETWEEN_EPOCHS, desired_train_error);
     }
@@ -370,10 +371,11 @@ sml_ann_bridge_train(struct sml_ann_bridge *iann,
 
     if (required_observations_suggestion)
         *required_observations_suggestion = required_observations;
-    if (iann->trained)
-        error = _sml_ann_bridge_setup_ci_and_observations(iann, inputs,
-            required_observations,
-            use_pseudorehearsal);
+    if (iann->trained) {
+        error = sml_ann_bridge_consider_trained(iann, inputs,
+                                                required_observations,
+                                                use_pseudorehearsal);
+    }
     return error;
 }
 
@@ -495,6 +497,7 @@ sml_ann_bridge_consider_trained(struct sml_ann_bridge *iann,
     if (error != 0)
         return error;
     iann->trained = true;
+    fann_set_training_algorithm(iann->ann, FANN_TRAIN_INCREMENTAL);
     return 0;
 }
 
