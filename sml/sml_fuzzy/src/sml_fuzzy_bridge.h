@@ -88,11 +88,11 @@ bool sml_fuzzy_bridge_output_set_accumulation(struct sml_variable *variable, enu
 bool sml_fuzzy_bridge_output_set_default_value(struct sml_variable *variable, float default_value);
 
 bool sml_fuzzy_variable_get_range(struct sml_variable *variable, float *min, float *max);
-struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_rectangle(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float start, float end, float height);
-struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_triangle(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float vertex_a, float vertex_b, float vertex_c, float height);
-struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_cosine(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float center, float width, float height);
-struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_gaussian(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float mean, float standard_deviation, float height);
-struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float start, float end, float height);
+struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_rectangle(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float start, float end);
+struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_triangle(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float vertex_a, float vertex_b, float vertex_c);
+struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_cosine(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float center, float width);
+struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_gaussian(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float mean, float standard_deviation);
+struct sml_fuzzy_term *sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy, struct sml_variable *variable, const char *name, float start, float end);
 int sml_fuzzy_bridge_variable_remove_term(struct sml_variable *variable, uint16_t term_num);
 struct sml_fuzzy_term *sml_fuzzy_variable_get_term(struct sml_variable *variable, uint16_t index);
 int sml_fuzzy_term_get_name(struct sml_fuzzy_term *term, char *term_name, size_t term_name_size);

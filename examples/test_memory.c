@@ -85,7 +85,7 @@ _add_terms(struct sml_object *sml, struct sml_variable *var, char *strbuf,
     for (i = 0; i < num_terms; i++) {
         snprintf(strbuf, STRLEN, "term%d.%d", id, i);
         sml_fuzzy_variable_add_term_triangle(sml, var, strbuf, step * i,
-            step * (i + 0.5), step * (i + 1), 1.0);
+            step * (i + 0.5), step * (i + 1));
     }
 }
 

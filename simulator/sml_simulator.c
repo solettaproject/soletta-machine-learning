@@ -949,24 +949,24 @@ add_term(Context *ctx, Variable *var, const char *name, float min, float max)
     if (term_is_discrete(term)) {
         if (fabs(var->min - min) < FLOAT_THRESHOLD)
             sml_fuzzy_variable_add_term_ramp(ctx->sml, var->sml_var, name,
-                min + DISCRETE_THRESHOLD, min, 1);
+                min + DISCRETE_THRESHOLD, min);
         else if (fabs(var->max - min) < FLOAT_THRESHOLD)
             sml_fuzzy_variable_add_term_ramp(ctx->sml, var->sml_var, name,
-                min - DISCRETE_THRESHOLD, min, 1);
+                min - DISCRETE_THRESHOLD, min);
         else
             sml_fuzzy_variable_add_term_triangle(ctx->sml, var->sml_var, name,
                 min - DISCRETE_THRESHOLD, min,
-                min + DISCRETE_THRESHOLD, 1);
+                min + DISCRETE_THRESHOLD);
     } else {
         if (fabs(var->min - min) < FLOAT_THRESHOLD)
             sml_fuzzy_variable_add_term_ramp(ctx->sml, var->sml_var, name, max,
-                min, 1);
+                min);
         else if (fabs(var->max - max) < FLOAT_THRESHOLD)
             sml_fuzzy_variable_add_term_ramp(ctx->sml, var->sml_var, name, min,
-                max, 1);
+                max);
         else
             sml_fuzzy_variable_add_term_triangle(ctx->sml, var->sml_var, name,
-                min, min + (max - min) / 2, max, 1);
+                min, min + (max - min) / 2, max);
     }
 }
 
@@ -1133,33 +1133,32 @@ add_time_day(Context *ctx)
     //create fuzzy terms
     if (ctx->time) {
         snprintf(term_name, sizeof(term_name), "%d",  0);
-        sml_fuzzy_variable_add_term_ramp(ctx->sml, ctx->time, term_name, 1, 0,
-            1);
+        sml_fuzzy_variable_add_term_ramp(ctx->sml, ctx->time, term_name, 1, 0);
         for (i = 1; i < ctx->time_blocks - 1; i++) {
             snprintf(term_name, sizeof(term_name), "%d",  i);
             sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->time,
-                term_name, i - 1, i, i + 1, 1);
+                term_name, i - 1, i, i + 1);
         }
         snprintf(term_name, sizeof(term_name), "%d",  i);
         sml_fuzzy_variable_add_term_ramp(ctx->sml, ctx->time, term_name, i - 1,
-            i, 1);
+            i);
     }
 
     if (ctx->weekday) {
         sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->weekday,
-            "Monday", 0, 0.5, 1, 1);
+            "Monday", 0, 0.5, 1);
         sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->weekday,
-            "Tuesday", 1, 1.5, 2, 1);
+            "Tuesday", 1, 1.5, 2);
         sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->weekday,
-            "Wednesday", 2, 2.5, 3, 1);
+            "Wednesday", 2, 2.5, 3);
         sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->weekday,
-            "Thursday", 3, 3.5, 4, 1);
+            "Thursday", 3, 3.5, 4);
         sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->weekday,
-            "Friday", 4, 4.5, 5, 1);
+            "Friday", 4, 4.5, 5);
         sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->weekday,
-            "Saturday", 5, 5.5, 6, 1);
+            "Saturday", 5, 5.5, 6);
         sml_fuzzy_variable_add_term_triangle(ctx->sml, ctx->weekday,
-            "Sunday", 6, 6.5, 7, 1);
+            "Sunday", 6, 6.5, 7);
     }
 }
 

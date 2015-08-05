@@ -881,7 +881,7 @@ struct sml_fuzzy_term*
 sml_fuzzy_bridge_variable_add_term_rectangle(struct sml_fuzzy *fuzzy,
                                              struct sml_variable *variable,
                                              const char *name, float start,
-                                             float end, float height)
+                                             float end)
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
@@ -889,7 +889,7 @@ sml_fuzzy_bridge_variable_add_term_rectangle(struct sml_fuzzy *fuzzy,
     if (!_check_name(name))
         return NULL;
 
-    term = new (std::nothrow) fl::Rectangle(name, start, end, height);
+    term = new (std::nothrow) fl::Rectangle(name, start, end, 1.0);
 
     if (!term) {
         sml_critical("Failed to create term");
@@ -913,8 +913,7 @@ struct sml_fuzzy_term*
 sml_fuzzy_bridge_variable_add_term_triangle(struct sml_fuzzy *fuzzy,
                                             struct sml_variable *variable,
                                             const char *name, float vertex_a,
-                                            float vertex_b, float vertex_c,
-                                            float height)
+                                            float vertex_b, float vertex_c)
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
@@ -923,7 +922,7 @@ sml_fuzzy_bridge_variable_add_term_triangle(struct sml_fuzzy *fuzzy,
         return NULL;
 
     term = new (std::nothrow) fl::Triangle(name, vertex_a, vertex_b, vertex_c,
-                                          height);
+                                          1.0);
 
     if (!term) {
         sml_critical("Failed to create term");
@@ -947,7 +946,7 @@ struct sml_fuzzy_term*
 sml_fuzzy_bridge_variable_add_term_cosine(struct sml_fuzzy *fuzzy,
                                           struct sml_variable *variable,
                                           const char *name, float center,
-                                          float width, float height)
+                                          float width)
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
@@ -955,7 +954,7 @@ sml_fuzzy_bridge_variable_add_term_cosine(struct sml_fuzzy *fuzzy,
     if (!_check_name(name))
         return NULL;
 
-    term = new (std::nothrow) fl::Cosine(name, center, width, height);
+    term = new (std::nothrow) fl::Cosine(name, center, width, 1.0);
     if (!term) {
         sml_critical("Failed to create term");
         return NULL;
@@ -978,8 +977,7 @@ struct sml_fuzzy_term*
 sml_fuzzy_bridge_variable_add_term_gaussian(struct sml_fuzzy *fuzzy,
                                             struct sml_variable *variable,
                                             const char *name, float mean,
-                                            float standard_deviation,
-                                            float height)
+                                            float standard_deviation)
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
@@ -988,7 +986,7 @@ sml_fuzzy_bridge_variable_add_term_gaussian(struct sml_fuzzy *fuzzy,
         return NULL;
 
     term = new (std::nothrow) fl::Gaussian(name, mean, standard_deviation,
-                                           height);
+                                           1.0);
     if (!term) {
         sml_critical("Failed to create term");
         return NULL;
@@ -1011,7 +1009,7 @@ struct sml_fuzzy_term*
 sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy,
                                         struct sml_variable *variable,
                                         const char *name, float start,
-                                        float end, float height)
+                                        float end)
 {
     fl::Variable *fl_var = (fl::Variable*) variable;
     fl::Term *term;
@@ -1019,7 +1017,7 @@ sml_fuzzy_bridge_variable_add_term_ramp(struct sml_fuzzy *fuzzy,
     if (!_check_name(name))
         return NULL;
 
-    term = new (std::nothrow) fl::Ramp(name, start, end, height);
+    term = new (std::nothrow) fl::Ramp(name, start, end, 1.0);
     if (!term) {
         sml_critical("Failed to create term");
         return NULL;
