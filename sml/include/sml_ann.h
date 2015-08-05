@@ -43,6 +43,77 @@ extern "C" {
  * @brief The SML neural network engine.
  *
  * \anchor Neural_Network_Engine_Introduction
+ *
+ * A neural network consists in a set of neurons that are inter-connected
+ * and distributed in layers, usually three (Input, hidden and output layers).
+ * For every connection between neurons there is a weight associated to it,
+ * these weights are initialized randomly with values beetween -0.2 and 0.2 and
+ * adjusted during the traning phase, so the neural networkt
+ * output predict the right value.
+ *
+ * The neuron is the basic unit of the neural network and it's responsible for
+ * producing an output value based on its inputs, the output is calculated
+ * using the following formula:
+ * <br> <center> \f$ f(\sum_{i=1}^{n} W_i * I_i) = Out (1)\f$ </center>
+ * Where:
+ * <ul>
+ *    <li>\f$i\f$ is the index of the input.
+ *    <li>\f$n\f$ is the number of inputs.
+ *    <li>\f$I_i\f$ is the input value for input i.
+ *    <li>\f$W_i\f$ is the weight value for the input i.
+ *    <li>\f$Out\f$ is the output value.
+ *    <li>\f$f(x)\f$ is the activation function.
+ * </ul>
+ *
+ * The activation function is chosen by the user and it can be any differentiable function,
+ * however most problems can be solved using the Sigmoid function.
+ *
+ * As an example, imagine that one wants to predict if a light should be on/off if Bob and Alice
+ * is present in the room using the following trained neural network.
+ * @image html ann.png
+ *
+ * Consider that Bob is present (input is 1) and Alice (input is 0) is not.
+ *
+ * The first step is to provide the Bob's and Alice's presence to the input nerons,
+ * In a neuron network the input neurons are special, because they do not apply the formula (1) to produce an output.
+ * The output value from a input neuron is the input value itself, so in this case the
+ * N1 and N2 neurons will output 1 and 0 respectively.
+ *
+ * Consider that all neurons are using the sigmoid function defined as:
+ * <br><center>\f$\frac{1}{1 + e^{-x}}\f$</center>
+ *
+ * Using the formula (1) the N3's output will be:
+ * \f{eqnarray*}{
+ *     OutputN3 &=& \frac{1}{1 + e^{-x}}\\
+ *              &=& \frac{1}{1 + e^{-((1 * 3) + (0 * 1.2))}}\\
+ *              &=& 0.95
+ * \f}
+ *
+ * The same thing for N4:
+ * \f{eqnarray*}{
+ *     OutputN4 &=& \frac{1}{1 + e^{-x}}\\
+ *              &=& \frac{1}{1 + e^{-((1 * 3.4) + (0 * 2.5))}}\\
+ *              &=& 0.96
+ * \f}
+ *
+ * Finally the Light state (N5):
+ * \f{eqnarray*}{
+ *     Light state  &=& \frac{1}{1 + e^{-x}}\\
+ *              &=& \frac{1}{1 + e^{-((0.95 * 4) + (0.96 * 5))}}\\
+ *              &=& 0.99
+ * \f}
+ *
+ * The neural network predict that the light state is 0.99, as it's very close to 1 we can consider
+ * that the light should be On.
+ *
+ * @remark The values used in the neural network above
+ * (inputs, outputs, neuron weights) were chosen randomly.
+ *
+ * The example above uses two neurons in the hidden layer, however for some problem, two nerons is not good enough.
+ * There is no silver bullet about how many neurons one should use in the hidden layer, this number is obtained by trial and error.
+ * SML can handle this automatically, during the traning phase SML will automatically choose the neural network topology
+ * (how many neurons the hidden layer must have), it will also decide which is the best activation function.
+ *
  * The SML neural network engine has two methods of operation, these methods try
  * to reduce or eliminate a problem called catastrophic forgetting that affects neural
  * networks.
@@ -131,7 +202,9 @@ bool sml_is_ann(struct sml_object *sml);
 bool sml_ann_supported(void);
 
 /**
- * @brief Set the neural network training algorithm.
+ * @brief Set the neural network trainning algorithm.
+ *
+ * The training algorithm is responsible for adjusting the neural network weights.
  *
  * @remark The default training algorithm is ::SML_ANN_TRAINING_ALGORITHM_QUICKPROP
  *
@@ -221,7 +294,7 @@ bool sml_ann_set_training_epochs(struct sml_object *sml, unsigned int training_e
  * @brief Set the neural network desired error
  *
  * This is used as a shortcut to stop the training phase. If
- * the neural network is equals or below desired_error the train can be stopped.
+ * the neural network error is equals or below desired_error the train will be stopped.
  *
  * @remark The default desired error is 0.001
  *
