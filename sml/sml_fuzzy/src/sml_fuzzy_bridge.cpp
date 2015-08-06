@@ -1359,13 +1359,13 @@ sml_fuzzy_bridge_variable_term_triangle_update(struct sml_fuzzy_term *term,
     if (!triangle)
         return false;
 
-    if (!isnan(vertex_a))
+    if (!std::isnan(vertex_a))
         triangle->setVertexA(vertex_a);
 
-    if (!isnan(vertex_b))
+    if (!std::isnan(vertex_b))
         triangle->setVertexB(vertex_b);
 
-    if (!isnan(vertex_c))
+    if (!std::isnan(vertex_c))
         triangle->setVertexA(vertex_c);
 
     return true;
