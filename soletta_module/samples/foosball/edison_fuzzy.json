@@ -1,0 +1,57 @@
+{
+ "$schema": "http://solettaproject.github.io/soletta/schemas/config.schema",
+ "nodetypes": [
+  {
+   "name": "ButtonMain",
+   "options": {
+    "pin": 129,
+    "active_low": false,
+    "edge_falling": true,
+    "edge_rising": true
+   },
+   "type": "gpio/reader"
+  },
+  {
+   "name": "ButtonNext",
+   "options": {
+    "pin": 12,
+    "active_low": false,
+    "edge_falling": true,
+    "edge_rising": true
+   },
+   "type": "gpio/reader"
+  },
+  {
+   "name": "ButtonReset",
+   "type": "converter/empty-to-boolean"
+  },
+  {
+   "name": "Lcd",
+   "type": "console"
+  },
+  {
+   "name": "Led1",
+   "options": {
+    "pin": 13,
+    "active_low": false
+   },
+   "type": "gpio/writer"
+  },
+  {
+   "name": "Led2",
+   "options": {
+    "pin": 182,
+    "active_low": false
+   },
+   "type": "gpio/writer"
+  },
+  {
+   "name": "SML",
+   "options": {
+    "stabilization_hits": 0,
+    "number_of_terms": 15
+   },
+   "type": "machine-learning/fuzzy"
+  }
+ ]
+}
