@@ -76,24 +76,3 @@ Using only the Fuzzy engine:
 To build docs run:
 
     $ make doc
-
-## Galileo
-
- * Install proper toolchain to build for galileo board.
- * Edit soletta_module/i586-poky-linux-uclibc.cmake and update
-   CMAKE_FIND_ROOT_PATH variable to point the toolchain's sysdir with any
-   necessary dependencies to build sml.
- * Create temporary directory to install sml and its dependencies. It is
-   called in this instruction {TMP_DESTDIR_PATH}
- * To use soletta_module/i586-poky-linux-uclibc.cmake to build fann and
-   fuzzylite and install them to the toolchain's ROOT_PATH. Run:
-
-        $ cmake .. \
-          -DCMAKE_TOOLCHAIN_FILE={PATH_TO_SML}soletta_module/i586-poky-linux-uclibc.cmake \
-          -DCMAKE_INSTALL_PREFIX:PATH=/usr
-        $ make && make install DESTDIR={TMP_DESTDIR_PATH}
-
- * Copy all files in {TMP_DESTDIR_PATH} to toolchain's sysdir.
- * Use same command to build sml and to install it to {TMP_DESTDIR_PATH}
- * Copy all files in {TMP_DESTDIR_PATH} to root of image to be used in galileo
-   board.
