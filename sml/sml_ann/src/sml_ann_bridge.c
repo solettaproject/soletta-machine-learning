@@ -373,8 +373,8 @@ sml_ann_bridge_train(struct sml_ann_bridge *iann,
         *required_observations_suggestion = required_observations;
     if (iann->trained) {
         error = sml_ann_bridge_consider_trained(iann, inputs,
-                                                required_observations,
-                                                use_pseudorehearsal);
+            required_observations,
+            use_pseudorehearsal);
     }
     return error;
 }
