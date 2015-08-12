@@ -1,0 +1,47 @@
+{
+ "$schema": "http://solettaproject.github.io/soletta/schemas/config.schema",
+ "nodetypes": [
+  {
+   "name": "BtnFuzzy",
+   "type": "gpio/reader"
+    "options": {
+        "pin": 12
+        "edge_falling": true,
+        "edge_rising": true
+   }
+  },
+  {
+   "name": "BtnAnn",
+    "type": "gpio/reader"
+    "options": {
+        "pin": 48
+        "edge_falling": true,
+        "edge_rising": true
+   }
+  },
+  {
+   "name": "EngineFuzzy"
+   "type": "gpio/writer"
+   "options": {
+       "pin": 182,
+       "active_low": false
+    }
+  },
+  {
+   "name": "EngineAnn"
+   "type": "gpio/writer"
+   "options": {
+       "pin": 49,
+       "active_low": false
+   }
+  },
+  {
+   "name": "FlowerPowerStatusLed"
+   "type": "gpio/writer"
+   "options": {
+       "pin": 252,
+       "active_low": false
+   }
+  }
+ ]
+}

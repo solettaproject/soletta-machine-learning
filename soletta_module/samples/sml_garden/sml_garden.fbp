@@ -1,0 +1,85 @@
+#!/usr/bin/env sol-fbp-runner
+
+# This file is part of the Soletta Project
+#
+# Copyright (C) 2015 Intel Corporation. All rights reserved.
+#
+# Redistribution and use in source and binary forms, with or without
+# modification, are permitted provided that the following conditions
+# are met:
+#
+#   * Redistributions of source code must retain the above copyright
+#     notice, this list of conditions and the following disclaimer.
+#   * Redistributions in binary form must reproduce the above copyright
+#     notice, this list of conditions and the following disclaimer in
+#     the documentation and/or other materials provided with the
+#     distribution.
+#   * Neither the name of Intel Corporation nor the names of its
+#     contributors may be used to endorse or promote products derived
+#     from this software without specific prior written permission.
+#
+# THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+# "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
+# LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
+# A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
+# OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
+# SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
+# LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+# DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+# THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+# (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+# OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+DECLARE=EngineController:fbp:engine_controller.fbp
+DECLARE=FlowerPowerStatus:fbp:flower_power_status.fbp
+
+SmlFuzzy(machine-learning/fuzzy-sync:stabilization_hits=0)
+SmlAnn(machine-learning/neural-network-sync:stabilization_hits=0, initial_required_observations=5)
+
+Console(console)
+Username(app/argv:index=1)
+Password(app/argv:index=2)
+UpdateInterval(app/argv:index=3)
+LocationIdFuzzy(app/argv:index=4)
+LocationIdAnn(app/argv:index=5)
+AnnDebugFile(app/argv:index=6)
+FuzzyDebugFile(app/argv:index=7)
+
+AnnDebugFile OUT -> DEBUG_FILE SmlAnn
+FuzzyDebugFile OUT -> DEBUG_FILE SmlFuzzy
+
+BtnFuzzy(BtnFuzzy) OUT -> IN EngineFuzzy(EngineFuzzy)
+BtnAnn(BtnAnn) OUT -> IN EngineAnn(EngineAnn)
+
+EngineControllerFuzzy(EngineController)
+EngineControllerAnn(EngineController)
+
+EngineControllerFuzzy OUT -> IN EngineFuzzy
+EngineControllerAnn OUT -> IN EngineAnn
+
+FlowerPowerAPI(flower-power/http-get:client_id="CLIENT_ID", client_secret="CLIENT_SECRET")
+Username OUT -> USERNAME FlowerPowerAPI
+Password OUT -> PASSWORD FlowerPowerAPI
+UpdateInterval OUT -> IN _(converter/string-to-int) OUT -> INTERVAL Timer(timer:interval=0) OUT -> GET FlowerPowerAPI
+
+FlowerPowerAPI ERROR -> ERROR FlowerPowerStatus(FlowerPowerStatus)
+FlowerPowerAPI OUT -> PACKET FlowerPowerStatus
+FlowerPowerStatus LED_STATUS -> IN _(FlowerPowerStatusLed)
+
+BtnFuzzy OUT -> IN _(boolean/filter) TRUE -> GET FlowerPowerAPI
+BtnAnn OUT -> IN _(boolean/filter) TRUE -> GET FlowerPowerAPI
+
+BtnFuzzy OUT -> ENGINE_STATE SmlMessageConstructorFuzzy(sml-garden/message-constructor)
+BtnAnn OUT -> ENGINE_STATE SmlMessageConstructorAnn(sml-garden/message-constructor)
+
+Timeblocks (wallclock/timeblock:interval=1) OUT -> TIMEBLOCK SmlMessageConstructorFuzzy
+Timeblocks OUT -> TIMEBLOCK SmlMessageConstructorAnn
+
+LocationIdFuzzy OUT -> ID FilterFuzzy(flower-power/filter-id)
+LocationIdAnn OUT -> ID FilterAnn(flower-power/filter-id)
+
+FlowerPowerAPI OUT -> IN FilterFuzzy OUT -> FLOWER_POWER_PACKET SmlMessageConstructorFuzzy OUT -> IN SmlFuzzy
+FlowerPowerAPI OUT -> IN FilterAnn OUT -> FLOWER_POWER_PACKET SmlMessageConstructorAnn OUT -> IN SmlAnn
+
+SmlFuzzy OUT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerFuzzy
+SmlAnn OUT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerAnn
