@@ -265,17 +265,16 @@ set_variable(struct machine_learning_data *mdata,
         return;
 
     var->range_changed = false;
+    if (sml_is_fuzzy(mdata->sml)) {
+        width = fmax((var->value.max - var->value.min + 1) /
+            mdata->number_of_terms, var->value.step);
+
+        sml_fuzzy_variable_set_default_term_width(mdata->sml, var->sml_variable,
+            width);
+    }
+
     sml_variable_set_range(mdata->sml, var->sml_variable, var->value.min,
         var->value.max);
-
-    if (!sml_is_fuzzy(mdata->sml))
-        return;
-
-    width = fmax((var->value.max - var->value.min + 1) /
-        mdata->number_of_terms, var->value.step);
-
-    sml_fuzzy_variable_set_default_term_width(mdata->sml, var->sml_variable,
-        width);
 }
 
 static bool
