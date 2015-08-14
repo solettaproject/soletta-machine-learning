@@ -287,7 +287,138 @@
        }
       ],
       "private_data_type": "machine_learning_data",
-      "url": "http://soletta.org/doc/latest/node_types/machine_learning/fuzzy.html"
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/neural_network.html"
+    },
+    {
+      "category": "machine-learning",
+      "description": "Learn output values based on input and output observation. Uses a fuzzy logic algorithm.",
+      "in_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_SML_DATA",
+        "description": "Port to receive SML data packets.",
+        "methods": {
+         "process": "sml_data_process"
+        },
+        "name": "IN"
+       }
+      ],
+      "methods": {
+       "close": "machine_learning_sync_close",
+       "open": "fuzzy_sync_open"
+      },
+      "name": "machine-learning/fuzzy-sync",
+      "options": {
+       "members": [
+        {
+         "data_type": "int",
+         "default": 5,
+         "description": "Amount of reads without input changes to consider input stable. If zero, it's always considered stable.",
+         "name": "stabilization_hits"
+        },
+        {
+         "data_type": "int",
+         "default": 15,
+         "description": "Number of fuzzy terms to be created for each variable.",
+         "name": "number_of_terms"
+        }
+       ],
+       "version": 1
+      },
+      "out_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_SML_OUTPUT_DATA",
+        "description": "Prediction values for output variables.",
+        "name": "OUT"
+       }
+      ],
+      "private_data_type": "machine_learning_sync_data",
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/fuzzy_sync.html"
+    },
+    {
+      "category": "machine-learning",
+      "description": "Learn output values based on input and output observation. Uses neural network algorithm.",
+      "in_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_SML_DATA",
+        "description": "Port to receive SML data packets.",
+        "methods": {
+         "process": "sml_data_process"
+        },
+        "name": "IN"
+       }
+      ],
+      "methods": {
+       "close": "machine_learning_sync_close",
+       "open": "neural_network_sync_open"
+      },
+      "name": "machine-learning/neural-network-sync",
+      "options": {
+       "members": [
+        {
+         "data_type": "int",
+         "default": 5,
+         "description": "Amount of reads without input changes to consider input stable. If zero, it's always considered stable.",
+         "name": "stabilization_hits"
+        },
+        {
+         "data_type": "int",
+         "default": 0,
+         "description": "Amound of initial observations necessary to first neural network training. If zero or negative, the default initial observation value will be used.",
+         "name": "initial_required_observations"
+        },
+        {
+         "data_type": "float",
+         "default": 0.1,
+         "description": "Desired mean squared error. It's the difference between the estimator and what is estimated. The neural network will try to reach this value. Higher values can be reached easily, requiring less time and processing on training phase. Also, it won't try to guess the output if the desired mse wasn't reached.",
+         "name": "mse"
+        },
+        {
+         "data_type": "string",
+         "default": "rprop",
+         "description": "Training algorithm to be used by the neural network. Supported algorithms are: 'rprop' - resilient backpropagation, and 'quickprop' - discrete pseudo-Newton method.",
+         "name": "training_algorithm"
+        },
+        {
+         "data_type": "string",
+         "default": "sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric",
+         "description": "Activation functions that may be used for neural network. It'll try to use all of these functions to get the best one for its observations. Supported activation functions are: sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric. It's possible to set more than one, separeted by space. By default all of them are considered candidates. Reducing this set will reduce processing on training phase.",
+         "name": "activation_functions"
+        }
+       ],
+       "version": 1
+      },
+      "out_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_SML_OUTPUT_DATA",
+        "description": "Prediction values for output variables.",
+        "name": "OUT"
+       }
+      ],
+      "private_data_type": "machine_learning_sync_data",
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/neural_network_sync.html"
+    },
+    {
+      "category": "machine-learning",
+      "description": "Filter output variables.",
+      "in_ports": [
+       {
+        "data_type": "custom:PACKET_TYPE_SML_OUTPUT_DATA",
+        "description": "Output variable value to be filtered.",
+        "methods": {
+         "process": "filter_sync_process"
+        },
+        "name": "IN"
+       }
+      ],
+      "name": "machine-learning/filter-sync",
+      "out_ports": [
+       {
+        "data_type": "float",
+        "description": "Array of output values. Index in array matches output position in sml",
+        "name": "OUT[32]"
+       }
+      ],
+      "url": "http://soletta.org/doc/latest/node_types/machine_learning/filter.html"
     }
   ]
 }
