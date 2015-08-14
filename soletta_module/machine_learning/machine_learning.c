@@ -41,8 +41,13 @@
 
 #include "sml_ann.h"
 #include "sml_fuzzy.h"
+#include "machine_learning_sml_data.h"
 
 #include "machine_learning_gen.h"
+
+/* TODO should we have SML_ACTIVATION_FUNCTION_LAST? */
+#define MAX_FUNCTIONS (SML_ANN_ACTIVATION_FUNCTION_SIN_SYMMETRIC + 1)
+#define AUTOMATIC_TERMS (15)
 
 struct tagged_float_data {
     struct sol_drange value;
@@ -56,7 +61,7 @@ mutex_lock(pthread_mutex_t *lock)
 
     if (error)
         SOL_WRN("Impossible to lock mutex. Error code: %d\n", error);
-    return error;
+    return -error;
 }
 
 static void
@@ -137,16 +142,11 @@ send_tagged_float_packet(struct sol_flow_node *src, uint16_t src_port,
     struct sol_drange *value, const char *tag)
 {
     struct sol_flow_packet *packet;
-    int ret;
 
     packet = packet_new_tagged_float(value, tag);
     SOL_NULL_CHECK(packet, -ENOMEM);
 
-    ret = sol_flow_send_packet(src, src_port, packet);
-    if (ret != 0)
-        sol_flow_packet_del(packet);
-
-    return ret;
+    return sol_flow_send_packet(src, src_port, packet);
 }
 
 struct tagger_data {
@@ -265,17 +265,16 @@ set_variable(struct machine_learning_data *mdata,
         return;
 
     var->range_changed = false;
+    if (sml_is_fuzzy(mdata->sml)) {
+        width = fmax((var->value.max - var->value.min + 1) /
+            mdata->number_of_terms, var->value.step);
+
+        sml_fuzzy_variable_set_default_term_width(mdata->sml, var->sml_variable,
+            width);
+    }
+
     sml_variable_set_range(mdata->sml, var->sml_variable, var->value.min,
         var->value.max);
-
-    if (!sml_is_fuzzy(mdata->sml))
-        return;
-
-    width = fmax((var->value.max - var->value.min + 1) /
-        mdata->number_of_terms, var->value.step);
-
-    sml_fuzzy_variable_set_default_term_width(mdata->sml, var->sml_variable,
-        width);
 }
 
 static bool
@@ -341,14 +340,33 @@ output_state_changed_cb(struct sml_object *sml,
 }
 
 static int
-create_engine(struct machine_learning_data *mdata)
+create_sml_fuzzy(struct sml_object **sml, int32_t stabilization_hits)
+{
+    struct sml_object *sml_fuzzy;
+
+    sml_fuzzy = sml_fuzzy_new();
+    SOL_NULL_CHECK(sml_fuzzy, -ENOMEM);
+
+    if (stabilization_hits < 0) {
+        SOL_WRN("Stabilization hits (%d) must be a positive value. Assuming 0.",
+            stabilization_hits);
+        stabilization_hits = 0;
+    }
+
+    if (!sml_set_stabilization_hits(sml_fuzzy, stabilization_hits)) {
+        SOL_WRN("Failed to set stabilization hits");
+        sml_free(sml_fuzzy);
+        return -EINVAL;
+    }
+
+    *sml = sml_fuzzy;
+    return 0;
+}
+
+static int
+init_machine_learning(struct machine_learning_data *mdata)
 {
     int r;
-
-    if (!mdata->sml) {
-        SOL_WRN("Failed to create sml");
-        return -EBADR;
-    }
 
     if (!sml_set_read_state_callback(mdata->sml, read_state_cb, mdata)) {
         SOL_WRN("Failed to set read callback");
@@ -378,33 +396,18 @@ create_engine(struct machine_learning_data *mdata)
     return 0;
 }
 
-#define AUTOMATIC_TERMS (15)
-
 static int
 machine_learning_fuzzy_open(struct sol_flow_node *node, void *data,
     const struct sol_flow_node_options *options)
 {
     struct machine_learning_data *mdata = data;
     const struct sol_flow_node_type_machine_learning_fuzzy_options *opts;
-    int32_t stabilization_hits;
     int r;
 
     opts = (const struct
         sol_flow_node_type_machine_learning_fuzzy_options *)options;
 
     mdata->node = node;
-
-    mdata->sml = sml_fuzzy_new();
-    r = create_engine(mdata);
-    SOL_INT_CHECK(r, < 0, r);
-
-    if (opts->stabilization_hits.val >= 0)
-        stabilization_hits = opts->stabilization_hits.val;
-    else {
-        SOL_WRN("Stabilization hits (%d) must be a positive value. Assuming 0.",
-            opts->stabilization_hits.val);
-        stabilization_hits = 0;
-    }
 
     if (opts->number_of_terms.val >= 0)
         mdata->number_of_terms = opts->number_of_terms.val;
@@ -414,15 +417,18 @@ machine_learning_fuzzy_open(struct sol_flow_node *node, void *data,
         mdata->number_of_terms = AUTOMATIC_TERMS;
     }
 
-    if (!sml_set_stabilization_hits(mdata->sml, stabilization_hits)) {
-        SOL_WRN("Failed to set stabilization hits");
-        return -EINVAL;
-    }
+    r = create_sml_fuzzy(&mdata->sml, opts->stabilization_hits.val);
+    SOL_INT_CHECK(r, < 0, r);
+
+    r = init_machine_learning(mdata);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
 
     return 0;
-}
 
-#undef AUTOMATIC_TERMS
+err:
+    sml_free(mdata->sml);
+    return r;
+}
 
 static const struct activation_function {
     enum sml_ann_activation_function function;
@@ -499,99 +505,115 @@ parse_functions(const char *options,
     return 0;
 }
 
-/* TODO should we have SML_ACTIVATION_FUNCTION_LAST? */
-#define MAX_FUNCTIONS (SML_ANN_ACTIVATION_FUNCTION_SIN_SYMMETRIC + 1)
+static int
+create_sml_ann(struct sml_object **sml, int32_t stabilization_hits, double mse,
+    int32_t initial_required_observations, const char *training_algorithm,
+    const char *activation_functions)
+{
+    struct sml_object *sml_ann;
+    unsigned int functions_size;
+    int r;
+    enum sml_ann_activation_function functions[MAX_FUNCTIONS];
+    enum sml_ann_training_algorithm algorithm =
+        SML_ANN_TRAINING_ALGORITHM_RPROP;
+
+    sml_ann = sml_ann_new();
+
+    if (stabilization_hits < 0) {
+        SOL_WRN("Stabilization hits (%d) must be a positive value. Assuming 0.",
+            stabilization_hits);
+        stabilization_hits = 0;
+    }
+
+    if (!sml_set_stabilization_hits(sml_ann, stabilization_hits)) {
+        SOL_WRN("Failed to set stabilization hits");
+        goto err;
+    }
+
+    if (initial_required_observations > 0) {
+        if (!sml_ann_set_initial_required_observations(sml_ann,
+            initial_required_observations)) {
+            SOL_WRN("Failed to set initial required observations");
+            goto err;
+        }
+    }
+
+    /* TODO: maybe we should have some kind of enum? */
+    if (!strcmp(training_algorithm, "quickprop"))
+        algorithm = SML_ANN_TRAINING_ALGORITHM_QUICKPROP;
+    else if (strcmp(training_algorithm, "rprop"))
+        SOL_WRN("Training algorithm %s not supported. Using rprop.",
+            training_algorithm);
+    if (!sml_ann_set_training_algorithm(sml_ann, algorithm)) {
+        SOL_WRN("Failed to set training algorithm");
+        goto err;
+    }
+
+    /* TODO: maybe we should have an array of strings option type? */
+    if (!activation_functions) {
+        SOL_WRN("Activation functions is mandatory. Using all candidates");
+        use_default_functions(functions, &functions_size);
+    } else {
+        r = parse_functions(activation_functions, functions, &functions_size);
+        SOL_INT_CHECK_GOTO(r, < 0, err_r);
+
+        if (functions_size == 0)
+            use_default_functions(functions, &functions_size);
+    }
+    if (!sml_ann_set_activation_function_candidates(sml_ann, functions,
+        functions_size)) {
+        SOL_WRN("Failed to set desired error");
+        goto err;
+    }
+
+    if (!isgreater(mse, 0)) {
+        SOL_WRN("Desired mean squared error (%f) must be a positive value."
+            "Assuming 0.1", mse);
+        mse = 0.1;
+    }
+    if (!sml_ann_set_desired_error(sml_ann, mse)) {
+        SOL_WRN("Failed to set desired error");
+        goto err;
+    }
+
+    *sml = sml_ann;
+    return 0;
+
+err:
+    r = -EINVAL;
+err_r:
+    sml_free(sml_ann);
+    return r;
+}
 
 static int
 machine_learning_neural_network_open(struct sol_flow_node *node, void *data,
     const struct sol_flow_node_options *options)
 {
-    double mse;
+    int r;
     struct machine_learning_data *mdata = data;
     const struct sol_flow_node_type_machine_learning_neural_network_options
     *opts;
-    enum sml_ann_activation_function functions[MAX_FUNCTIONS];
-    int r;
-    enum sml_ann_training_algorithm algorithm =
-        SML_ANN_TRAINING_ALGORITHM_RPROP;
-    unsigned int functions_size;
-    int32_t stabilization_hits;
 
     opts = (const struct
         sol_flow_node_type_machine_learning_neural_network_options *)options;
 
     mdata->node = node;
 
-    mdata->sml = sml_ann_new();
-    r = create_engine(mdata);
+    r = create_sml_ann(&mdata->sml, opts->stabilization_hits.val,
+        opts->mse.val, opts->initial_required_observations.val,
+        opts->training_algorithm, opts->activation_functions);
     SOL_INT_CHECK(r, < 0, r);
 
-    if (opts->stabilization_hits.val >= 0)
-        stabilization_hits = opts->stabilization_hits.val;
-    else {
-        SOL_WRN("Stabilization hits (%d) must be a positive value. Assuming 0.",
-            opts->stabilization_hits.val);
-        stabilization_hits = 0;
-    }
-
-    if (!sml_set_stabilization_hits(mdata->sml, stabilization_hits)) {
-        SOL_WRN("Failed to set stabilization hits");
-        return -EINVAL;
-    }
-
-    if (opts->initial_required_observations.val > 0) {
-        if (!sml_ann_set_initial_required_observations(mdata->sml,
-            opts->initial_required_observations.val)) {
-            SOL_WRN("Failed to set initial required observations");
-            return -EINVAL;
-        }
-    }
-
-    /* TODO: maybe we should have some kind of enum? */
-    if (!strcmp(opts->training_algorithm, "quickprop"))
-        algorithm = SML_ANN_TRAINING_ALGORITHM_QUICKPROP;
-    else if (strcmp(opts->training_algorithm, "rprop"))
-        SOL_WRN("Training algorithm %s not supported. Using rprop.",
-            opts->training_algorithm);
-    if (!sml_ann_set_training_algorithm(mdata->sml, algorithm)) {
-        SOL_WRN("Failed to set training algorithm");
-        return -EINVAL;
-    }
-
-    /* TODO: maybe we should have an array of strings option type? */
-    if (!opts->activation_functions) {
-        SOL_WRN("Activation functions is mandatory. Using all candidates");
-        use_default_functions(functions, &functions_size);
-    } else {
-        r = parse_functions(opts->activation_functions, functions,
-            &functions_size);
-        SOL_INT_CHECK(r, < 0, r);
-
-        if (functions_size == 0)
-            use_default_functions(functions, &functions_size);
-    }
-    if (!sml_ann_set_activation_function_candidates(mdata->sml, functions,
-        functions_size)) {
-        SOL_WRN("Failed to set desired error");
-        return -EINVAL;
-    }
-
-    if (isgreater(opts->mse.val, 0))
-        mse = opts->mse.val;
-    else {
-        SOL_WRN("Desired mean squared error (%f) must be a positive value."
-            "Assuming 0.1", opts->mse.val);
-        mse = 0.1;
-    }
-    if (!sml_ann_set_desired_error(mdata->sml, mse)) {
-        SOL_WRN("Failed to set desired error");
-        return -EINVAL;
-    }
+    r = init_machine_learning(mdata);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
 
     return 0;
-}
 
-#undef MAX_FUNCTIONS
+err:
+    sml_free(mdata->sml);
+    return r;
+}
 
 static void
 machine_learning_close(struct sol_flow_node *node, void *data)
@@ -939,5 +961,660 @@ prediction_trigger_process(struct sol_flow_node *node, void *data,
 
     return 0;
 }
+
+static void
+packet_type_sml_data_packet_dispose(
+    const struct sol_flow_packet_type *packet_type, void *mem)
+{
+    struct packet_type_sml_data_packet_data *packet_type_sml_data = mem;
+
+    free(packet_type_sml_data->inputs);
+    free(packet_type_sml_data->outputs);
+}
+
+static int
+packet_type_sml_data_packet_init(const struct sol_flow_packet_type *packet_type,
+    void *mem, const void *input)
+{
+    const struct packet_type_sml_data_packet_data *in = input;
+    struct packet_type_sml_data_packet_data *sml_data = mem;
+    uint16_t i;
+
+    SOL_NULL_CHECK(in->inputs, -EINVAL);
+    SOL_NULL_CHECK(in->outputs, -EINVAL);
+    SOL_NULL_CHECK(in->inputs_len, -EINVAL);
+    SOL_NULL_CHECK(in->outputs_len, -EINVAL);
+
+    sml_data->inputs_len = in->inputs_len;
+    sml_data->outputs_len = in->outputs_len;
+
+    sml_data->inputs = malloc(in->inputs_len *
+        sizeof(struct sol_drange));
+    SOL_NULL_CHECK(sml_data->inputs, -ENOMEM);
+    for (i = 0; i < in->inputs_len; i++)
+        sml_data->inputs[i] = in->inputs[i];
+
+    sml_data->outputs = malloc(in->outputs_len *
+        sizeof(struct sol_drange));
+    SOL_NULL_CHECK_GOTO(sml_data->outputs, err);
+    for (i = 0; i < in->outputs_len; i++)
+        sml_data->outputs[i] = in->outputs[i];
+
+    return 0;
+
+err:
+    free(sml_data->inputs);
+    return -ENOMEM;
+}
+
+#define PACKET_TYPE_SML_DATA_PACKET_TYPE_API_VERSION (1)
+
+static const struct sol_flow_packet_type _PACKET_TYPE_SML_DATA = {
+    .api_version = PACKET_TYPE_SML_DATA_PACKET_TYPE_API_VERSION,
+    .name = "PACKET_TYPE_SML_DATA",
+    .data_size = sizeof(struct packet_type_sml_data_packet_data),
+    .init = packet_type_sml_data_packet_init,
+    .dispose = packet_type_sml_data_packet_dispose,
+};
+SOL_API const struct sol_flow_packet_type *PACKET_TYPE_SML_DATA =
+    &_PACKET_TYPE_SML_DATA;
+
+#undef PACKET_TYPE_SML_DATA_PACKET_TYPE_API_VERSION
+
+SOL_API struct sol_flow_packet *
+sml_data_new_packet(struct packet_type_sml_data_packet_data *sml_data)
+{
+    SOL_NULL_CHECK(sml_data, NULL);
+    return sol_flow_packet_new(PACKET_TYPE_SML_DATA, sml_data);
+}
+
+SOL_API int
+sml_data_get_packet(const struct sol_flow_packet *packet,
+    struct packet_type_sml_data_packet_data *sml_data)
+{
+    SOL_NULL_CHECK(packet, -EINVAL);
+    if (sol_flow_packet_get_type(packet) != PACKET_TYPE_SML_DATA)
+        return -EINVAL;
+
+    return sol_flow_packet_get(packet, sml_data);
+}
+
+SOL_API int
+sml_data_send_packet(struct sol_flow_node *src, uint16_t src_port,
+    struct packet_type_sml_data_packet_data *sml_data)
+{
+    struct sol_flow_packet *packet;
+
+    packet = sml_data_new_packet(sml_data);
+    SOL_NULL_CHECK(packet, -ENOMEM);
+
+    return sol_flow_send_packet(src, src_port, packet);
+}
+
+static void
+packet_type_sml_output_data_packet_dispose(
+    const struct sol_flow_packet_type *packet_type, void *mem)
+{
+    struct packet_type_sml_output_data_packet_data *packet_type_sml_output_data = mem;
+
+    free(packet_type_sml_output_data->outputs);
+}
+
+static int
+packet_type_sml_output_data_packet_init(
+    const struct sol_flow_packet_type *packet_type, void *mem,
+    const void *input)
+{
+    const struct packet_type_sml_output_data_packet_data *in = input;
+    struct packet_type_sml_output_data_packet_data *sml_output_data = mem;
+    uint16_t i;
+
+    SOL_NULL_CHECK(in->outputs, -EINVAL);
+    SOL_NULL_CHECK(in->outputs_len, -EINVAL);
+
+    sml_output_data->outputs_len = in->outputs_len;
+
+    sml_output_data->outputs = malloc(in->outputs_len *
+        sizeof(struct sol_drange));
+    for (i = 0; i < in->outputs_len; i++)
+        sml_output_data->outputs[i] = in->outputs[i];
+
+    return 0;
+}
+
+#define PACKET_TYPE_SML_OUTPUT_DATA_PACKET_TYPE_API_VERSION (1)
+
+static const struct sol_flow_packet_type _PACKET_TYPE_SML_OUTPUT_DATA = {
+    .api_version = PACKET_TYPE_SML_OUTPUT_DATA_PACKET_TYPE_API_VERSION,
+    .name = "PACKET_TYPE_SML_OUTPUT_DATA",
+    .data_size = sizeof(struct packet_type_sml_output_data_packet_data),
+    .init = packet_type_sml_output_data_packet_init,
+    .dispose = packet_type_sml_output_data_packet_dispose,
+};
+SOL_API const struct sol_flow_packet_type *PACKET_TYPE_SML_OUTPUT_DATA =
+    &_PACKET_TYPE_SML_OUTPUT_DATA;
+
+#undef PACKET_TYPE_SML_OUTPUT_DATA_PACKET_TYPE_API_VERSION
+
+SOL_API struct sol_flow_packet *
+sml_output_data_new_packet(
+    struct packet_type_sml_output_data_packet_data *sml_output_data)
+{
+    return sol_flow_packet_new(PACKET_TYPE_SML_OUTPUT_DATA, sml_output_data);
+}
+
+SOL_API int
+sml_output_data_get_packet(const struct sol_flow_packet *packet,
+    struct packet_type_sml_output_data_packet_data *sml_output_data)
+{
+    SOL_NULL_CHECK(packet, -EINVAL);
+    if (sol_flow_packet_get_type(packet) != PACKET_TYPE_SML_OUTPUT_DATA)
+        return -EINVAL;
+
+    return sol_flow_packet_get(packet, sml_output_data);
+}
+
+SOL_API int
+sml_output_data_send_packet(struct sol_flow_node *src, uint16_t src_port,
+    struct packet_type_sml_output_data_packet_data *sml_output_data)
+{
+    struct sol_flow_packet *packet;
+
+    packet = sml_output_data_new_packet(sml_output_data);
+    SOL_NULL_CHECK(packet, -ENOMEM);
+
+    return sol_flow_send_packet(src, src_port, packet);
+}
+
+struct machine_learning_sync_data {
+    //Used only in open method or/and worker thread. No need to lock
+    struct sml_object *sml;
+    uint16_t number_of_terms;
+    struct sol_flow_node *node;
+    struct sml_data_priv *cur_sml_data;
+    double *output_steps;
+    uint16_t output_steps_len;
+
+    //Used by main thread and process thread. Need to be locked
+    struct sol_ptr_vector input_queue;
+    struct sol_ptr_vector output_queue;
+
+    struct sol_worker_thread *worker;
+    pthread_mutex_t queue_lock;
+};
+
+struct sml_data_priv {
+    struct packet_type_sml_data_packet_data base;
+    bool predict;
+};
+
+#define VARIABLE_INPUT_PREFIX "INPUT"
+#define VARIABLE_OUTPUT_PREFIX "OUTPUT"
+
+static int
+machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
+    bool is_output)
+{
+    char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    float max, min, width;
+    struct sml_variable *var;
+    struct sol_drange *val;
+    uint16_t i, len, array_len;
+    struct sml_variables_list *list;
+    struct sol_drange *array;
+    const char *prefix;
+    struct sml_variable *(*new_variable)
+        (struct sml_object *sml, const char *name);
+
+    if (is_output) {
+        list = sml_get_output_list(mdata->sml);
+        array = mdata->cur_sml_data->base.outputs;
+        array_len = mdata->cur_sml_data->base.outputs_len;
+        prefix = VARIABLE_OUTPUT_PREFIX;
+        new_variable = sml_new_output;
+    } else {
+        list = sml_get_input_list(mdata->sml);
+        array = mdata->cur_sml_data->base.inputs;
+        array_len = mdata->cur_sml_data->base.inputs_len;
+        prefix = VARIABLE_INPUT_PREFIX;
+        new_variable = sml_new_input;
+    }
+
+    len = sml_variables_list_get_length(mdata->sml, list);
+    if (is_output) {
+        mdata->output_steps = realloc(mdata->output_steps,
+            sizeof(double) * array_len);
+        SOL_NULL_CHECK(mdata->output_steps, -ENOMEM);
+        mdata->output_steps_len = len;
+    }
+    for (i = 0; i < array_len; i++) {
+        val = &array[i];
+        if (i >= len) {
+            snprintf(var_name, sizeof(var_name), "%s%d", prefix, i);
+            var = new_variable(mdata->sml, var_name);
+        } else
+            var = sml_variables_list_index(mdata->sml, list, i);
+        SOL_NULL_CHECK(var, -EINVAL);
+
+        if (!sml_variable_get_range(mdata->sml, var, &min, &max))
+            return -EINVAL;
+
+        if ((!sol_drange_val_equal(min, val->min)) ||
+            (!sol_drange_val_equal(max, val->max))) {
+            width = fmax((val->max - val->min + 1) /
+                mdata->number_of_terms, val->step);
+
+            if (sml_is_fuzzy(mdata->sml) &&
+                !sml_fuzzy_variable_set_default_term_width(mdata->sml, var,
+                width))
+                return -EINVAL;
+            if (!sml_variable_set_range(mdata->sml, var, val->min, val->max))
+                return -EINVAL;
+        }
+
+        if (is_output)
+            mdata->output_steps[i] = val->step;
+    }
+
+    return 0;
+}
+
+#undef VARIABLE_INPUT_PREFIX
+#undef VARIABLE_OUTPUT_PREFIX
+
+static int
+machine_learning_sync_pre_process(struct machine_learning_sync_data *mdata)
+{
+    int r;
+
+    r  = machine_learning_sync_update_variables(mdata, false);
+    SOL_INT_CHECK(r, < 0, r);
+
+    return machine_learning_sync_update_variables(mdata, true);
+
+}
+
+static bool sync_read_state_cb(struct sml_object *sml, void *data);
+
+static void sync_output_state_changed_cb(struct sml_object *sml, struct sml_variables_list *changed, void *data);
+
+static bool
+machine_learning_sync_worker_thread_iterate(void *data)
+{
+    struct machine_learning_sync_data *mdata = data;
+    struct sml_data_priv *sml_data;
+    int r;
+
+    r = mutex_lock(&mdata->queue_lock);
+    SOL_INT_CHECK(r, < 0, false);
+
+    if (mdata->input_queue.base.len == 0)
+        goto end;
+
+    sml_data = sol_ptr_vector_get(&mdata->input_queue, 0);
+    SOL_NULL_CHECK_GOTO(sml_data, end);
+
+    r = sol_ptr_vector_del(&mdata->input_queue, 0);
+    SOL_INT_CHECK_GOTO(r, < 0, end);
+
+    pthread_mutex_unlock(&mdata->queue_lock);
+
+    mdata->cur_sml_data = sml_data;
+
+    r = machine_learning_sync_pre_process(mdata);
+    SOL_INT_CHECK_GOTO(r, < 0, next);
+
+    if (mdata->cur_sml_data->predict) {
+        sync_read_state_cb(mdata->sml, mdata);
+        if (sml_predict(mdata->sml))
+            sync_output_state_changed_cb(mdata->sml, NULL, mdata);
+        else
+            SOL_WRN("Predict failed.");
+    } else {
+        if (sml_process(mdata->sml) < 0)
+            SOL_WRN("Process failed.");
+    }
+
+next:
+    packet_type_sml_data_packet_dispose(NULL, &sml_data->base);
+    free(sml_data);
+
+    sol_worker_thread_feedback(mdata->worker);
+    return true;
+
+end:
+    pthread_mutex_unlock(&mdata->queue_lock);
+    return false;
+}
+
+static void
+machine_learning_sync_worker_thread_feedback(void *data)
+{
+    int r;
+    uint16_t i;
+    struct packet_type_sml_output_data_packet_data *sml_output_data;
+    struct machine_learning_sync_data *mdata = data;
+
+    r = mutex_lock(&mdata->queue_lock);
+    SOL_INT_CHECK(r, < 0);
+    if (mdata->output_queue.base.len == 0)
+        goto end;
+
+    for (i = 0; i < mdata->output_queue.base.len; i++) {
+        sml_output_data = sol_ptr_vector_get(&mdata->output_queue, i);
+        SOL_NULL_CHECK_GOTO(sml_output_data, end);
+        r = sml_output_data_send_packet(mdata->node,
+            SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__OUT__OUT,
+            sml_output_data);
+        packet_type_sml_output_data_packet_dispose(NULL, sml_output_data);
+        free(sml_output_data);
+    }
+    sol_ptr_vector_clear(&mdata->output_queue);
+
+end:
+    pthread_mutex_unlock(&mdata->queue_lock);
+}
+
+static int machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata);
+
+static void
+machine_learning_sync_worker_thread_finished(void *data)
+{
+    struct machine_learning_sync_data *mdata = data;
+
+    mdata->worker = NULL;
+    machine_learning_sync_worker_thread_feedback(data);
+
+    //No lock needed because worker thread is dead
+    if (mdata->input_queue.base.len > 0)
+        machine_learning_sync_worker_schedule(mdata);
+}
+
+static int
+machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata)
+{
+    struct sol_worker_thread_spec spec = {
+        .api_version = SOL_WORKER_THREAD_SPEC_API_VERSION,
+        .cleanup = NULL,
+        .iterate = machine_learning_sync_worker_thread_iterate,
+        .finished = machine_learning_sync_worker_thread_finished,
+        .feedback = machine_learning_sync_worker_thread_feedback,
+        .data = mdata
+    };
+
+    mdata->worker = sol_worker_thread_new(&spec);
+    SOL_NULL_CHECK(mdata->worker, -errno);
+
+    return 0;
+}
+
+static void
+machine_learning_sync_close(struct sol_flow_node *node, void *data)
+{
+    struct machine_learning_sync_data *mdata = data;
+
+    sml_free(mdata->sml);
+}
+
+static int
+sml_data_priv_create(struct packet_type_sml_data_packet_data *sml_data,
+    struct sml_data_priv **new_sml_data)
+{
+    int r;
+    struct sml_data_priv *new;
+
+    new = malloc(sizeof(struct sml_data_priv));
+    SOL_NULL_CHECK(new, -ENOMEM);
+
+    r = packet_type_sml_data_packet_init(NULL, &new->base, sml_data);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
+
+    *new_sml_data = new;
+    return 0;
+
+err:
+    free(new);
+    return r;
+}
+
+static int
+sml_data_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    int r;
+    struct machine_learning_sync_data *mdata = data;
+    struct packet_type_sml_data_packet_data sml_data;
+    struct sml_data_priv *new_sml_data = NULL;
+
+    r = sml_data_get_packet(packet, &sml_data);
+    SOL_INT_CHECK(r, < 0, r);
+
+    r = sml_data_priv_create(&sml_data, &new_sml_data);
+    SOL_INT_CHECK(r, < 0, r);
+
+    if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__IN__IN)
+        new_sml_data->predict = false;
+    else
+        new_sml_data->predict = true;
+
+    r = mutex_lock(&mdata->queue_lock);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
+
+    r = sol_ptr_vector_append(&mdata->input_queue, new_sml_data);
+    SOL_INT_CHECK_GOTO(r, < 0, err_mutex);
+
+    pthread_mutex_unlock(&mdata->queue_lock);
+
+    if (!mdata->worker)
+        return machine_learning_sync_worker_schedule(mdata);
+    return 0;
+
+err_mutex:
+    pthread_mutex_unlock(&mdata->queue_lock);
+err:
+    free(new_sml_data);
+    return r;
+}
+
+static bool
+sync_fill_variables(struct sml_object *sml, struct sml_variables_list *list,
+    struct sol_drange *array, uint16_t array_len)
+{
+    uint16_t i, len;
+    struct sml_variable *var;
+
+    len = sml_variables_list_get_length(sml, list);
+    for (i = 0; i < len && i < array_len; i++) {
+        var = sml_variables_list_index(sml, list, i);
+        if (isnan(array[i].val))
+            continue;
+        if (!sml_variable_set_value(sml, var, array[i].val))
+            return false;
+    }
+
+    return true;
+}
+
+static bool
+sync_read_state_cb(struct sml_object *sml, void *data)
+{
+    struct machine_learning_sync_data *mdata = data;
+
+    if (!sync_fill_variables(sml, sml_get_input_list(sml),
+        mdata->cur_sml_data->base.inputs, mdata->cur_sml_data->base.inputs_len))
+        return false;
+
+    return sync_fill_variables(sml, sml_get_output_list(sml),
+        mdata->cur_sml_data->base.outputs,
+        mdata->cur_sml_data->base.outputs_len);
+}
+
+static void
+sync_output_state_changed_cb(struct sml_object *sml,
+    struct sml_variables_list *changed, void *data)
+{
+    int r;
+    uint16_t i, len;
+    float min, max;
+    struct sml_variables_list *list;
+    struct sml_variable *var;
+    struct packet_type_sml_output_data_packet_data *sml_output_data;
+    struct machine_learning_sync_data *mdata = data;
+
+    list = sml_get_output_list(sml);
+    len = sml_variables_list_get_length(sml, list);
+
+    sml_output_data =
+        malloc(sizeof(struct packet_type_sml_output_data_packet_data));
+    SOL_NULL_CHECK(sml_output_data);
+    sml_output_data->outputs = malloc(sizeof(struct sol_drange) * len);
+    SOL_NULL_CHECK_GOTO(sml_output_data->outputs, err);
+    sml_output_data->outputs_len = len;
+
+    for (i = 0; i < len; i++) {
+        var = sml_variables_list_index(sml, list, i);
+        SOL_NULL_CHECK_GOTO(var, err);
+        if (!changed || sml_variables_list_contains(sml, changed, var)) {
+            if (!sml_variable_get_range(sml, var, &min, &max))
+                goto err;
+
+            sml_output_data->outputs[i].val = sml_variable_get_value(sml, var);
+            sml_output_data->outputs[i].min = min;
+            sml_output_data->outputs[i].max = max;
+            if (i < mdata->output_steps_len)
+                sml_output_data->outputs[i].step = mdata->output_steps[i];
+            else
+                sml_output_data->outputs[i].step = NAN;
+        } else {
+            sml_output_data->outputs[i].val = NAN;
+            sml_output_data->outputs[i].min = NAN;
+            sml_output_data->outputs[i].max = NAN;
+            sml_output_data->outputs[i].step = NAN;
+        }
+    }
+
+    r = mutex_lock(&mdata->queue_lock);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
+
+    r = sol_ptr_vector_append(&mdata->output_queue, sml_output_data);
+
+    pthread_mutex_unlock(&mdata->queue_lock);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
+    return;
+
+err:
+    free(sml_output_data->outputs);
+    free(sml_output_data);
+}
+
+int
+init_machine_learning_sync(struct machine_learning_sync_data *mdata)
+{
+    int r;
+
+    if (!sml_set_read_state_callback(mdata->sml, sync_read_state_cb, mdata)) {
+        SOL_WRN("Failed to set read callback");
+        return -EINVAL;
+    }
+
+    if (!sml_set_output_state_changed_callback(mdata->sml,
+        sync_output_state_changed_cb, mdata)) {
+        SOL_WRN("Failed to set change state callback");
+        return -EINVAL;
+    }
+
+    sol_ptr_vector_init(&mdata->input_queue);
+    sol_ptr_vector_init(&mdata->output_queue);
+
+    if ((r = pthread_mutex_init(&mdata->queue_lock, NULL))) {
+        SOL_WRN("Failed to initialize pthread mutex lock");
+        return -r;
+    }
+    return 0;
+}
+
+static int
+fuzzy_sync_open(struct sol_flow_node *node, void *data,
+    const struct sol_flow_node_options *options)
+{
+    const struct sol_flow_node_type_machine_learning_fuzzy_options *opts;
+    struct machine_learning_sync_data *mdata = data;
+    int r;
+
+    opts = (const struct
+        sol_flow_node_type_machine_learning_fuzzy_options *)options;
+
+    mdata->node = node;
+    if (opts->number_of_terms.val >= 0)
+        mdata->number_of_terms = opts->number_of_terms.val;
+    else {
+        SOL_WRN("Number of fuzzy terms (%d) must be a positive value. "
+            "Assuming %d.", opts->number_of_terms.val, AUTOMATIC_TERMS);
+        mdata->number_of_terms = AUTOMATIC_TERMS;
+    }
+
+    r = create_sml_fuzzy(&mdata->sml, opts->stabilization_hits.val);
+    SOL_INT_CHECK(r, < 0, r);
+
+    r = init_machine_learning_sync(mdata);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
+
+    return 0;
+
+err:
+    sml_free(mdata->sml);
+    return r;
+}
+
+static int
+neural_network_sync_open(struct sol_flow_node *node, void *data,
+    const struct sol_flow_node_options *options)
+{
+    int r;
+    struct machine_learning_sync_data *mdata = data;
+    const struct sol_flow_node_type_machine_learning_neural_network_options
+    *opts;
+
+    opts = (const struct
+        sol_flow_node_type_machine_learning_neural_network_options *)options;
+
+    mdata->node = node;
+    r = create_sml_ann(&mdata->sml, opts->stabilization_hits.val,
+        opts->mse.val, opts->initial_required_observations.val,
+        opts->training_algorithm, opts->activation_functions);
+    SOL_INT_CHECK(r, < 0, r);
+
+    r = init_machine_learning_sync(mdata);
+    SOL_INT_CHECK_GOTO(r, < 0, err);
+
+    return 0;
+
+err:
+    sml_free(mdata->sml);
+    return r;
+}
+
+static int
+filter_sync_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    int r;
+    uint16_t i, out_port;
+    struct packet_type_sml_output_data_packet_data sml_output_data;
+
+    out_port  = SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FILTER_SYNC__OUT__OUT_0;
+
+    sml_output_data_get_packet(packet, &sml_output_data);
+    for (i = 0; i < sml_output_data.outputs_len; i++) {
+        r = sol_flow_send_drange_packet(node, out_port + i,
+            &sml_output_data.outputs[i]);
+        SOL_INT_CHECK(r, < 0, r);
+    }
+
+    return 0;
+}
+
+#undef MAX_FUNCTIONS
+#undef AUTOMATIC_TERMS
 
 #include "machine_learning_gen.c"
