@@ -56,7 +56,7 @@ mutex_lock(pthread_mutex_t *lock)
 
     if (error)
         SOL_WRN("Impossible to lock mutex. Error code: %d\n", error);
-    return error;
+    return -error;
 }
 
 static void
