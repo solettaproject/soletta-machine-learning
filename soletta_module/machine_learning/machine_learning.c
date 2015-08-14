@@ -137,16 +137,11 @@ send_tagged_float_packet(struct sol_flow_node *src, uint16_t src_port,
     struct sol_drange *value, const char *tag)
 {
     struct sol_flow_packet *packet;
-    int ret;
 
     packet = packet_new_tagged_float(value, tag);
     SOL_NULL_CHECK(packet, -ENOMEM);
 
-    ret = sol_flow_send_packet(src, src_port, packet);
-    if (ret != 0)
-        sol_flow_packet_del(packet);
-
-    return ret;
+    return sol_flow_send_packet(src, src_port, packet);
 }
 
 struct tagger_data {
