@@ -1132,7 +1132,7 @@ struct machine_learning_sync_data {
     struct sml_object *sml;
     uint16_t number_of_terms;
     struct sol_flow_node *node;
-    struct packet_type_sml_data_packet_data *cur_sml_data;
+    struct sml_data_priv *cur_sml_data;
     double *output_steps;
     uint16_t output_steps_len;
 
@@ -1144,12 +1144,17 @@ struct machine_learning_sync_data {
     pthread_mutex_t queue_lock;
 };
 
+struct sml_data_priv {
+    struct packet_type_sml_data_packet_data base;
+    bool predict;
+};
+
 #define VARIABLE_INPUT_PREFIX "INPUT"
 #define VARIABLE_OUTPUT_PREFIX "OUTPUT"
 
 static int
 machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
-    bool is_output)
+    bool output_variable)
 {
     char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
     float max, min, width;
@@ -1162,22 +1167,22 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
     struct sml_variable *(*new_variable)
         (struct sml_object *sml, const char *name);
 
-    if (is_output) {
+    if (output_variable) {
         list = sml_get_output_list(mdata->sml);
-        array = mdata->cur_sml_data->outputs;
-        array_len = mdata->cur_sml_data->outputs_len;
+        array = mdata->cur_sml_data->base.outputs;
+        array_len = mdata->cur_sml_data->base.outputs_len;
         prefix = VARIABLE_OUTPUT_PREFIX;
         new_variable = sml_new_output;
     } else {
         list = sml_get_input_list(mdata->sml);
-        array = mdata->cur_sml_data->inputs;
-        array_len = mdata->cur_sml_data->inputs_len;
+        array = mdata->cur_sml_data->base.inputs;
+        array_len = mdata->cur_sml_data->base.inputs_len;
         prefix = VARIABLE_INPUT_PREFIX;
         new_variable = sml_new_input;
     }
 
     len = sml_variables_list_get_length(mdata->sml, list);
-    if (is_output) {
+    if (output_variable) {
         mdata->output_steps = realloc(mdata->output_steps,
             sizeof(double) * array_len);
         SOL_NULL_CHECK(mdata->output_steps, -ENOMEM);
@@ -1208,7 +1213,7 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
                 return -EINVAL;
         }
 
-        if (is_output)
+        if (output_variable)
             mdata->output_steps[i] = val->step;
     }
 
@@ -1230,11 +1235,15 @@ machine_learning_sync_pre_process(struct machine_learning_sync_data *mdata)
 
 }
 
+static bool sync_read_state_cb(struct sml_object *sml, void *data);
+
+static void sync_output_state_changed_cb(struct sml_object *sml, struct sml_variables_list *changed, void *data);
+
 static bool
 machine_learning_sync_worker_thread_iterate(void *data)
 {
     struct machine_learning_sync_data *mdata = data;
-    struct packet_type_sml_data_packet_data *sml_data;
+    struct sml_data_priv *sml_data;
     int r;
 
     r = mutex_lock(&mdata->queue_lock);
@@ -1253,11 +1262,22 @@ machine_learning_sync_worker_thread_iterate(void *data)
 
     mdata->cur_sml_data = sml_data;
 
-    if (machine_learning_sync_pre_process(mdata) < 0 ||
-        sml_process(mdata->sml) < 0)
-        SOL_WRN("Process failed.");
+    r = machine_learning_sync_pre_process(mdata);
+    SOL_INT_CHECK_GOTO(r, < 0, next);
 
-    packet_type_sml_data_packet_dispose(NULL, sml_data);
+    if (mdata->cur_sml_data->predict) {
+        sync_read_state_cb(mdata->sml, mdata);
+        if (sml_predict(mdata->sml))
+            sync_output_state_changed_cb(mdata->sml, NULL, mdata);
+        else
+            SOL_WRN("Predict failed.");
+    } else {
+        if (sml_process(mdata->sml) < 0)
+            SOL_WRN("Process failed.");
+    }
+
+next:
+    packet_type_sml_data_packet_dispose(NULL, &sml_data->base);
     free(sml_data);
 
     sol_worker_thread_feedback(mdata->worker);
@@ -1338,16 +1358,16 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
 }
 
 static int
-sml_data_clone(struct packet_type_sml_data_packet_data *sml_data,
-    struct packet_type_sml_data_packet_data **new_sml_data)
+sml_data_priv_create(struct packet_type_sml_data_packet_data *sml_data,
+    struct sml_data_priv **new_sml_data)
 {
     int r;
-    struct packet_type_sml_data_packet_data *new;
+    struct sml_data_priv *new;
 
-    new = malloc(sizeof(struct packet_type_sml_data_packet_data));
+    new = malloc(sizeof(struct sml_data_priv));
     SOL_NULL_CHECK(new, -ENOMEM);
 
-    r = packet_type_sml_data_packet_init(NULL, new, sml_data);
+    r = packet_type_sml_data_packet_init(NULL, &new->base, sml_data);
     SOL_INT_CHECK_GOTO(r, < 0, err);
 
     *new_sml_data = new;
@@ -1365,13 +1385,18 @@ sml_data_process(struct sol_flow_node *node, void *data, uint16_t port,
     int r;
     struct machine_learning_sync_data *mdata = data;
     struct packet_type_sml_data_packet_data sml_data;
-    struct packet_type_sml_data_packet_data *new_sml_data = NULL;
+    struct sml_data_priv *new_sml_data = NULL;
 
     r = sml_data_get_packet(packet, &sml_data);
     SOL_INT_CHECK(r, < 0, r);
 
-    r = sml_data_clone(&sml_data, &new_sml_data);
+    r = sml_data_priv_create(&sml_data, &new_sml_data);
     SOL_INT_CHECK(r, < 0, r);
+
+    if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__IN__IN)
+        new_sml_data->predict = false;
+    else
+        new_sml_data->predict = true;
 
     r = mutex_lock(&mdata->queue_lock);
     SOL_INT_CHECK_GOTO(r, < 0, err);
@@ -1415,11 +1440,12 @@ sync_read_state_cb(struct sml_object *sml, void *data)
     struct machine_learning_sync_data *mdata = data;
 
     if (!sync_fill_variables(sml, sml_get_input_list(sml),
-        mdata->cur_sml_data->inputs, mdata->cur_sml_data->inputs_len))
+        mdata->cur_sml_data->base.inputs, mdata->cur_sml_data->base.inputs_len))
         return false;
 
     return sync_fill_variables(sml, sml_get_output_list(sml),
-        mdata->cur_sml_data->outputs, mdata->cur_sml_data->outputs_len);
+        mdata->cur_sml_data->base.outputs,
+        mdata->cur_sml_data->base.outputs_len);
 }
 
 static void
@@ -1447,7 +1473,7 @@ sync_output_state_changed_cb(struct sml_object *sml,
     for (i = 0; i < len; i++) {
         var = sml_variables_list_index(sml, list, i);
         SOL_NULL_CHECK_GOTO(var, err);
-        if (sml_variables_list_contains(sml, changed, var)) {
+        if (!changed || sml_variables_list_contains(sml, changed, var)) {
             if (!sml_variable_get_range(sml, var, &min, &max))
                 goto err;
 

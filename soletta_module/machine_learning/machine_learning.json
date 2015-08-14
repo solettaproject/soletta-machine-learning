@@ -300,6 +300,14 @@
          "process": "sml_data_process"
         },
         "name": "IN"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_SML_DATA",
+        "description": "Port to receive SML data packets to run sml in prediction mode.",
+        "methods": {
+         "process": "sml_data_process"
+        },
+        "name": "IN_PREDICT"
        }
       ],
       "methods": {
@@ -345,6 +353,14 @@
          "process": "sml_data_process"
         },
         "name": "IN"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_SML_DATA",
+        "description": "Port to receive SML data packets to run sml in prediction mode.",
+        "methods": {
+         "process": "sml_data_process"
+        },
+        "name": "IN_PREDICT"
        }
       ],
       "methods": {
