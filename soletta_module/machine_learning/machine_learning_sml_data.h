@@ -9,9 +9,10 @@ extern "C" {
 #endif
 
 struct packet_type_sml_data_packet_data {
-    uint16_t inputs_len, outputs_len;
+    uint16_t inputs_len, outputs_len, output_ids_len, input_ids_len;
     struct sol_drange *inputs;
     struct sol_drange *outputs;
+    bool *output_ids, *input_ids;
 };
 
 struct packet_type_sml_output_data_packet_data {
