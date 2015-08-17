@@ -1135,6 +1135,7 @@ struct machine_learning_sync_data {
     struct sml_data_priv *cur_sml_data;
     double *output_steps;
     uint16_t output_steps_len;
+    FILE *debug_file;
 
     //Used by main thread and process thread. Need to be locked
     struct sol_ptr_vector input_queue;
@@ -1354,6 +1355,8 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
 {
     struct machine_learning_sync_data *mdata = data;
 
+    if (mdata->debug_file)
+        fclose(mdata->debug_file);
     sml_free(mdata->sml);
 }
 
@@ -1417,6 +1420,48 @@ err:
     return r;
 }
 
+static void
+sync_debug_log_list(struct machine_learning_sync_data *mdata,
+    struct sol_drange *array, uint16_t array_len)
+{
+    uint16_t i;
+
+    for (i = 0; i < array_len; i++) {
+        fprintf(mdata->debug_file, " %f %f %f %f", array[i].val, array[i].min,
+            array[i].max, array[i].step);
+        if (i < array_len - 1)
+            fprintf(mdata->debug_file, ";");
+    }
+}
+
+static void
+sync_debug_log_read_state_cb(struct machine_learning_sync_data *mdata)
+{
+    if (!mdata->debug_file)
+        return;
+
+    fprintf(mdata->debug_file, "READ_STATE_CB INPUTS");
+    sync_debug_log_list(mdata, mdata->cur_sml_data->base.inputs,
+        mdata->cur_sml_data->base.inputs_len);
+    fprintf(mdata->debug_file, " OUTPUTS");
+    sync_debug_log_list(mdata, mdata->cur_sml_data->base.outputs,
+        mdata->cur_sml_data->base.outputs_len);
+    fprintf(mdata->debug_file, "\n");
+}
+
+static void
+sync_debug_log_output_state_changed_cb(struct machine_learning_sync_data *mdata,
+    struct packet_type_sml_output_data_packet_data *sml_output_data)
+{
+    if (!mdata->debug_file)
+        return;
+
+    fprintf(mdata->debug_file, "OUTPUT_STATE_CHANGED_CB ");
+    sync_debug_log_list(mdata, sml_output_data->outputs,
+        sml_output_data->outputs_len);
+    fprintf(mdata->debug_file, "\n");
+}
+
 static bool
 sync_fill_variables(struct sml_object *sml, struct sml_variables_list *list,
     struct sol_drange *array, uint16_t array_len)
@@ -1443,9 +1488,13 @@ sync_read_state_cb(struct sml_object *sml, void *data)
         mdata->cur_sml_data->base.inputs, mdata->cur_sml_data->base.inputs_len))
         return false;
 
-    return sync_fill_variables(sml, sml_get_output_list(sml),
+    if (!sync_fill_variables(sml, sml_get_output_list(sml),
         mdata->cur_sml_data->base.outputs,
-        mdata->cur_sml_data->base.outputs_len);
+        mdata->cur_sml_data->base.outputs_len))
+        return false;
+
+    sync_debug_log_read_state_cb(mdata);
+    return true;
 }
 
 static void
@@ -1495,6 +1544,7 @@ sync_output_state_changed_cb(struct sml_object *sml,
     r = mutex_lock(&mdata->queue_lock);
     SOL_INT_CHECK_GOTO(r, < 0, err);
 
+    sync_debug_log_output_state_changed_cb(mdata, sml_output_data);
     r = sol_ptr_vector_append(&mdata->output_queue, sml_output_data);
 
     pthread_mutex_unlock(&mdata->queue_lock);
@@ -1591,6 +1641,35 @@ neural_network_sync_open(struct sol_flow_node *node, void *data,
 err:
     sml_free(mdata->sml);
     return r;
+}
+
+static int
+sml_data_debug_file(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    int r;
+    struct machine_learning_sync_data *mdata = data;
+    const char *str;
+
+    r = sol_flow_packet_get_string(packet, &str);
+    SOL_INT_CHECK(r, < 0, r);
+    SOL_NULL_CHECK(str, -EINVAL);
+
+    if (mdata->debug_file)
+        fclose(mdata->debug_file);
+
+    if (str[0] == 0) {
+        mdata->debug_file = NULL;
+        return 0;
+    }
+
+    mdata->debug_file = fopen(str, "a");
+    fprintf(mdata->debug_file, "#READ_STATE_CB INPUTS val min max step;"
+        " val min max step; val min max step;... OUTPUTS val min max step;"
+        " val min max step; val min max step;...\n");
+    fprintf(mdata->debug_file, "#OUTPUT_STATE_CHANGED_CB val min max step;"
+            " val min max step; val min max step;...\n");
+    return 0;
 }
 
 static int
