@@ -308,6 +308,14 @@
          "process": "sml_data_process"
         },
         "name": "IN_PREDICT"
+       },
+       {
+        "data_type": "string",
+        "description": "File to log sml read data and predicted outputs.",
+        "methods": {
+         "process": "sml_data_debug_file"
+        },
+        "name": "DEBUG_FILE"
        }
       ],
       "methods": {
@@ -361,6 +369,14 @@
          "process": "sml_data_process"
         },
         "name": "IN_PREDICT"
+       },
+       {
+        "data_type": "string",
+        "description": "File to log sml read data and predicted outputs.",
+        "methods": {
+         "process": "sml_data_debug_file"
+        },
+        "name": "DEBUG_FILE"
        }
       ],
       "methods": {
