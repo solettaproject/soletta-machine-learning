@@ -1,0 +1,50 @@
+{
+    "name": "sml-garden",
+    "$schema": "http://solettaproject.github.io/soletta/schemas/node-type-genspec.schema",
+    "meta": {
+        "author": "Intel Corporation",
+        "license": "BSD 3-Clause",
+        "version": "1"
+    },
+    "types": [
+        {
+            "category": "sml-garden",
+            "description": "Tag output variables.",
+            "in_ports" : [
+                {
+                    "data_type": "custom:PACKET_TYPE_FLOWER_POWER",
+                    "description": "Packet with measures (sunlight, temperature, soil moisture and fertilizer) related to a plant.",
+                    "name": "FLOWER_POWER_PACKET",
+                    "methods": {
+                        "process": "flower_power_packet_process"
+                    }
+                },
+                {
+                    "data_type":"boolean",
+                    "description":"Flag that indicates if the engine is on or off.",
+                    "name":"ENGINE_STATE",
+                    "methods": {
+                        "process": "engine_state_process"
+                    }
+                },
+                {
+                    "data_type":"int",
+                    "description":"The current timeblock of the day.",
+                    "name":"TIMEBLOCK",
+                    "methods": {
+                        "process":"timeblock_process"
+                    }
+                }
+            ],
+            "name": "sml-garden/message-constructor",
+            "out_ports": [
+                {
+                    "data_type": "custom:PACKET_TYPE_SML_DATA",
+                    "description": "A message used to feed SML that contains the current timeblock, how many seconds the engine was on and plant data.",
+                    "name": "OUT"
+                }
+            ],
+            "private_data_type": "sml_garden_data"
+        }
+    ]
+}

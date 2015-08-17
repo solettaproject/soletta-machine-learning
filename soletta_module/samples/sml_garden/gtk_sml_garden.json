@@ -1,0 +1,25 @@
+{
+ "$schema": "http://solettaproject.github.io/soletta/schemas/config.schema",
+ "nodetypes": [
+  {
+   "name": "BtnFuzzy",
+   "type": "gtk/pushbutton"
+  },
+  {
+   "name": "BtnAnn",
+   "type": "gtk/pushbutton"
+  },
+  {
+   "name": "EngineFuzzy"
+   "type": "gtk/led"
+  },
+  {
+   "name": "EngineAnn"
+   "type": "gtk/led"
+  },
+  {
+   "name": "FlowerPowerStatusLed"
+   "type": "gtk/led"
+  }
+ ]
+}
