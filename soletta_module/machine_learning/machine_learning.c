@@ -970,6 +970,8 @@ packet_type_sml_data_packet_dispose(
 
     free(packet_type_sml_data->inputs);
     free(packet_type_sml_data->outputs);
+    free(packet_type_sml_data->input_ids);
+    free(packet_type_sml_data->output_ids);
 }
 
 static int
@@ -985,24 +987,54 @@ packet_type_sml_data_packet_init(const struct sol_flow_packet_type *packet_type,
     SOL_NULL_CHECK(in->inputs_len, -EINVAL);
     SOL_NULL_CHECK(in->outputs_len, -EINVAL);
 
+    if ((in->output_ids_len == 0) != (in->output_ids == NULL)) {
+        SOL_WRN("output_ids and output_ids_len values are inconsistent\n");
+        return -EINVAL;
+    }
+
+    if ((in->input_ids_len == 0) != (in->input_ids == NULL)) {
+        SOL_WRN("input_ids and input_ids_len values are inconsistent\n");
+        return -EINVAL;
+    }
+
     sml_data->inputs_len = in->inputs_len;
     sml_data->outputs_len = in->outputs_len;
+    sml_data->input_ids_len = in->input_ids_len;
+    sml_data->output_ids_len = in->output_ids_len;
 
-    sml_data->inputs = malloc(in->inputs_len *
-        sizeof(struct sol_drange));
+    sml_data->input_ids = NULL;
+    sml_data->output_ids = NULL;
+    sml_data->inputs = malloc(in->inputs_len * sizeof(struct sol_drange));
     SOL_NULL_CHECK(sml_data->inputs, -ENOMEM);
     for (i = 0; i < in->inputs_len; i++)
         sml_data->inputs[i] = in->inputs[i];
 
-    sml_data->outputs = malloc(in->outputs_len *
-        sizeof(struct sol_drange));
+    sml_data->outputs = malloc(in->outputs_len * sizeof(struct sol_drange));
     SOL_NULL_CHECK_GOTO(sml_data->outputs, err);
     for (i = 0; i < in->outputs_len; i++)
         sml_data->outputs[i] = in->outputs[i];
 
+    if (sml_data->input_ids_len) {
+        sml_data->input_ids = malloc(sml_data->input_ids_len *
+            sizeof(bool));
+        SOL_NULL_CHECK_GOTO(sml_data->input_ids, err);
+        for (i = 0; i < sml_data->input_ids_len; i++)
+            sml_data->input_ids[i] = in->input_ids[i];
+    }
+
+    if (sml_data->output_ids_len) {
+        sml_data->output_ids = malloc(sml_data->output_ids_len *
+            sizeof(bool));
+        SOL_NULL_CHECK_GOTO(sml_data->output_ids, err);
+        for (i = 0; i < sml_data->output_ids_len; i++)
+            sml_data->output_ids[i] = in->output_ids[i];
+    }
+
     return 0;
 
 err:
+    free(sml_data->input_ids);
+    free(sml_data->outputs);
     free(sml_data->inputs);
     return -ENOMEM;
 }
@@ -1163,9 +1195,10 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
     float max, min, width;
     struct sml_variable *var;
     struct sol_drange *val;
-    uint16_t i, len, array_len;
+    uint16_t i, len, array_len, array_ids_len;
     struct sml_variables_list *list;
     struct sol_drange *array;
+    bool *array_ids;
     const char *prefix;
     struct sml_variable *(*new_variable)
         (struct sml_object *sml, const char *name);
@@ -1174,12 +1207,16 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         list = sml_get_output_list(mdata->sml);
         array = mdata->cur_sml_data->base.outputs;
         array_len = mdata->cur_sml_data->base.outputs_len;
+        array_ids = mdata->cur_sml_data->base.output_ids;
+        array_ids_len = mdata->cur_sml_data->base.output_ids_len;
         prefix = VARIABLE_OUTPUT_PREFIX;
         new_variable = sml_new_output;
     } else {
         list = sml_get_input_list(mdata->sml);
         array = mdata->cur_sml_data->base.inputs;
         array_len = mdata->cur_sml_data->base.inputs_len;
+        array_ids = mdata->cur_sml_data->base.input_ids;
+        array_ids_len = mdata->cur_sml_data->base.input_ids_len;
         prefix = VARIABLE_INPUT_PREFIX;
         new_variable = sml_new_input;
     }
@@ -1219,6 +1256,11 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         if (output_variable)
             mdata->output_steps[i] = val->step;
     }
+
+    if (array_ids)
+        for (i = 0; i < array_ids_len; i++)
+            if (!sml_fuzzy_variable_set_is_id(mdata->sml, var, array_ids[i]))
+                return -EINVAL;
 
     return 0;
 }
