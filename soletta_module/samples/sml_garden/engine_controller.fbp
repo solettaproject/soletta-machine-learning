@@ -34,7 +34,8 @@
 INPORT=ConverterSeconds.IN:SECONDS
 OUTPORT=IsEngineOn.OUT:OUT
 
-ConverterSeconds(converter/float-to-int) OUT -> INTERVAL Timer(timer:interval=0)
+MilliSeconds(constant/int:value=1000) OUT -> OPERAND[0] ToMilliSeconds(int/multiplication)
+ConverterSeconds(converter/float-to-int) OUT -> OPERAND[1] ToMilliSeconds OUT -> INTERVAL Timer(timer:interval=0)
 
 ConverterSeconds OUT -> IN ConverterRange(converter/int-to-boolean:true_range=min:1|max:INT32_MAX) OUT -> ENABLED Timer
 
