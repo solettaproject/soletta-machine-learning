@@ -34,7 +34,7 @@ DECLARE=EngineController:fbp:engine_controller.fbp
 DECLARE=FlowerPowerStatus:fbp:flower_power_status.fbp
 
 SmlFuzzy(machine-learning/fuzzy-sync:stabilization_hits=0)
-SmlAnn(machine-learning/neural-network-sync:stabilization_hits=0, initial_required_observations=5)
+SmlAnn(machine-learning/neural-network-sync:stabilization_hits=0, initial_required_observations=20)
 
 Console(console)
 Username(app/argv:index=1)
@@ -72,7 +72,7 @@ BtnAnn OUT -> IN _(boolean/filter) TRUE -> GET FlowerPowerAPI
 BtnFuzzy OUT -> ENGINE_STATE SmlMessageConstructorFuzzy(sml-garden/message-constructor)
 BtnAnn OUT -> ENGINE_STATE SmlMessageConstructorAnn(sml-garden/message-constructor)
 
-Timeblocks (wallclock/timeblock:interval=1) OUT -> TIMEBLOCK SmlMessageConstructorFuzzy
+Timeblocks (wallclock/timeblock:interval=30) OUT -> TIMEBLOCK SmlMessageConstructorFuzzy
 Timeblocks OUT -> TIMEBLOCK SmlMessageConstructorAnn
 
 LocationIdFuzzy OUT -> ID FilterFuzzy(flower-power/filter-id)
