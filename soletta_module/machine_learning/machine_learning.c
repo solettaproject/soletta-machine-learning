@@ -1255,6 +1255,7 @@ sync_debug_log_sml_data(FILE *debug_file,
     fprintf(debug_file, " OUTPUTS");
     sync_debug_log_list(debug_file, sml_data->outputs, sml_data->outputs_len);
     fprintf(debug_file, "\n");
+    fflush(debug_file);
 }
 
 static void
@@ -1268,6 +1269,7 @@ sync_debug_log_sml_output_data(FILE *debug_file,
     sync_debug_log_list(debug_file, sml_output_data->outputs,
         sml_output_data->outputs_len);
     fprintf(debug_file, "\n");
+    fflush(debug_file);
 }
 
 static int
@@ -1677,6 +1679,7 @@ sml_data_debug_file(struct sol_flow_node *node, void *data, uint16_t port,
         " val min max step; val min max step;...\n");
     fprintf(mdata->debug_file, "#OUTPUT_STATE_CHANGED_CB val min max step;"
             " val min max step; val min max step;...\n");
+    fflush(mdata->debug_file);
     return 0;
 }
 

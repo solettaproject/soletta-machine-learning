@@ -57,7 +57,7 @@ EngineControllerAnn(EngineController)
 EngineControllerFuzzy OUT -> IN EngineFuzzy
 EngineControllerAnn OUT -> IN EngineAnn
 
-FlowerPowerAPI(flower-power/http-get:client_id="CLIENT_ID", client_secret="CLIENT_SECRET")
+FlowerPowerAPI(flower-power/http-get:client_id="cabelitostos@gmail.com", client_secret="I2VuyjPztuGlxu0a2HcbWmQnrhDGJmR6OdsgRGrutjCazBYm")
 Username OUT -> USERNAME FlowerPowerAPI
 Password OUT -> PASSWORD FlowerPowerAPI
 UpdateInterval OUT -> IN _(converter/string-to-int) OUT -> INTERVAL Timer(timer:interval=0) OUT -> GET FlowerPowerAPI
