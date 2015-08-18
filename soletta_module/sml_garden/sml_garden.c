@@ -34,6 +34,7 @@
 #include <string.h>
 #include <errno.h>
 #include <time.h>
+#include <math.h>
 #include <stdbool.h>
 #include <limits.h>
 #include <machine_learning_sml_data.h>
@@ -100,6 +101,11 @@ flower_power_packet_process(struct sol_flow_node *node, void *data,
     SOL_INT_CHECK(r, < 0, r);
     SOL_DBG("Received packet - id: %s - timestamp: %s - water:%g",
             id, timestamp, sdata->water.val);
+
+    if (isnan(sdata->water.val)) {
+        SOL_DBG("Current water value is NAN, ignoring it.");
+        return 0;
+    }
 
     /* Engine still running, wait until we can send the data. */
     if (sdata->engine_is_on) {
