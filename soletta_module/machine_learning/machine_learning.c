@@ -1193,7 +1193,7 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
 {
     char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
     float max, min, width;
-    struct sml_variable *var;
+    struct sml_variable *var = NULL;
     struct sol_drange *val;
     uint16_t i, len, array_len, array_ids_len;
     struct sml_variables_list *list;
@@ -1257,7 +1257,7 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
             mdata->output_steps[i] = val->step;
     }
 
-    if (array_ids)
+    if (var && array_ids)
         for (i = 0; i < array_ids_len; i++)
             if (!sml_fuzzy_variable_set_is_id(mdata->sml, var, array_ids[i]))
                 return -EINVAL;
