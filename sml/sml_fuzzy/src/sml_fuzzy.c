@@ -425,8 +425,10 @@ _act(struct sml_fuzzy_engine *fuzzy_engine, bool *should_learn)
     struct sml_matrix output_membership;
     struct sol_vector changed_idx = SOL_VECTOR_INIT(uint16_t);
     struct sml_variables_list *changed;
-    struct sml_variable *variable;
     int error;
+#ifdef Debug
+    struct sml_variable *variable;
+#endif
 
     //predict outputs
     if ((error = sml_fuzzy_process_output(fuzzy_engine->fuzzy)))
@@ -998,7 +1000,9 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
     is_id = sml_fuzzy_bridge_variable_get_is_id(fuzzy, variable);
     overlap = width * DEFAULT_OVERLAP_PERCENTAGE;
     first_min = max;
+    first_max = max;
     last_max = min;
+    last_min = min;
     num_terms = sml_fuzzy_variable_terms_count(variable);
     for (i = 0; i < num_terms; i++) {
         term = sml_fuzzy_variable_get_term(variable, i);
