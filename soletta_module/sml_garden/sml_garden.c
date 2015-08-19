@@ -40,7 +40,6 @@
 
 #include "sml_garden_gen.h"
 
-#define ONE_DAY (1440)
 #define ENGINE_DURATION_MIN_VAL (0)
 #define ENGINE_DURATION_MAX_VAL (60)
 
