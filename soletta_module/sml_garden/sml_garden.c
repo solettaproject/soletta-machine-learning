@@ -36,14 +36,13 @@
 #include <time.h>
 #include <math.h>
 #include <stdbool.h>
-#include <limits.h>
 #include <machine_learning_sml_data.h>
 
 #include "sml_garden_gen.h"
 
 #define ONE_DAY (1440)
 #define ENGINE_DURATION_MIN_VAL (0)
-#define ENGINE_DURATION_MAX_VAL (INT32_MAX)
+#define ENGINE_DURATION_MAX_VAL (60)
 
 struct sml_garden_data {
     time_t btn_pressed_timestamp;
