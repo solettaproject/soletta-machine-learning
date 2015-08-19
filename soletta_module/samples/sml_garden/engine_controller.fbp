@@ -31,13 +31,15 @@
 # This module is responsible for leaving the engine on for X seconds,
 # where X is an input.
 
-INPORT=ConverterSeconds.IN:SECONDS
+INPORT=ClassifyFloat.IN:SECONDS
 OUTPORT=IsEngineOn.OUT:OUT
 
-MilliSeconds(constant/int:value=1000) OUT -> OPERAND[0] ToMilliSeconds(int/multiplication)
-ConverterSeconds(converter/float-to-int) OUT -> OPERAND[1] ToMilliSeconds OUT -> INTERVAL Timer(timer:interval=0)
+ClassifyFloat(float/classify) NORMAL -> IN _(converter/float-to-int) OUT -> IN Filter(int/filter:min=0, max=60)
 
-ConverterSeconds OUT -> IN ConverterRange(converter/int-to-boolean:true_range=min:1|max:INT32_MAX) OUT -> ENABLED Timer
+MilliSeconds(constant/int:value=1000) OUT -> OPERAND[0] ToMilliSeconds(int/multiplication)
+Filter OUT -> OPERAND[1] ToMilliSeconds OUT -> INTERVAL Timer(timer:interval=0)
+
+Filter OUT -> IN ConverterRange(converter/int-to-boolean:true_range=min:1|max:INT32_MAX) OUT -> ENABLED Timer
 
 Timer OUT -> IN ConverterEmpty(converter/empty-to-boolean:output_value=false) OUT -> ENABLED Timer
 
