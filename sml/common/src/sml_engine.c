@@ -544,3 +544,29 @@ sml_set_max_memory_for_observations(struct sml_object *sml,
     engine->obs_max_size = obs_max_size;
     return true;
 }
+
+int
+sml_call_read_state_cb(struct sml_engine *engine)
+{
+    if (!engine->read_state_cb) {
+        sml_critical("It's required to set a read_state_cb to read");
+        return -EINVAL;
+    }
+
+    if (!engine->read_state_cb((struct sml_object *)engine,
+        engine->read_state_cb_data))
+        return -EAGAIN;
+
+    return 0;
+}
+
+void
+sml_call_output_state_changed_cb(struct sml_engine *engine,
+    struct sml_variables_list *changed)
+{
+    if (!engine->output_state_changed_cb)
+        return;
+
+    engine->output_state_changed_cb((struct sml_object *)engine, changed,
+        engine->output_state_changed_cb_data);
+}
