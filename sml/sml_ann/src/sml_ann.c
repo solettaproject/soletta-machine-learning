@@ -752,11 +752,6 @@ _sml_ann_process(struct sml_engine *engine)
     struct sml_ann_bridge *iann;
     struct sml_variables_list *changed;
 
-    if (!ann_engine->engine.read_state_cb) {
-        sml_critical("There is not read callback registered");
-        return -EINVAL;
-    }
-
     if ((error = _sml_ann_alloc_arrays_if_needed(ann_engine))) {
         sml_critical("Could not alloc observation arrays123! %d", error);
         return error;
@@ -768,12 +763,8 @@ _sml_ann_process(struct sml_engine *engine)
         return error;
     }
 
-    if (!ann_engine->engine.read_state_cb(
-        (struct sml_object *)&ann_engine->engine,
-        ann_engine->engine.read_state_cb_data)) {
-        sml_debug("Read cb returned false");
-        return -EAGAIN;
-    }
+    if ((error = sml_call_read_state_cb(&ann_engine->engine)))
+        return error;
 
     should_act = false;
     if (ann_engine->first_run) {
@@ -822,9 +813,8 @@ _sml_ann_process(struct sml_engine *engine)
                 changed = _sml_ann_output_has_significant_changes(
                     ann_engine->outputs);
                 if (changed && sml_ann_variables_list_get_length(changed)) {
-                    ann_engine->engine.output_state_changed_cb(
-                        (struct sml_object *)&ann_engine->engine, changed,
-                        ann_engine->engine.output_state_changed_cb_data);
+                    sml_call_output_state_changed_cb(&ann_engine->engine,
+                        changed);
                     if (should_act)
                         ann_engine->engine.output_state_changed_called = true;
                 } else

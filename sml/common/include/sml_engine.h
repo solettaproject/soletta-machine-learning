@@ -65,6 +65,9 @@ typedef bool (*sml_engine_variable_set_range)(struct sml_engine *engine, struct 
 typedef bool (*sml_engine_variable_get_range)(struct sml_variable *sml_variable, float *min, float *max);
 typedef void (*sml_engine_print_debug)(struct sml_engine *engine, bool full);
 
+int sml_call_read_state_cb(struct sml_engine *engine);
+void sml_call_output_state_changed_cb(struct sml_engine *engine, struct sml_variables_list *changed);
+
 struct sml_engine {
     /* General API */
     sml_engine_load_file load_file;

@@ -186,22 +186,6 @@ sml_fuzzy_set_variable_terms_auto_balance(struct sml_object *sml,
 }
 
 static int
-_read_variables(struct sml_fuzzy_engine *fuzzy_engine)
-{
-    if (!fuzzy_engine->engine.read_state_cb) {
-        sml_critical("It's required to set a read_state_cb to read");
-        return -EINVAL;
-    }
-
-    if (!fuzzy_engine->engine.read_state_cb(
-        (struct sml_object *)&fuzzy_engine->engine,
-        fuzzy_engine->engine.read_state_cb_data))
-        return -EAGAIN;
-
-    return 0;
-}
-
-static int
 _get_next_term_id(struct sml_fuzzy *fuzzy, struct sml_variable *var)
 {
     uint16_t terms_len, i;
@@ -479,9 +463,7 @@ _act(struct sml_fuzzy_engine *fuzzy_engine, bool *should_learn)
             //If variable is not present in the changed list, the read values
             //should be set as its value.
             sml_fuzzy_set_read_values(fuzzy_engine->fuzzy, changed);
-            fuzzy_engine->engine.output_state_changed_cb(
-                (struct sml_object *)&fuzzy_engine->engine, changed,
-                fuzzy_engine->engine.output_state_changed_cb_data);
+            sml_call_output_state_changed_cb(&fuzzy_engine->engine, changed);
             fuzzy_engine->engine.output_state_changed_called = true;
             sml_fuzzy_variables_list_free(changed);
         }
@@ -686,7 +668,7 @@ _sml_process(struct sml_engine *engine)
         }
     }
 
-    if ((error = _read_variables(fuzzy_engine))) {
+    if ((error = sml_call_read_state_cb(&fuzzy_engine->engine))) {
         sml_error("Failed to read variables.");
         return error;
     }
