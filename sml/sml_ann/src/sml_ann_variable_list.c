@@ -234,6 +234,10 @@ sml_ann_variable_scale_value(struct sml_variable *var, float value)
     struct sml_variable_impl *impl = (struct sml_variable_impl *)var;
     float midrange = (impl->max_value + impl->min_value) / 2.0;
 
+    if (value > impl->max_value)
+        value = impl->max_value;
+    else if (value < impl->min_value)
+        value = impl->min_value;
     return (value - midrange) / ((impl->max_value - impl->min_value) / 2.0);
 }
 
@@ -243,6 +247,10 @@ sml_ann_variable_descale_value(struct sml_variable *var, float value)
     struct sml_variable_impl *impl = (struct sml_variable_impl *)var;
     float midrange = (impl->max_value + impl->min_value) / 2.0;
 
+    if (value > 1.0)
+        value = 1.0;
+    else if (value < -1.0)
+        value = -1.0;
     return (((impl->max_value - impl->min_value) / 2.0) * value) + midrange;
 }
 
