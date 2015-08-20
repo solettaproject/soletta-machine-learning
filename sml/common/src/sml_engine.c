@@ -501,7 +501,7 @@ sml_variable_set_range(struct sml_object *sml,
 
     if (max < min) {
         sml_warning("Max value (%f) is lower than min value (%f). Inverting.",
-            min, max);
+            max, min);
         return engine->variable_set_range(engine, sml_variable, max, min);
     }
 
