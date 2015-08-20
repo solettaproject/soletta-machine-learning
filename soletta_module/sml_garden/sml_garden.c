@@ -41,7 +41,7 @@
 #include "sml_garden_gen.h"
 
 #define ENGINE_DURATION_MIN_VAL (0)
-#define ENGINE_DURATION_MAX_VAL (60)
+#define ENGINE_DURATION_MAX_VAL (30)
 
 struct sml_garden_data {
     time_t btn_pressed_timestamp;
