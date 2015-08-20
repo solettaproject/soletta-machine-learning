@@ -426,6 +426,9 @@ _act(struct sml_fuzzy_engine *fuzzy_engine, bool *should_learn)
     struct sol_vector changed_idx = SOL_VECTOR_INIT(uint16_t);
     struct sml_variables_list *changed;
     int error;
+#ifdef Debug
+    struct sml_variable *variable;
+#endif
 
 #ifdef Debug
     struct sml_variable *variable;
