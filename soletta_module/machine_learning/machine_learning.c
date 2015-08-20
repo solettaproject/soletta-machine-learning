@@ -1720,7 +1720,7 @@ sml_data_debug_file(struct sol_flow_node *node, void *data, uint16_t port,
         " val min max step; val min max step;... OUTPUTS val min max step;"
         " val min max step; val min max step;...\n");
     fprintf(mdata->debug_file, "#OUTPUT_STATE_CHANGED_CB val min max step;"
-            " val min max step; val min max step;...\n");
+        " val min max step; val min max step;...\n");
     fflush(mdata->debug_file);
     return 0;
 }

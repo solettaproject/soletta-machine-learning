@@ -82,25 +82,24 @@ send_packet(struct sol_flow_node *node, struct sml_garden_data *sdata)
     sdata->last_engine_on_duration = 0;
     SOL_DBG("Sending packet to SML");
     return sml_data_send_packet(node,
-                    SOL_FLOW_NODE_TYPE_SML_GARDEN_MESSAGE_CONSTRUCTOR__OUT__OUT,
-                    &sml_data);
+        SOL_FLOW_NODE_TYPE_SML_GARDEN_MESSAGE_CONSTRUCTOR__OUT__OUT,
+        &sml_data);
 }
 
 static int
 flower_power_packet_process(struct sol_flow_node *node, void *data,
-                            uint16_t port, uint16_t conn_id,
-                            const struct sol_flow_packet *packet)
+    uint16_t port, uint16_t conn_id,
+    const struct sol_flow_packet *packet)
 {
     int r;
     const char *timestamp, *id;
     struct sml_garden_data *sdata = data;
 
     r = sol_flower_power_get_packet_components(packet, &id,
-                                               &timestamp, NULL, NULL,
-                                               NULL, &sdata->water);
+        &timestamp, NULL, NULL, NULL, &sdata->water);
     SOL_INT_CHECK(r, < 0, r);
-    SOL_DBG("Received packet - id: %s - timestamp: %s - water:%g",
-            id, timestamp, sdata->water.val);
+    SOL_DBG("Received packet - id: %s - timestamp: %s - water:%g", id,
+        timestamp, sdata->water.val);
 
     if (isnan(sdata->water.val)) {
         SOL_DBG("Current water value is NAN, ignoring it.");
@@ -118,8 +117,7 @@ flower_power_packet_process(struct sol_flow_node *node, void *data,
 
 static int
 engine_state_process(struct sol_flow_node *node, void *data,
-                     uint16_t port, uint16_t conn_id,
-                     const struct sol_flow_packet *packet)
+    uint16_t port, uint16_t conn_id, const struct sol_flow_packet *packet)
 {
     int r;
     bool engine_is_on;
@@ -146,10 +144,11 @@ engine_state_process(struct sol_flow_node *node, void *data,
 
 static int
 timeblock_process(struct sol_flow_node *node, void *data,
-                  uint16_t port, uint16_t conn_id,
-                  const struct sol_flow_packet *packet) {
+    uint16_t port, uint16_t conn_id, const struct sol_flow_packet *packet)
+{
     struct sml_garden_data *sdata = data;
     int r;
+
     r = sol_flow_packet_get_irange(packet, &sdata->timeblock);
     SOL_INT_CHECK(r, < 0, r);
     SOL_DBG("Timeblock changed. Now:%d", sdata->timeblock.val);
