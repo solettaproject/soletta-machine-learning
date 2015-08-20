@@ -1508,12 +1508,25 @@ static void
 machine_learning_sync_close(struct sol_flow_node *node, void *data)
 {
     struct machine_learning_sync_data *mdata = data;
+    struct packet_type_sml_output_data_packet_data *output_data;
+    struct sml_data_priv *sml_data;
+    int error;
+    uint16_t i;
 
     if (mdata->debug_file)
         fclose(mdata->debug_file);
     if (mdata->sml_data_dir && !sml_save(mdata->sml, mdata->sml_data_dir))
         SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
+    if ((error = pthread_mutex_destroy(&mdata->queue_lock)))
+        SOL_WRN("Error %d when destroying pthread mutex lock", error);
+    SOL_PTR_VECTOR_FOREACH_IDX (&mdata->output_queue, output_data, i)
+        free(output_data);
+    SOL_PTR_VECTOR_FOREACH_IDX (&mdata->input_queue, sml_data, i)
+        free(sml_data);
     sml_free(mdata->sml);
+    sol_ptr_vector_clear(&mdata->input_queue);
+    sol_ptr_vector_clear(&mdata->output_queue);
+    free(mdata->output_steps);
     free(mdata->sml_data_dir);
 }
 
