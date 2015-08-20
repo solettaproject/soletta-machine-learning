@@ -34,7 +34,7 @@
 INPORT=ClassifyFloat.IN:SECONDS
 OUTPORT=IsEngineOn.OUT:OUT
 
-ClassifyFloat(float/classify) NORMAL -> IN _(converter/float-to-int) OUT -> IN Filter(int/filter:min=0, max=60)
+ClassifyFloat(float/classify) NORMAL -> IN _(converter/float-to-int) OUT -> IN Filter(int/filter:min=0, max=30)
 
 MilliSeconds(constant/int:value=1000) OUT -> OPERAND[0] ToMilliSeconds(int/multiplication)
 Filter OUT -> OPERAND[1] ToMilliSeconds OUT -> INTERVAL Timer(timer:interval=0)

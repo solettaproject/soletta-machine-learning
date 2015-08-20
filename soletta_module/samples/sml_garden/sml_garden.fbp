@@ -33,7 +33,7 @@
 DECLARE=EngineController:fbp:engine_controller.fbp
 DECLARE=FlowerPowerStatus:fbp:flower_power_status.fbp
 
-SmlFuzzy(machine-learning/fuzzy-sync:stabilization_hits=0)
+SmlFuzzy(machine-learning/fuzzy-sync:stabilization_hits=0, number_of_terms=30)
 SmlAnn(machine-learning/neural-network-sync:stabilization_hits=0, initial_required_observations=20)
 
 Console(console)
