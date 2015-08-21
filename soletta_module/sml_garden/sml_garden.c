@@ -47,6 +47,7 @@ struct sml_garden_data {
     time_t btn_pressed_timestamp;
     uint8_t last_engine_on_duration;
     bool has_pending_data;
+    char *last_timestamp;
 
     struct sol_drange cur_water, last_water;
     struct sol_irange cur_timeblock, last_timeblock;
@@ -57,6 +58,7 @@ send_packet_if_needed(struct sol_flow_node *node, struct sml_garden_data *sdata)
 {
     struct packet_type_sml_data_packet_data sml_data;
     struct sol_drange inputs[2], output;
+    int r;
 
     //If not ready to send packet
     if (!sdata->has_pending_data || sdata->btn_pressed_timestamp != 0)
@@ -86,9 +88,11 @@ send_packet_if_needed(struct sol_flow_node *node, struct sml_garden_data *sdata)
     sdata->last_engine_on_duration = 0;
     SOL_DBG("Sending packet to SML");
 
-    return sml_data_send_packet(node,
+    r = sml_data_send_packet(node,
         SOL_FLOW_NODE_TYPE_SML_GARDEN_MESSAGE_CONSTRUCTOR__OUT__OUT,
         &sml_data);
+    sdata->cur_water.val = NAN;
+    return r;
 }
 
 static int
@@ -99,14 +103,33 @@ flower_power_packet_process(struct sol_flow_node *node, void *data,
     int r;
     const char *timestamp, *id;
     struct sml_garden_data *sdata = data;
+    struct sol_drange water;
 
     r = sol_flower_power_get_packet_components(packet, &id,
-        &timestamp, NULL, NULL, NULL, &sdata->cur_water);
+        &timestamp, NULL, NULL, NULL, &water);
     SOL_INT_CHECK(r, < 0, r);
     SOL_DBG("Received packet - id: %s - timestamp: %s - water:%g", id,
-        timestamp, sdata->cur_water.val);
+        timestamp, water.val);
 
+    if (!timestamp) {
+        SOL_ERR("Could not copy timestamp string. Timestamp is NULL.");
+        return -EINVAL;
+    }
+
+    if (!sdata->last_timestamp || strcmp(timestamp, sdata->last_timestamp)) {
+        sdata->last_water = sdata->cur_water;
+        sdata->cur_water = water;
+
+        free(sdata->last_timestamp);
+        sdata->last_timestamp = strdup(timestamp);
+        SOL_NULL_CHECK_GOTO(sdata->last_timestamp, err_exit);
+    }
     return 0;
+
+err_exit:
+    sdata->last_timestamp = NULL;
+    SOL_ERR("No memory to copy the timestamp");
+    return -ENOMEM;
 }
 
 static int
@@ -175,6 +198,14 @@ message_constructor_open(struct sol_flow_node *node, void *data,
     sdata->cur_water.val = NAN;
 
     return 0;
+}
+
+static void
+message_constructor_close(struct sol_flow_node *node, void *data)
+{
+    struct sml_garden_data *sdata = data;
+
+    free(sdata->last_timestamp);
 }
 
 #include "sml_garden_gen.c"
