@@ -10,15 +10,15 @@
    "type": "gtk/pushbutton"
   },
   {
-   "name": "EngineFuzzy"
+   "name": "EngineFuzzy",
    "type": "gtk/led"
   },
   {
-   "name": "EngineAnn"
+   "name": "EngineAnn",
    "type": "gtk/led"
   },
   {
-   "name": "FlowerPowerStatusLed"
+   "name": "FlowerPowerStatusLed",
    "type": "gtk/led"
   },
   {
