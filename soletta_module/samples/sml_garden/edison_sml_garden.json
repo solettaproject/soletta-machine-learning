@@ -3,49 +3,49 @@
  "nodetypes": [
   {
    "name": "BtnFuzzy",
-   "type": "gpio/reader"
+   "type": "gpio/reader",
     "options": {
-        "pin": 12
+        "pin": 12,
         "edge_falling": true,
         "edge_rising": true
    }
   },
   {
    "name": "BtnAnn",
-    "type": "gpio/reader"
+    "type": "gpio/reader",
     "options": {
-        "pin": 48
+        "pin": 48,
         "edge_falling": true,
         "edge_rising": true
    }
   },
   {
-   "name": "EngineFuzzy"
-   "type": "gpio/writer"
+   "name": "EngineFuzzy",
+   "type": "gpio/writer",
    "options": {
        "pin": 182,
        "active_low": false
     }
   },
   {
-   "name": "EngineAnn"
-   "type": "gpio/writer"
+   "name": "EngineAnn",
+   "type": "gpio/writer",
    "options": {
        "pin": 49,
        "active_low": false
    }
   },
   {
-   "name": "FlowerPowerStatusLed"
-   "type": "gpio/writer"
+   "name": "FlowerPowerStatusLed",
+   "type": "gpio/writer",
    "options": {
        "pin": 252,
        "active_low": false
    }
   },
   {
-   "name": "SmlAnn"
-   "type": "machine-learning/neural-network-sync"
+   "name": "SmlAnn",
+   "type": "machine-learning/neural-network-sync",
     "options": {
         "stabilization_hits": 0,
         "initial_required_observations": 20,
@@ -53,8 +53,8 @@
    }
   },
   {
-   "name": "SmlFuzzy"
-   "type": "machine-learning/fuzzy-sync"
+   "name": "SmlFuzzy",
+   "type": "machine-learning/fuzzy-sync",
    "options": {
        "stabilization_hits": 0,
        "data_dir": "/home/root/fuzzy_data/",

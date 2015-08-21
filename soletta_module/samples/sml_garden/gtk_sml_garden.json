@@ -10,20 +10,20 @@
    "type": "gtk/pushbutton"
   },
   {
-   "name": "EngineFuzzy"
+   "name": "EngineFuzzy",
    "type": "gtk/led"
   },
   {
-   "name": "EngineAnn"
+   "name": "EngineAnn",
    "type": "gtk/led"
   },
   {
-   "name": "FlowerPowerStatusLed"
+   "name": "FlowerPowerStatusLed",
    "type": "gtk/led"
   },
   {
-   "name": "SmlAnn"
-   "type": "machine-learning/neural-network-sync"
+   "name": "SmlAnn",
+   "type": "machine-learning/neural-network-sync",
     "options": {
         "stabilization_hits": 0,
         "initial_required_observations": 20,
@@ -31,8 +31,8 @@
    }
   },
   {
-   "name": "SmlFuzzy"
-    "type": "machine-learning/fuzzy-sync"
+   "name": "SmlFuzzy",
+    "type": "machine-learning/fuzzy-sync",
     "options": {
         "stabilization_hits": 0,
         "data_dir": "/tmp/fuzzy_data/",
