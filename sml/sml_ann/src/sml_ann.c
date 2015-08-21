@@ -873,6 +873,7 @@ _sml_ann_save(struct sml_engine *engine, const char *path)
     char ann_path[SML_PATH_MAX], cfg_path[SML_PATH_MAX];
     struct sol_ptr_vector *anns;
     uint16_t i, ann_idx;
+    bool exists;
 
     if (!sml_cache_get_size(ann_engine->anns_cache)) {
         sml_critical("Could not save the neural network." \
@@ -880,8 +881,12 @@ _sml_ann_save(struct sml_engine *engine, const char *path)
         return false;
     }
 
-    if (!is_dir(path)) {
+    exists = file_exists(path);
+    if (exists && !is_dir(path)) {
         sml_critical("Failed to save sml: %s is not a directory\n", path);
+        return false;
+    } else if (!exists && !create_dir(path)) {
+        sml_critical("Could not create the directory:%s", path);
         return false;
     }
 

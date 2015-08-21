@@ -36,6 +36,7 @@
 #include <dirent.h>
 #include <string.h>
 #include <sml_log.h>
+#include <errno.h>
 
 bool
 is_file(const char *path)
@@ -46,6 +47,49 @@ is_file(const char *path)
         return true;
 
     return false;
+}
+
+bool
+file_exists(const char *path)
+{
+    struct stat stat_result;
+    if (!stat(path, &stat_result))
+        return true;
+    return false;
+}
+
+bool
+create_dir(const char *path)
+{
+    size_t i, last_i, bytes;
+    int r;
+    struct stat stat_result;
+    char aux[PATH_MAX];
+    bool ok = true;
+
+    if (strlen(path) + 1 > PATH_MAX) {
+        sml_critical("Could not create dir. The path is bigger than PATH_MAX!");
+        return false;
+    }
+    memset(aux, 0, sizeof(aux));
+    for (i = 0, last_i = 0; path[i]; i++) {
+        if ((path[i] == '/' && i != 0) || path[i + 1] == '\0') {
+            bytes = i - last_i;
+            memcpy(aux + last_i, path + last_i, path[i + 1] == '\0' ? bytes + 1 : bytes);
+            last_i = i;
+            r = stat(aux, &stat_result);
+            if (r && errno == ENOENT && mkdir(aux, S_IRWXU | S_IRWXG | S_IROTH)) {
+                ok = false;
+                sml_critical("Could not create the path:%s", aux);
+                break;
+            } else if (!r && !S_ISDIR(stat_result.st_mode)) {
+                ok = false;
+                sml_critical("%s is not a directory", aux);
+                break;
+            }
+        }
+    }
+    return ok;
 }
 
 bool

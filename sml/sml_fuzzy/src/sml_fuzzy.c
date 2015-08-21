@@ -738,9 +738,13 @@ _sml_save(struct sml_engine *engine, const char *path)
 {
     char buf[SML_PATH_MAX];
     struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)engine;
+    bool exists = file_exists(path);
 
-    if (!is_dir(path)) {
+    if (exists && !is_dir(path)) {
         sml_critical("Failed to save sml: %s is not a directory\n", path);
+        return false;
+    } else if (!exists && !create_dir(path)) {
+        sml_critical("Could not create the directory:%s", path);
         return false;
     }
 

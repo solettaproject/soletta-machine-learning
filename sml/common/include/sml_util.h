@@ -42,6 +42,8 @@ bool is_file(const char *path);
 bool is_dir(const char *path);
 bool clean_dir(const char *path, const char *prefix);
 bool delete_file(const char *path);
+bool file_exists(const char *path);
+bool create_dir(const char *path);
 
 #ifdef __cplusplus
 }
