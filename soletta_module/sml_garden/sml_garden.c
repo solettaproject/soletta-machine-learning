@@ -59,6 +59,8 @@ send_packet(struct sol_flow_node *node, struct sml_garden_data *sdata)
     struct packet_type_sml_data_packet_data sml_data;
     struct sol_drange inputs[2], output;
 
+    sml_data.input_ids_len = sml_data.output_ids_len = 0;
+    sml_data.input_ids = sml_data.output_ids = NULL;
     sml_data.inputs_len = 2;
     sml_data.outputs_len = 1;
 

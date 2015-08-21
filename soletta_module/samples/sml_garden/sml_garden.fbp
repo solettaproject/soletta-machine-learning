@@ -33,17 +33,16 @@
 DECLARE=EngineController:fbp:engine_controller.fbp
 DECLARE=FlowerPowerStatus:fbp:flower_power_status.fbp
 
-SmlFuzzy(machine-learning/fuzzy-sync:stabilization_hits=0)
-SmlAnn(machine-learning/neural-network-sync:stabilization_hits=0, initial_required_observations=20)
+SmlFuzzy(SmlFuzzy)
+SmlAnn(SmlAnn)
 
 Console(console)
 Username(app/argv:index=1)
 Password(app/argv:index=2)
-UpdateInterval(app/argv:index=3)
-LocationIdFuzzy(app/argv:index=4)
-LocationIdAnn(app/argv:index=5)
-AnnDebugFile(app/argv:index=6)
-FuzzyDebugFile(app/argv:index=7)
+LocationIdFuzzy(app/argv:index=3)
+LocationIdAnn(app/argv:index=4)
+AnnDebugFile(app/argv:index=5)
+FuzzyDebugFile(app/argv:index=6)
 
 AnnDebugFile OUT -> DEBUG_FILE SmlAnn
 FuzzyDebugFile OUT -> DEBUG_FILE SmlFuzzy
@@ -60,7 +59,6 @@ EngineControllerAnn OUT -> IN EngineAnn
 FlowerPowerAPI(flower-power/http-get:client_id="CLIENT_ID", client_secret="CLIENT_SECRET")
 Username OUT -> USERNAME FlowerPowerAPI
 Password OUT -> PASSWORD FlowerPowerAPI
-UpdateInterval OUT -> IN _(converter/string-to-int) OUT -> INTERVAL Timer(timer:interval=0) OUT -> GET FlowerPowerAPI
 
 FlowerPowerAPI ERROR -> ERROR FlowerPowerStatus(FlowerPowerStatus)
 FlowerPowerAPI OUT -> PACKET FlowerPowerStatus
@@ -74,6 +72,9 @@ BtnAnn OUT -> ENGINE_STATE SmlMessageConstructorAnn(sml-garden/message-construct
 
 Timeblocks (wallclock/timeblock:interval=30) OUT -> TIMEBLOCK SmlMessageConstructorFuzzy
 Timeblocks OUT -> TIMEBLOCK SmlMessageConstructorAnn
+Timeblocks OUT -> GET FlowerPowerAPI
+Timeblocks OUT -> SAVE SmlFuzzy
+Timeblocks OUT -> SAVE SmlAnn
 
 LocationIdFuzzy OUT -> ID FilterFuzzy(flower-power/filter-id)
 LocationIdAnn OUT -> ID FilterAnn(flower-power/filter-id)

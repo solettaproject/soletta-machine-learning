@@ -138,6 +138,14 @@
          "process": "trigger_process"
         },
         "name": "TRIGGER"
+       },
+       {
+        "data_type":"any",
+        "description": "Port used to save fuzzy data",
+        "methods": {
+            "process": "save_process"
+        },
+        "name":"SAVE"
        }
       ],
       "methods": {
@@ -158,6 +166,12 @@
          "default": 15,
          "description": "Number of fuzzy terms to be created for each variable.",
          "name": "number_of_terms"
+        },
+        {
+         "data_type": "string",
+         "default": null,
+         "description": "The directory that the neural network data files will be saved/loaded",
+         "name": "data_dir"
         }
        ],
        "version": 1
@@ -232,6 +246,14 @@
          "process": "trigger_process"
         },
         "name": "TRIGGER"
+       },
+       {
+        "data_type":"any",
+        "description": "Port used to save neural network data",
+        "methods": {
+            "process": "save_process"
+        },
+        "name":"SAVE"
        }
       ],
       "methods": {
@@ -270,6 +292,12 @@
          "default": "sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric",
          "description": "Activation functions that may be used for neural network. It'll try to use all of these functions to get the best one for its observations. Supported activation functions are: sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric. It's possible to set more than one, separeted by space. By default all of them are considered candidates. Reducing this set will reduce processing on training phase.",
          "name": "activation_functions"
+        },
+        {
+         "data_type": "string",
+         "default": null,
+         "description": "The directory that the neural network data files will be saved/loaded",
+         "name": "data_dir"
         }
        ],
        "version": 1
@@ -316,6 +344,14 @@
          "process": "sml_data_debug_file"
         },
         "name": "DEBUG_FILE"
+       },
+       {
+        "data_type":"any",
+        "description": "Port used to save fuzzy data",
+        "methods": {
+            "process": "sml_data_save_process"
+        },
+        "name":"SAVE"
        }
       ],
       "methods": {
@@ -336,6 +372,12 @@
          "default": 15,
          "description": "Number of fuzzy terms to be created for each variable.",
          "name": "number_of_terms"
+        },
+        {
+         "data_type": "string",
+         "default": null,
+         "description": "The directory that the fuzzy data files will be saved/loaded",
+         "name": "data_dir"
         }
        ],
        "version": 1
@@ -377,6 +419,14 @@
          "process": "sml_data_debug_file"
         },
         "name": "DEBUG_FILE"
+       },
+       {
+        "data_type":"any",
+        "description": "Port used to save neural network data",
+        "methods": {
+            "process": "sml_data_save_process"
+        },
+        "name":"SAVE"
        }
       ],
       "methods": {
@@ -415,6 +465,12 @@
          "default": "sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric",
          "description": "Activation functions that may be used for neural network. It'll try to use all of these functions to get the best one for its observations. Supported activation functions are: sigmoid sigmoid_symmetric gaussian gaussian_symmetric elliot elliot_symmetric cos cos_symmetric sin sin_symmetric. It's possible to set more than one, separeted by space. By default all of them are considered candidates. Reducing this set will reduce processing on training phase.",
          "name": "activation_functions"
+        },
+        {
+         "data_type": "string",
+         "default": null,
+         "description": "The directory that the neural network data files will be saved/loaded",
+         "name": "data_dir"
         }
        ],
        "version": 1

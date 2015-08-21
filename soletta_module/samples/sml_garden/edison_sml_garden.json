@@ -42,6 +42,23 @@
        "pin": 252,
        "active_low": false
    }
+  },
+  {
+   "name": "SmlAnn"
+   "type": "machine-learning/neural-network-sync"
+    "options": {
+        "stabilization_hits": 0,
+        "initial_required_observations": 20,
+        "data_dir": "/home/root/ann_data/"
+   }
+  },
+  {
+   "name": "SmlFuzzy"
+   "type": "machine-learning/fuzzy-sync"
+   "options": {
+       "stabilization_hits": 0,
+       "data_dir": "/home/root/fuzzy_data/"
+   }
   }
  ]
 }
