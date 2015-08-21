@@ -62,7 +62,7 @@ Password OUT -> PASSWORD FlowerPowerAPI
 
 FlowerPowerAPI ERROR -> ERROR FlowerPowerStatus(FlowerPowerStatus)
 FlowerPowerAPI OUT -> PACKET FlowerPowerStatus
-FlowerPowerStatus LED_STATUS -> IN _(FlowerPowerStatusLed)
+FlowerPowerStatus LED_STATUS -> IN Status(FlowerPowerStatusLed)
 
 BtnFuzzy OUT -> IN _(boolean/filter) TRUE -> GET FlowerPowerAPI
 BtnAnn OUT -> IN _(boolean/filter) TRUE -> GET FlowerPowerAPI
