@@ -45,20 +45,24 @@
 
 struct sml_garden_data {
     time_t btn_pressed_timestamp;
-    int last_engine_on_duration;
-    bool engine_is_on;
+    uint8_t last_engine_on_duration;
     bool has_pending_data;
 
-    struct sol_drange water;
-    struct sol_irange timeblock;
+    struct sol_drange cur_water, last_water;
+    struct sol_irange cur_timeblock, last_timeblock;
 };
 
 static int
-send_packet(struct sol_flow_node *node, struct sml_garden_data *sdata)
+send_packet_if_needed(struct sol_flow_node *node, struct sml_garden_data *sdata)
 {
     struct packet_type_sml_data_packet_data sml_data;
     struct sol_drange inputs[2], output;
 
+    //If not ready to send packet
+    if (!sdata->has_pending_data || sdata->btn_pressed_timestamp != 0)
+        return 0;
+
+    sdata->has_pending_data = false;
     sml_data.input_ids_len = sml_data.output_ids_len = 0;
     sml_data.input_ids = sml_data.output_ids = NULL;
     sml_data.inputs_len = 2;
@@ -72,15 +76,16 @@ send_packet(struct sol_flow_node *node, struct sml_garden_data *sdata)
     output.max = ENGINE_DURATION_MAX_VAL;
     output.step = 1;
 
-    inputs[0] = sdata->water;
+    inputs[0] = sdata->last_water;
 
-    inputs[1].val = sdata->timeblock.val;
-    inputs[1].min = sdata->timeblock.min;
-    inputs[1].max = sdata->timeblock.max;
-    inputs[1].step = sdata->timeblock.step;
+    inputs[1].val = sdata->last_timeblock.val;
+    inputs[1].min = sdata->last_timeblock.min;
+    inputs[1].max = sdata->last_timeblock.max;
+    inputs[1].step = sdata->last_timeblock.step;
 
     sdata->last_engine_on_duration = 0;
     SOL_DBG("Sending packet to SML");
+
     return sml_data_send_packet(node,
         SOL_FLOW_NODE_TYPE_SML_GARDEN_MESSAGE_CONSTRUCTOR__OUT__OUT,
         &sml_data);
@@ -96,23 +101,12 @@ flower_power_packet_process(struct sol_flow_node *node, void *data,
     struct sml_garden_data *sdata = data;
 
     r = sol_flower_power_get_packet_components(packet, &id,
-        &timestamp, NULL, NULL, NULL, &sdata->water);
+        &timestamp, NULL, NULL, NULL, &sdata->cur_water);
     SOL_INT_CHECK(r, < 0, r);
     SOL_DBG("Received packet - id: %s - timestamp: %s - water:%g", id,
-        timestamp, sdata->water.val);
+        timestamp, sdata->cur_water.val);
 
-    if (isnan(sdata->water.val)) {
-        SOL_DBG("Current water value is NAN, ignoring it.");
-        return 0;
-    }
-
-    /* Engine still running, wait until we can send the data. */
-    if (sdata->engine_is_on) {
-        sdata->has_pending_data = true;
-        return 0;
-    }
-
-    return send_packet(node, sdata);
+    return 0;
 }
 
 static int
@@ -126,20 +120,29 @@ engine_state_process(struct sol_flow_node *node, void *data,
 
     r = sol_flow_packet_get_boolean(packet, &engine_is_on);
     SOL_INT_CHECK(r, < 0, r);
+
     if (engine_is_on)
         sdata->btn_pressed_timestamp = now;
-    else if (sdata->engine_is_on) {
-        sdata->last_engine_on_duration = now - sdata->btn_pressed_timestamp;
-        SOL_DBG("Pressed for:%d seconds", sdata->last_engine_on_duration);
+    else if (sdata->btn_pressed_timestamp) {
+        now -= sdata->btn_pressed_timestamp;
+        SOL_DBG("Pressed for:%ld seconds", now);
+        if (sdata->last_engine_on_duration + now > ENGINE_DURATION_MAX_VAL)
+            sdata->last_engine_on_duration = ENGINE_DURATION_MAX_VAL;
+        else
+            sdata->last_engine_on_duration += now;
+
+        sdata->btn_pressed_timestamp = 0;
+        r = send_packet_if_needed(node, sdata);
+        SOL_INT_CHECK(r, < 0, r);
     }
-    sdata->engine_is_on = engine_is_on;
 
-    if (!sdata->has_pending_data || sdata->last_engine_on_duration < 1)
-        return 0;
+    return 0;
+}
 
-    /* Send */
-    sdata->has_pending_data = false;
-    return send_packet(node, sdata);
+static bool
+empty_irange(struct sol_irange *val)
+{
+    return val->val == 0 && val->min == 0 && val->max == 0 && val->step == 0;
 }
 
 static int
@@ -147,11 +150,30 @@ timeblock_process(struct sol_flow_node *node, void *data,
     uint16_t port, uint16_t conn_id, const struct sol_flow_packet *packet)
 {
     struct sml_garden_data *sdata = data;
-    int r;
+    int r, send_error = 0;
 
-    r = sol_flow_packet_get_irange(packet, &sdata->timeblock);
+    if (!empty_irange(&sdata->cur_timeblock) && !isnan(sdata->cur_water.val)) {
+        sdata->last_timeblock = sdata->cur_timeblock;
+        sdata->last_water = sdata->cur_water;
+        sdata->has_pending_data = true;
+        send_error = send_packet_if_needed(node, sdata);
+    }
+
+    r = sol_flow_packet_get_irange(packet, &sdata->cur_timeblock);
     SOL_INT_CHECK(r, < 0, r);
-    SOL_DBG("Timeblock changed. Now:%d", sdata->timeblock.val);
+    SOL_DBG("Timeblock changed. Now:%d", sdata->cur_timeblock.val);
+
+    return send_error;
+}
+
+static int
+message_constructor_open(struct sol_flow_node *node, void *data,
+    const struct sol_flow_node_options *options)
+{
+    struct sml_garden_data *sdata = data;
+
+    sdata->cur_water.val = NAN;
+
     return 0;
 }
 
