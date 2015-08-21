@@ -965,10 +965,10 @@ trigger_process(struct sol_flow_node *node, void *data, uint16_t port,
     uint16_t conn_id, const struct sol_flow_packet *packet)
 {
     struct machine_learning_data *mdata = data;
+    int r;
 
-    if (mutex_lock(&mdata->process_lock))
-        return false;
-
+    r = mutex_lock(&mdata->process_lock);
+    SOL_INT_CHECK(r, < 0, r);
     mdata->process_needed = true;
     pthread_mutex_unlock(&mdata->process_lock);
 
@@ -1005,10 +1005,10 @@ prediction_trigger_process(struct sol_flow_node *node, void *data,
     const struct sol_flow_packet *packet)
 {
     struct machine_learning_data *mdata = data;
+    int r;
 
-    if (mutex_lock(&mdata->process_lock))
-        return false;
-
+    r = mutex_lock(&mdata->process_lock);
+    SOL_INT_CHECK(r, < 0, r);
     mdata->predict_needed = true;
     pthread_mutex_unlock(&mdata->process_lock);
 
