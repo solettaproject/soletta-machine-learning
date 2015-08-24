@@ -395,6 +395,44 @@ bool sml_load(struct sml_object *sml, const char *path);
 void sml_print_debug(struct sml_object *sml, bool full);
 
 /**
+ * @brief Set the file to be used to debug data changes in this engine
+ *
+ * This file will be used to log all calls to methods that changes the current
+ * state of the sml engine data. This information may be used to reproduce the
+ * execution of sml for debug purposes. Methods that configure the sml are not
+ * logged.
+ *
+ * To use this feature, sml must be compiled with build type set to Debug.
+ *
+ * @param sml The ::sml_object object.
+ * @param str A string with full path of file to be used to write debug data.
+ * Use @c NULL or an empty string to disable data debug.
+ * @return @ true if debug file was updated successfully. @c false if operation
+ * failed or if sml was not compiled using Debug build type.
+ *
+ * @see ::sml_load_debug_data_log_file
+ */
+bool sml_set_debug_data_log_file(struct sml_object *sml, const char *str);
+
+/**
+ * @brief Load to current engine the debug data logged to a file
+ *
+ * Load all data logged in file set by ::sml_set_debug_data_log_file to current
+ * engine. Used for debug purposes.
+ *
+ * To use this feature, sml must be compiled with build type set to Debug.
+ *
+ * @param sml The ::sml_object object.
+ * @param str A string with full path of file to be used to load debug data.
+ * @return @ true if loading debug was successful. @c false if operation
+ * failed or if sml was not compiled using Debug build type.
+ *
+ * @see ::sml_set_debug_data_log_file
+ *
+ */
+bool sml_load_debug_data_log_file(struct sml_object *sml, const char *str);
+
+/**
  * @brief Set maximum memory that can be used to store observation history data.
  *
  * @remark max_size = 0 means infinite (it is also the default).
@@ -611,6 +649,11 @@ bool sml_variable_set_range(struct sml_object *sml, struct sml_variable *sml_var
  * @return @c false on failure.
  */
 bool sml_variable_get_range(struct sml_object *sml, struct sml_variable *sml_variable, float *min, float *max);
+
+#define SML_VARIABLES_LIST_FOREACH(sml, list, len, var, i)              \
+    for (i = 0, len = sml_variables_list_get_length(sml, list);         \
+        i < len && ((var = sml_variables_list_index(sml, list, i)));   \
+        i++)
 
 /**
  * @}

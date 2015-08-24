@@ -36,6 +36,8 @@
 #include <sml_ann.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <config.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -97,6 +99,9 @@ struct sml_engine {
 
     /* Debug API */
     sml_engine_print_debug print_debug;
+#ifdef Debug
+    FILE *debug_file;
+#endif
 
     uint32_t magic_number;
     sml_read_state_cb read_state_cb;

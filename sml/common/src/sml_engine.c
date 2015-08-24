@@ -40,8 +40,37 @@
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
+#include <config.h>
+#include <stdarg.h>
 
 #define LINE_SIZE (256)
+#define STR_FORMAT(WIDTH) "%" #WIDTH "s"
+#define STR_FMT(W) STR_FORMAT(W)
+
+#ifdef Debug
+#define SML_LOG_DEBUG_DATA(engine, ...)                     \
+    do {                                                    \
+        if (engine->debug_file)                             \
+            fprintf(engine->debug_file, __VA_ARGS__);       \
+    } while (0)
+
+#define SML_LOG_DEBUG_DATA_VAR(engine, prefix, fmt, var, ...)                 \
+    do {                                                                      \
+        if (engine->debug_file)                                               \
+            sml_log_debug_data_var(engine, prefix, fmt, var, ## __VA_ARGS__); \
+    } while (0)
+
+#define SML_LOG_DEBUG_DATA_LIST(engine, prefix, list, ...)                   \
+    do {                                                                     \
+        if (engine->debug_file)                                              \
+            sml_log_debug_data_list(engine, prefix, list, ## __VA_ARGS__);   \
+    } while (0)
+
+#else
+#define SML_LOG_DEBUG_DATA(...)
+#define SML_LOG_DEBUG_DATA_VAR(...)
+#define SML_LOG_DEBUG_DATA_LIST(...)
+#endif
 
 static bool
 _default_load_fll_file(struct sml_object *engine, const char *filename)
@@ -93,6 +122,45 @@ _default_load_fll_file(struct sml_object *engine, const char *filename)
     return true;
 }
 
+#ifdef Debug
+void
+sml_log_debug_data_var(struct sml_engine *engine, const char *prefix,
+    const char *fmt, struct sml_variable *var, ...)
+{
+    int r;
+    va_list args;
+    char name[SML_VARIABLE_NAME_MAX_LEN + 1];
+
+    va_start(args, var);
+    r = sml_variable_get_name((struct sml_object *)engine, var, name,
+        sizeof(name));
+    if (r == 0) {
+        fprintf(engine->debug_file, "%s %s ", prefix, name);
+        vfprintf(engine->debug_file, fmt, args);
+    }
+    va_end(args);
+}
+
+void
+sml_log_debug_data_list(struct sml_engine *engine, const char *prefix,
+    struct sml_variables_list *list)
+{
+    int r;
+    uint16_t len, i;
+    struct sml_variable *var;
+    char name[SML_VARIABLE_NAME_MAX_LEN + 1];
+
+    SML_VARIABLES_LIST_FOREACH((struct sml_object *)engine, list, len, var, i) {
+        r = sml_variable_get_name((struct sml_object *)engine, var, name,
+            sizeof(name));
+        if (r == 0)
+            fprintf(engine->debug_file, "%s %s %f\n", prefix, name,
+                sml_variable_get_value((struct sml_object *)engine, var));
+    }
+
+}
+#endif
+
 API_EXPORT bool
 sml_load_fll_file(struct sml_object *sml, const char *filename)
 {
@@ -115,6 +183,10 @@ sml_free(struct sml_object *sml)
             "sml_free is mandatory for engines.");
         return;
     }
+#ifdef Debug
+    if (engine->debug_file)
+        fclose(engine->debug_file);
+#endif
     engine->free(engine);
 }
 
@@ -153,11 +225,143 @@ sml_set_stabilization_hits(struct sml_object *sml, uint16_t hits)
 }
 
 API_EXPORT bool
+sml_set_debug_data_log_file(struct sml_object *sml, const char *str)
+{
+#ifdef Debug
+    ON_NULL_RETURN_VAL(sml, false);
+    struct sml_engine *engine = (struct sml_engine *)sml;
+
+    if (engine->debug_file)
+        fclose(engine->debug_file);
+
+    if (!str || str[0] == 0) {
+        engine->debug_file = NULL;
+        return true;
+    }
+
+    engine->debug_file = fopen(str, "a");
+    return engine->debug_file != NULL;
+#else
+    return false;
+#endif
+}
+
+#ifdef Debug
+struct sml_variable *
+variable_find_by_name(struct sml_object *sml, const char *name)
+{
+    int r;
+    uint16_t i, len;
+    struct sml_variables_list *list;
+    struct sml_variable *var;
+    char tmp_name[SML_VARIABLE_NAME_MAX_LEN + 1];
+
+    list = sml_get_input_list(sml);
+    SML_VARIABLES_LIST_FOREACH(sml, list, len, var, i) {
+        r = sml_variable_get_name(sml, var, tmp_name, sizeof(tmp_name));
+        if (r == 0 && strncmp(tmp_name, name, sizeof(tmp_name)) == 0)
+            return var;
+    }
+
+    list = sml_get_output_list(sml);
+    SML_VARIABLES_LIST_FOREACH(sml, list, len, var, i) {
+        r = sml_variable_get_name(sml, var, tmp_name, sizeof(tmp_name));
+        if (r == 0 && strncmp(tmp_name, name, sizeof(tmp_name)) == 0)
+            return var;
+    }
+    return NULL;
+}
+#endif
+
+API_EXPORT bool
+sml_load_debug_data_log_file(struct sml_object *sml, const char *str)
+{
+#ifdef Debug
+    ON_NULL_RETURN_VAL(sml, false);
+    ON_NULL_RETURN_VAL(str, false);
+    FILE *file;
+    char line[LINE_SIZE];
+    char name[SML_VARIABLE_NAME_MAX_LEN + 1];
+    int int_val, ret;
+    float float_val, float_val2;
+    struct sml_variable *var;
+
+    file = fopen(str, "r");
+    ON_NULL_RETURN_VAL(file, false);
+
+    while (fgets(line, LINE_SIZE, file)) {
+        ret = strncmp(line, "sml_process", 11);
+        if (ret == 0) {
+            sml_process(sml);
+            continue;
+        }
+        ret = strncmp(line, "sml_predict", 11);
+        if (ret == 0) {
+            sml_predict(sml);
+            continue;
+        }
+        ret = sscanf(line, "sml_set_learn_disabled %d\n", &int_val);
+        if (ret > 0) {
+            sml_set_learn_disabled(sml, !!int_val);
+            continue;
+        }
+        ret = sscanf(line, "sml_new_input %127s\n", name);
+        if (ret > 0) {
+            sml_new_input(sml, name);
+            continue;
+        }
+        ret = sscanf(line, "sml_new_output %127s\n", name);
+        if (ret > 0) {
+            sml_new_output(sml, name);
+            continue;
+        }
+        ret = sscanf(line, "sml_variable_set_value %127s %f\n", name,
+            &float_val);
+        if (ret > 1) {
+            var = variable_find_by_name(sml, name);
+            if (var)
+                sml_variable_set_value(sml, var, float_val);
+            continue;
+        }
+        ret = sscanf(line, "sml_variable_set_enabled %127s %d\n", name,
+            &int_val);
+        if (ret > 1) {
+            var = variable_find_by_name(sml, name);
+            if (var)
+                sml_variable_set_enabled(sml, var, !!int_val);
+            continue;
+        }
+        ret = sscanf(line, "sml_remove_variable %127s\n", name);
+        if (ret > 0) {
+            var = variable_find_by_name(sml, name);
+            if (var)
+                sml_remove_variable(sml, var);
+            continue;
+        }
+        ret = sscanf(line, "sml_variable_set_range %127s %f %f\n", name,
+            &float_val, &float_val2);
+        if (ret > 2) {
+            var = variable_find_by_name(sml, name);
+            if (var)
+                sml_variable_set_range(sml, var, float_val, float_val2);
+            continue;
+        }
+    }
+
+
+    return true;
+#else
+    return false;
+#endif
+}
+
+API_EXPORT bool
 sml_set_learn_disabled(struct sml_object *sml, bool disable)
 {
     ON_NULL_RETURN_VAL(sml, false);
     struct sml_engine *engine = (struct sml_engine *)sml;
     engine->learn_disabled = disable;
+    SML_LOG_DEBUG_DATA(engine, "sml_set_learn_disabled %d\n", !!disable);
     return true;
 }
 
@@ -165,6 +369,7 @@ API_EXPORT int
 sml_process(struct sml_object *sml)
 {
     struct sml_engine *engine = (struct sml_engine *)sml;
+    int r;
 
     ON_NULL_RETURN_VAL(sml, -EINVAL);
     if (!engine->process) {
@@ -172,7 +377,9 @@ sml_process(struct sml_object *sml)
             "sml_process is mandatory for engines.");
         return -EINVAL;
     }
-    return engine->process(engine);
+    r = engine->process(engine);
+    SML_LOG_DEBUG_DATA(engine, "sml_process\n");
+    return r;
 }
 
 API_EXPORT bool
@@ -186,6 +393,7 @@ sml_predict(struct sml_object *sml)
             "sml_predict is mandatory for engines.");
         return false;
     }
+    SML_LOG_DEBUG_DATA(engine, "sml_predict\n");
     return engine->predict(engine);
 }
 
@@ -269,6 +477,7 @@ sml_new_input(struct sml_object *sml, const char *name)
         return NULL;
     }
 
+    SML_LOG_DEBUG_DATA(engine, "sml_new_input %s\n", name);
     return engine->new_input(engine, name);
 }
 
@@ -294,6 +503,7 @@ sml_new_output(struct sml_object *sml, const char *name)
         return NULL;
     }
 
+    SML_LOG_DEBUG_DATA(engine, "sml_new_output %s\n", name);
     return engine->new_output(engine, name);
 }
 
@@ -340,6 +550,9 @@ sml_variable_set_value(struct sml_object *sml,
             "sml_variable_set_value is mandatory for engines.");
         return false;
     }
+
+    SML_LOG_DEBUG_DATA_VAR(engine, "sml_variable_set_value", "%f\n",
+        sml_variable, value);
     return engine->set_value(sml_variable, value);
 }
 
@@ -393,6 +606,9 @@ sml_variable_set_enabled(struct sml_object *sml,
             "sml_variable_set_enabled is mandatory for engines.");
         return -EINVAL;
     }
+
+    SML_LOG_DEBUG_DATA_VAR(engine, "sml_variable_set_enabled", "%d\n",
+        sml_variable, !!enabled);
     return engine->variable_set_enabled(engine,
         sml_variable, enabled);
 }
@@ -425,6 +641,7 @@ sml_remove_variable(struct sml_object *sml, struct sml_variable *sml_variable)
             "sml_remove_variable is mandatory for engines.");
         return false;
     }
+    SML_LOG_DEBUG_DATA_VAR(engine, "sml_remove_variable", "", sml_variable);
     return engine->remove_variable(engine, sml_variable);
 }
 
@@ -499,6 +716,9 @@ sml_variable_set_range(struct sml_object *sml,
     if (isnan(max) && !sml_variable_get_range(sml, sml_variable, NULL, &max))
         return false;
 
+    SML_LOG_DEBUG_DATA_VAR(engine, "sml_variable_set_range", "%f %f\n",
+        sml_variable, min, max);
+
     if (max < min) {
         sml_warning("Max value (%f) is lower than min value (%f). Inverting.",
             max, min);
@@ -557,6 +777,11 @@ sml_call_read_state_cb(struct sml_engine *engine)
         engine->read_state_cb_data))
         return -EAGAIN;
 
+    SML_LOG_DEBUG_DATA(engine, "sml_call_read_state_cb\n");
+    SML_LOG_DEBUG_DATA_LIST(engine, "sml_call_read_state_cb input",
+        sml_get_input_list((struct sml_object *)engine));
+    SML_LOG_DEBUG_DATA_LIST(engine, "sml_call_read_state_cb output",
+        sml_get_output_list((struct sml_object *)engine));
     return 0;
 }
 
@@ -569,4 +794,9 @@ sml_call_output_state_changed_cb(struct sml_engine *engine,
 
     engine->output_state_changed_cb((struct sml_object *)engine, changed,
         engine->output_state_changed_cb_data);
+
+    SML_LOG_DEBUG_DATA(engine, "sml_call_output_state_changed_cb\n");
+    if (changed)
+        SML_LOG_DEBUG_DATA_LIST(engine,
+            "sml_call_output_state_changed_cb changed", changed);
 }
