@@ -53,6 +53,7 @@ bool
 file_exists(const char *path)
 {
     struct stat stat_result;
+
     if (!stat(path, &stat_result))
         return true;
     return false;
