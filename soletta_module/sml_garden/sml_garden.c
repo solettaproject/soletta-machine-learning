@@ -101,27 +101,25 @@ flower_power_packet_process(struct sol_flow_node *node, void *data,
     const struct sol_flow_packet *packet)
 {
     int r;
-    const char *timestamp, *id;
     struct sml_garden_data *sdata = data;
-    struct sol_drange water;
+    struct sol_flower_power_data fpd;
 
-    r = sol_flower_power_get_packet_components(packet, &id,
-        &timestamp, NULL, NULL, NULL, &water);
+    r = sol_flower_power_get_packet(packet, &fpd);
     SOL_INT_CHECK(r, < 0, r);
-    SOL_DBG("Received packet - id: %s - timestamp: %s - water:%g", id,
-        timestamp, water.val);
+    SOL_DBG("Received packet - id: %s - timestamp: %s - water:%g", fpd.id,
+        fpd.timestamp, fpd.water.val);
 
-    if (!timestamp) {
+    if (!fpd.timestamp) {
         SOL_ERR("Could not copy timestamp string. Timestamp is NULL.");
         return -EINVAL;
     }
 
-    if (!sdata->last_timestamp || strcmp(timestamp, sdata->last_timestamp)) {
+    if (!sdata->last_timestamp || strcmp(fpd.timestamp, sdata->last_timestamp)) {
         sdata->last_water = sdata->cur_water;
-        sdata->cur_water = water;
+        sdata->cur_water = fpd.water;
 
         free(sdata->last_timestamp);
-        sdata->last_timestamp = strdup(timestamp);
+        sdata->last_timestamp = strdup(fpd.timestamp);
         SOL_NULL_CHECK_GOTO(sdata->last_timestamp, err_exit);
     }
     return 0;
