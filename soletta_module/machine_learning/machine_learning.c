@@ -1226,7 +1226,6 @@ struct machine_learning_sync_data {
 
     //Used only in main thread. No need to lock
     struct sol_flow_node *node;
-    FILE *debug_file;
 
     //Used by main thread and process thread. Need to be locked
     struct sol_ptr_vector input_queue;
@@ -1326,52 +1325,6 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
 #undef VARIABLE_INPUT_PREFIX
 #undef VARIABLE_OUTPUT_PREFIX
 
-static void
-sync_debug_log_list(FILE *debug_file, struct sol_drange *array,
-    uint16_t array_len)
-{
-    uint16_t i;
-
-    for (i = 0; i < array_len; i++) {
-        fprintf(debug_file, " %f %f %f %f", array[i].val, array[i].min,
-            array[i].max, array[i].step);
-        if (i < array_len - 1)
-            fprintf(debug_file, ";");
-    }
-}
-
-static void
-sync_debug_log_sml_data(FILE *debug_file,
-    struct packet_type_sml_data_packet_data *sml_data, bool predict)
-{
-    if (!debug_file)
-        return;
-
-    if (predict)
-        fprintf(debug_file, "PREDICT INPUTS");
-    else
-        fprintf(debug_file, "PROCESS INPUTS");
-    sync_debug_log_list(debug_file, sml_data->inputs, sml_data->inputs_len);
-    fprintf(debug_file, " OUTPUTS");
-    sync_debug_log_list(debug_file, sml_data->outputs, sml_data->outputs_len);
-    fprintf(debug_file, "\n");
-    fflush(debug_file);
-}
-
-static void
-sync_debug_log_sml_output_data(FILE *debug_file,
-    struct packet_type_sml_output_data_packet_data *sml_output_data)
-{
-    if (!debug_file)
-        return;
-
-    fprintf(debug_file, "OUTPUT_STATE_CHANGED_CB ");
-    sync_debug_log_list(debug_file, sml_output_data->outputs,
-        sml_output_data->outputs_len);
-    fprintf(debug_file, "\n");
-    fflush(debug_file);
-}
-
 static int
 machine_learning_sync_pre_process(struct machine_learning_sync_data *mdata)
 {
@@ -1460,8 +1413,6 @@ machine_learning_sync_worker_thread_feedback(void *data)
         r = sml_output_data_send_packet(mdata->node,
             SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__OUT__OUT,
             sml_output_data);
-        sync_debug_log_sml_output_data(mdata->debug_file,
-            sml_output_data);
         packet_type_sml_output_data_packet_dispose(NULL, sml_output_data);
         free(sml_output_data);
     }
@@ -1513,8 +1464,6 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
     int error;
     uint16_t i;
 
-    if (mdata->debug_file)
-        fclose(mdata->debug_file);
     if (mdata->sml_data_dir && !sml_save(mdata->sml, mdata->sml_data_dir))
         SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
     if ((error = pthread_mutex_destroy(&mdata->queue_lock)))
@@ -1578,9 +1527,6 @@ sml_data_process(struct sol_flow_node *node, void *data, uint16_t port,
     SOL_INT_CHECK_GOTO(r, < 0, err_mutex);
 
     pthread_mutex_unlock(&mdata->queue_lock);
-
-    sync_debug_log_sml_data(mdata->debug_file, &sml_data,
-        new_sml_data->predict);
 
     if (!mdata->worker)
         return machine_learning_sync_worker_schedule(mdata);
@@ -1823,22 +1769,8 @@ sml_data_debug_file(struct sol_flow_node *node, void *data, uint16_t port,
     SOL_INT_CHECK(r, < 0, r);
     SOL_NULL_CHECK(str, -EINVAL);
 
-    if (mdata->debug_file)
-        fclose(mdata->debug_file);
+    sml_set_debug_log_file(mdata->sml, str);
 
-    if (str[0] == 0) {
-        mdata->debug_file = NULL;
-        return 0;
-    }
-
-    mdata->debug_file = fopen(str, "a");
-    SOL_NULL_CHECK(mdata->debug_file, -ENOMEM);
-    fprintf(mdata->debug_file, "#PROCESS INPUTS val min max step;"
-        " val min max step; val min max step;... OUTPUTS val min max step;"
-        " val min max step; val min max step;...\n");
-    fprintf(mdata->debug_file, "#OUTPUT_STATE_CHANGED_CB val min max step;"
-        " val min max step; val min max step;...\n");
-    fflush(mdata->debug_file);
     return 0;
 }
 
