@@ -36,6 +36,8 @@
 #include <sml_ann.h>
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdio.h>
+#include <config.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -64,6 +66,9 @@ typedef struct sml_variable *(*sml_engine_variables_list_index)(struct sml_varia
 typedef bool (*sml_engine_variable_set_range)(struct sml_engine *engine, struct sml_variable *sml_variable, float min, float max);
 typedef bool (*sml_engine_variable_get_range)(struct sml_variable *sml_variable, float *min, float *max);
 typedef void (*sml_engine_print_debug)(struct sml_engine *engine, bool full);
+
+int sml_call_read_state_cb(struct sml_engine *engine);
+void sml_call_output_state_changed_cb(struct sml_engine *engine, struct sml_variables_list *changed);
 
 struct sml_engine {
     /* General API */
@@ -94,6 +99,9 @@ struct sml_engine {
 
     /* Debug API */
     sml_engine_print_debug print_debug;
+#ifdef Debug
+    FILE *debug_file;
+#endif
 
     uint32_t magic_number;
     sml_read_state_cb read_state_cb;
