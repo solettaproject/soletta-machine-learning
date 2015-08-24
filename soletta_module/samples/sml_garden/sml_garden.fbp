@@ -70,7 +70,7 @@ BtnAnn OUT -> IN _(boolean/filter) TRUE -> GET FlowerPowerAPI
 BtnFuzzy OUT -> ENGINE_STATE SmlMessageConstructorFuzzy(sml-garden/message-constructor)
 BtnAnn OUT -> ENGINE_STATE SmlMessageConstructorAnn(sml-garden/message-constructor)
 
-Timeblocks (wallclock/timeblock:interval=30) OUT -> TIMEBLOCK SmlMessageConstructorFuzzy
+Timeblocks (wallclock/timeblock:interval=30, send_initial_packet=true) OUT -> TIMEBLOCK SmlMessageConstructorFuzzy
 Timeblocks OUT -> TIMEBLOCK SmlMessageConstructorAnn
 Timeblocks OUT -> GET FlowerPowerAPI
 Timeblocks OUT -> SAVE SmlFuzzy
