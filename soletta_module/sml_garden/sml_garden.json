@@ -44,8 +44,13 @@
             "out_ports": [
                 {
                     "data_type": "custom:PACKET_TYPE_SML_DATA",
-                    "description": "A message used to feed SML that contains the current timeblock, how many seconds the engine was on and plant data.",
+                    "description": "A message used to feed SML process port that contains the current timeblock, how many seconds the engine was on and plant data.",
                     "name": "OUT"
+                },
+                {
+                    "data_type": "custom:PACKET_TYPE_SML_DATA",
+                    "description": "A message used to feed SML predict port that contains the current timeblock, how many seconds the engine was on and plant data.",
+                    "name": "OUT_PREDICT"
                 }
             ],
             "private_data_type": "sml_garden_data"
