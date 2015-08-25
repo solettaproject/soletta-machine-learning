@@ -146,6 +146,14 @@
             "process": "save_process"
         },
         "name":"SAVE"
+       },
+       {
+        "data_type": "string",
+        "description": "File to log sml read data and predicted outputs.",
+        "methods": {
+         "process": "debug_file_process"
+        },
+        "name": "DEBUG_FILE"
        }
       ],
       "methods": {
@@ -254,6 +262,14 @@
             "process": "save_process"
         },
         "name":"SAVE"
+       },
+       {
+        "data_type": "string",
+        "description": "File to log sml read data and predicted outputs.",
+        "methods": {
+         "process": "debug_file_process"
+        },
+        "name": "DEBUG_FILE"
        }
       ],
       "methods": {
