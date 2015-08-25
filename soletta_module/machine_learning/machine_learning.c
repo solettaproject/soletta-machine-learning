@@ -1052,6 +1052,7 @@ packet_type_sml_data_packet_dispose(
 {
     struct packet_type_sml_data_packet_data *packet_type_sml_data = mem;
 
+    SOL_NULL_CHECK(packet_type_sml_data);
     free(packet_type_sml_data->inputs);
     free(packet_type_sml_data->outputs);
     free(packet_type_sml_data->input_ids);
@@ -1173,6 +1174,7 @@ packet_type_sml_output_data_packet_dispose(
 {
     struct packet_type_sml_output_data_packet_data *packet_type_sml_output_data = mem;
 
+    SOL_NULL_CHECK(packet_type_sml_output_data);
     free(packet_type_sml_output_data->outputs);
 }
 
@@ -1501,10 +1503,14 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
         SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
     if ((error = pthread_mutex_destroy(&mdata->queue_lock)))
         SOL_WRN("Error %d when destroying pthread mutex lock", error);
-    SOL_PTR_VECTOR_FOREACH_IDX (&mdata->output_queue, output_data, i)
+    SOL_PTR_VECTOR_FOREACH_IDX (&mdata->output_queue, output_data, i) {
+        packet_type_sml_output_data_packet_dispose(NULL, output_data);
         free(output_data);
-    SOL_PTR_VECTOR_FOREACH_IDX (&mdata->input_queue, sml_data, i)
+    }
+    SOL_PTR_VECTOR_FOREACH_IDX (&mdata->input_queue, sml_data, i) {
+        packet_type_sml_data_packet_dispose(NULL, &sml_data->base);
         free(sml_data);
+    }
     sml_free(mdata->sml);
     sol_ptr_vector_clear(&mdata->input_queue);
     sol_ptr_vector_clear(&mdata->output_queue);
