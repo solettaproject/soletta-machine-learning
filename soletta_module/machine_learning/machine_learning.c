@@ -231,7 +231,8 @@ struct machine_learning_data {
     struct sol_vector output_vec;
     struct sol_vector output_id_vec;
     bool process_needed, predict_needed, send_process_finished, save_needed,
-        learn_disabled;
+        learn_disabled, debug_file_changed;
+    char *debug_file;
 
     struct sol_flow_node *node;
     struct sol_worker_thread *worker;
@@ -667,6 +668,7 @@ machine_learning_close(struct sol_flow_node *node, void *data)
         SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
     sml_free(mdata->sml);
     free(mdata->sml_data_dir);
+    free(mdata->debug_file);
 }
 
 static int
@@ -904,6 +906,15 @@ machine_learning_worker_thread_iterate(void *data)
     predict_needed = mdata->predict_needed;
     save_needed = mdata->save_needed;
     learn_disabled = mdata->learn_disabled;
+
+    if (mdata->debug_file_changed) {
+        if (!sml_set_debug_log_file(mdata->sml, mdata->debug_file))
+            SOL_WRN("Failed to set debug log file at : %s", mdata->debug_file);
+        free(mdata->debug_file);
+        mdata->debug_file = NULL;
+        mdata->debug_file_changed = false;
+    }
+
     pthread_mutex_unlock(&mdata->process_lock);
 
     if (!sml_set_learn_disabled(mdata->sml, learn_disabled)) {
@@ -915,7 +926,7 @@ machine_learning_worker_thread_iterate(void *data)
         return false;
 
     if (save_needed && !sml_save(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
+        SOL_WRN("Failed to save SML data at: %s", mdata->sml_data_dir);
 
     if ((mdata->run_process && process_needed) || !predict_needed) {
         //Execute process
@@ -1251,6 +1262,37 @@ sml_output_data_send_packet(struct sol_flow_node *src, uint16_t src_port,
     return sol_flow_send_packet(src, src_port, packet);
 }
 
+static int
+debug_file_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    int r;
+    struct machine_learning_data *mdata = data;
+    const char *str;
+
+    r = sol_flow_packet_get_string(packet, &str);
+    SOL_INT_CHECK(r, < 0, r);
+
+    r = mutex_lock(&mdata->process_lock);
+    SOL_INT_CHECK(r, < 0, r);
+
+    free(mdata->debug_file);
+
+    if (str) {
+        mdata->debug_file = strdup(str);
+        SOL_NULL_CHECK_GOTO(mdata->debug_file, err);
+    } else
+        mdata->debug_file = NULL;
+    mdata->debug_file_changed = true;
+
+    pthread_mutex_unlock(&mdata->process_lock);
+    return 0;
+
+err:
+    pthread_mutex_unlock(&mdata->process_lock);
+    return -ENOMEM;
+}
+
 struct machine_learning_sync_data {
     //Used only in open method or/and worker thread. No need to lock
     struct sml_object *sml;
@@ -1266,7 +1308,8 @@ struct machine_learning_sync_data {
     //Used by main thread and process thread. Need to be locked
     struct sol_ptr_vector input_queue;
     struct sol_vector output_queue;
-    bool save_needed, learn_disabled;
+    bool save_needed, learn_disabled, debug_file_changed;
+    char *debug_file;
 
     struct sol_worker_thread *worker;
     pthread_mutex_t queue_lock;
@@ -1391,6 +1434,14 @@ machine_learning_sync_worker_thread_iterate(void *data)
 
     r = mutex_lock(&mdata->queue_lock);
     SOL_INT_CHECK(r, < 0, false);
+
+    if (mdata->debug_file_changed) {
+        if (!sml_set_debug_log_file(mdata->sml, mdata->debug_file))
+            SOL_WRN("Failed to set debug log file at : %s", mdata->debug_file);
+        free(mdata->debug_file);
+        mdata->debug_file = NULL;
+        mdata->debug_file_changed = false;
+    }
 
     if (mdata->save_needed && !sml_save(mdata->sml, mdata->sml_data_dir))
         SOL_WRN("Failed to save the SML data at:%s", mdata->sml_data_dir);
@@ -1531,6 +1582,7 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
     sol_vector_clear(&mdata->output_queue);
     free(mdata->output_steps);
     free(mdata->sml_data_dir);
+    free(mdata->debug_file);
 }
 
 static int
@@ -1854,11 +1906,26 @@ sml_data_debug_file(struct sol_flow_node *node, void *data, uint16_t port,
 
     r = sol_flow_packet_get_string(packet, &str);
     SOL_INT_CHECK(r, < 0, r);
-    SOL_NULL_CHECK(str, -EINVAL);
 
-    sml_set_debug_log_file(mdata->sml, str);
+    r = mutex_lock(&mdata->queue_lock);
+    SOL_INT_CHECK(r, < 0, r);
+
+    free(mdata->debug_file);
+
+    if (str) {
+        mdata->debug_file = strdup(str);
+        SOL_NULL_CHECK_GOTO(mdata->debug_file, err);
+    } else
+        mdata->debug_file = NULL;
+    mdata->debug_file_changed = true;
+
+    pthread_mutex_unlock(&mdata->queue_lock);
 
     return 0;
+
+err:
+    pthread_mutex_unlock(&mdata->queue_lock);
+    return -ENOMEM;
 }
 
 static int
