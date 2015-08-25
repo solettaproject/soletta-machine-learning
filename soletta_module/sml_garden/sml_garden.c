@@ -91,7 +91,6 @@ send_packet_if_needed(struct sol_flow_node *node, struct sml_garden_data *sdata)
     r = sml_data_send_packet(node,
         SOL_FLOW_NODE_TYPE_SML_GARDEN_MESSAGE_CONSTRUCTOR__OUT__OUT,
         &sml_data);
-    sdata->cur_water.val = NAN;
     return r;
 }
 
@@ -114,8 +113,9 @@ flower_power_packet_process(struct sol_flow_node *node, void *data,
         return -EINVAL;
     }
 
-    if (!sdata->last_timestamp || strcmp(fpd.timestamp, sdata->last_timestamp)) {
-        sdata->last_water = sdata->cur_water;
+    if (!sdata->last_timestamp ||
+        strcmp(fpd.timestamp, sdata->last_timestamp)) {
+
         sdata->cur_water = fpd.water;
 
         free(sdata->last_timestamp);
@@ -173,9 +173,13 @@ timeblock_process(struct sol_flow_node *node, void *data,
     struct sml_garden_data *sdata = data;
     int r, send_error = 0;
 
-    if (!empty_irange(&sdata->cur_timeblock) && !isnan(sdata->cur_water.val)) {
+    if (!empty_irange(&sdata->cur_timeblock) &&
+        (!isnan(sdata->cur_water.val) || sdata->last_engine_on_duration > 0)) {
         sdata->last_timeblock = sdata->cur_timeblock;
-        sdata->last_water = sdata->cur_water;
+        if (!isnan(sdata->cur_water.val)) {
+            sdata->last_water = sdata->cur_water;
+            sdata->cur_water.val = NAN;
+        }
         sdata->has_pending_data = true;
         send_error = send_packet_if_needed(node, sdata);
     }
