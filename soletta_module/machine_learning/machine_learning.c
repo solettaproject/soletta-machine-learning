@@ -1320,11 +1320,11 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
     }
 
     len = sml_variables_list_get_length(mdata->sml, list);
-    if (output_variable) {
+    if (output_variable && array_len > mdata->output_steps_len) {
         mdata->output_steps = realloc(mdata->output_steps,
             sizeof(double) * array_len);
         SOL_NULL_CHECK(mdata->output_steps, -ENOMEM);
-        mdata->output_steps_len = len;
+        mdata->output_steps_len = array_len;
     }
     for (i = 0; i < array_len; i++) {
         val = &array[i];
