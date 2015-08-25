@@ -154,6 +154,14 @@
             "process": "sml_learn_disabled"
         },
         "name":"LEARN_DISABLED"
+       },
+       {
+        "data_type": "string",
+        "description": "File to log sml read data and predicted outputs.",
+        "methods": {
+         "process": "debug_file_process"
+        },
+        "name": "DEBUG_FILE"
        }
       ],
       "methods": {
@@ -270,6 +278,14 @@
             "process": "sml_learn_disabled"
         },
         "name":"LEARN_DISABLED"
+       },
+       {
+        "data_type": "string",
+        "description": "File to log sml read data and predicted outputs.",
+        "methods": {
+         "process": "debug_file_process"
+        },
+        "name": "DEBUG_FILE"
        }
       ],
       "methods": {
