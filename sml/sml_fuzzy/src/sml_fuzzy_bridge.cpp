@@ -217,6 +217,8 @@ bool
 sml_fuzzy_load_file(struct sml_fuzzy *fuzzy, const char *filename)
 {
     fl::Engine *engine;
+    uint16_t i, len;
+    void *width;
 
     try {
         fl::FllImporter importer;
@@ -238,7 +240,6 @@ sml_fuzzy_load_file(struct sml_fuzzy *fuzzy, const char *filename)
       goto error;
     }
 
-
     if (fuzzy->engine)
         delete (fl::Engine*) fuzzy->engine;
 
@@ -249,6 +250,20 @@ sml_fuzzy_load_file(struct sml_fuzzy *fuzzy, const char *filename)
     fuzzy->output_terms_count = _calc_terms_count(engine->outputVariables());
     _remove_rule_blocks(engine);
 
+    sol_vector_clear(&fuzzy->input_terms_width);
+    sol_vector_clear(&fuzzy->output_terms_width);
+
+    len = engine->inputVariables().size();
+    for (i = 0; i < len; i++) {
+        width = sol_vector_append(&fuzzy->input_terms_width);
+        ON_NULL_RETURN_VAL(width, false);
+    }
+
+    len = engine->outputVariables().size();
+    for (i = 0; i < len; i++) {
+        width = sol_vector_append(&fuzzy->output_terms_width);
+        ON_NULL_RETURN_VAL(width, false);
+    }
     return true;
 
 error:
