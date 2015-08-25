@@ -54,6 +54,37 @@ struct sml_garden_data {
 };
 
 static int
+send_predict_packet(struct sol_flow_node *node, struct sml_garden_data *sdata)
+{
+    struct packet_type_sml_data_packet_data sml_data;
+    struct sol_drange inputs[2];
+    int r;
+
+    sdata->has_pending_data = false;
+    sml_data.input_ids_len = sml_data.output_ids_len = 0;
+    sml_data.input_ids = sml_data.output_ids = NULL;
+    sml_data.inputs_len = 2;
+    sml_data.outputs_len = 0;
+
+    sml_data.outputs = NULL;
+    sml_data.inputs = inputs;
+
+    inputs[0] = sdata->last_water;
+
+    inputs[1].val = sdata->cur_timeblock.val;
+    inputs[1].min = sdata->cur_timeblock.min;
+    inputs[1].max = sdata->cur_timeblock.max;
+    inputs[1].step = sdata->cur_timeblock.step;
+
+    SOL_DBG("Sending predict packet to SML");
+
+    r = sml_data_send_packet(node,
+        SOL_FLOW_NODE_TYPE_SML_GARDEN_MESSAGE_CONSTRUCTOR__OUT__OUT_PREDICT,
+        &sml_data);
+    return r;
+}
+
+static int
 send_packet_if_needed(struct sol_flow_node *node, struct sml_garden_data *sdata)
 {
     struct packet_type_sml_data_packet_data sml_data;
@@ -182,13 +213,15 @@ timeblock_process(struct sol_flow_node *node, void *data,
         }
         sdata->has_pending_data = true;
         send_error = send_packet_if_needed(node, sdata);
+        if (send_error)
+            SOL_DBG("Send packet to process SML failed with error=%d\n",
+                send_error);
     }
 
     r = sol_flow_packet_get_irange(packet, &sdata->cur_timeblock);
     SOL_INT_CHECK(r, < 0, r);
     SOL_DBG("Timeblock changed. Now:%d", sdata->cur_timeblock.val);
-
-    return send_error;
+    return send_predict_packet(node, sdata);
 }
 
 static int
