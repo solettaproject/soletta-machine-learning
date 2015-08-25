@@ -146,6 +146,14 @@
             "process": "save_process"
         },
         "name":"SAVE"
+       },
+       {
+        "data_type":"boolean",
+        "description": "Port used to disable the learning process",
+        "methods": {
+            "process": "sml_learn_disabled"
+        },
+        "name":"LEARN_DISABLED"
        }
       ],
       "methods": {
@@ -254,6 +262,14 @@
             "process": "save_process"
         },
         "name":"SAVE"
+       },
+       {
+        "data_type":"boolean",
+        "description": "Port used to disable the learning process",
+        "methods": {
+            "process": "sml_learn_disabled"
+        },
+        "name":"LEARN_DISABLED"
        }
       ],
       "methods": {
@@ -352,6 +368,14 @@
             "process": "sml_data_save_process"
         },
         "name":"SAVE"
+       },
+       {
+        "data_type":"boolean",
+        "description": "Port used to disable the learning process",
+        "methods": {
+            "process": "sml_data_learn_disabled_process"
+        },
+        "name":"LEARN_DISABLED"
        }
       ],
       "methods": {
@@ -427,6 +451,14 @@
             "process": "sml_data_save_process"
         },
         "name":"SAVE"
+       },
+       {
+        "data_type":"boolean",
+        "description": "Port used to disable the learning process",
+        "methods": {
+            "process": "sml_data_learn_disabled_process"
+        },
+        "name":"LEARN_DISABLED"
        }
       ],
       "methods": {
