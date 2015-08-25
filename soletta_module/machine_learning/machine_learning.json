@@ -387,6 +387,11 @@
         "data_type": "custom:PACKET_TYPE_SML_OUTPUT_DATA",
         "description": "Prediction values for output variables.",
         "name": "OUT"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_SML_OUTPUT_DATA",
+        "description": "Prediction values for output variables when prediction is called.",
+        "name": "OUT_PREDICT"
        }
       ],
       "private_data_type": "machine_learning_sync_data",
@@ -480,6 +485,11 @@
         "data_type": "custom:PACKET_TYPE_SML_OUTPUT_DATA",
         "description": "Prediction values for output variables.",
         "name": "OUT"
+       },
+       {
+        "data_type": "custom:PACKET_TYPE_SML_OUTPUT_DATA",
+        "description": "Prediction values for output variables when prediction is called.",
+        "name": "OUT_PREDICT"
        }
       ],
       "private_data_type": "machine_learning_sync_data",
