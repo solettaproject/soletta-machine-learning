@@ -1068,9 +1068,12 @@ packet_type_sml_data_packet_init(const struct sol_flow_packet_type *packet_type,
     uint16_t i;
 
     SOL_NULL_CHECK(in->inputs, -EINVAL);
-    SOL_NULL_CHECK(in->outputs, -EINVAL);
     SOL_NULL_CHECK(in->inputs_len, -EINVAL);
-    SOL_NULL_CHECK(in->outputs_len, -EINVAL);
+
+    if ((in->outputs_len == 0) != (in->outputs == NULL)) {
+        SOL_WRN("output_ids and output_ids_len values are inconsistent\n");
+        return -EINVAL;
+    }
 
     if ((in->output_ids_len == 0) != (in->output_ids == NULL)) {
         SOL_WRN("output_ids and output_ids_len values are inconsistent\n");
@@ -1089,15 +1092,18 @@ packet_type_sml_data_packet_init(const struct sol_flow_packet_type *packet_type,
 
     sml_data->input_ids = NULL;
     sml_data->output_ids = NULL;
+    sml_data->outputs = NULL;
     sml_data->inputs = malloc(in->inputs_len * sizeof(struct sol_drange));
     SOL_NULL_CHECK(sml_data->inputs, -ENOMEM);
     for (i = 0; i < in->inputs_len; i++)
         sml_data->inputs[i] = in->inputs[i];
 
-    sml_data->outputs = malloc(in->outputs_len * sizeof(struct sol_drange));
-    SOL_NULL_CHECK_GOTO(sml_data->outputs, err);
-    for (i = 0; i < in->outputs_len; i++)
-        sml_data->outputs[i] = in->outputs[i];
+    if (in->outputs) {
+        sml_data->outputs = malloc(in->outputs_len * sizeof(struct sol_drange));
+        SOL_NULL_CHECK_GOTO(sml_data->outputs, err);
+        for (i = 0; i < in->outputs_len; i++)
+            sml_data->outputs[i] = in->outputs[i];
+    }
 
     if (sml_data->input_ids_len) {
         sml_data->input_ids = malloc(sml_data->input_ids_len *
@@ -1259,7 +1265,7 @@ struct machine_learning_sync_data {
 
     //Used by main thread and process thread. Need to be locked
     struct sol_ptr_vector input_queue;
-    struct sol_ptr_vector output_queue;
+    struct sol_vector output_queue;
     bool save_needed, learn_disabled;
 
     struct sol_worker_thread *worker;
@@ -1268,6 +1274,11 @@ struct machine_learning_sync_data {
 
 struct sml_data_priv {
     struct packet_type_sml_data_packet_data base;
+    bool predict;
+};
+
+struct sml_output_data_priv {
+    struct packet_type_sml_output_data_packet_data *packet;
     bool predict;
 };
 
@@ -1369,7 +1380,7 @@ machine_learning_sync_pre_process(struct machine_learning_sync_data *mdata)
 
 static bool sync_read_state_cb(struct sml_object *sml, void *data);
 
-static void sync_output_state_changed_cb(struct sml_object *sml, struct sml_variables_list *changed, void *data);
+static void sync_output_state_changed_run(struct sml_object *sml, struct sml_variables_list *changed, void *data, bool predict);
 
 static bool
 machine_learning_sync_worker_thread_iterate(void *data)
@@ -1409,7 +1420,7 @@ machine_learning_sync_worker_thread_iterate(void *data)
     if (mdata->cur_sml_data->predict) {
         sync_read_state_cb(mdata->sml, mdata);
         if (sml_predict(mdata->sml))
-            sync_output_state_changed_cb(mdata->sml, NULL, mdata);
+            sync_output_state_changed_run(mdata->sml, NULL, mdata, true);
         else
             SOL_WRN("Predict failed.");
     } else {
@@ -1432,26 +1443,29 @@ end:
 static void
 machine_learning_sync_worker_thread_feedback(void *data)
 {
-    int r;
+    int r, port;
     uint16_t i;
     struct packet_type_sml_output_data_packet_data *sml_output_data;
     struct machine_learning_sync_data *mdata = data;
+    struct sml_output_data_priv *priv;
 
     r = mutex_lock(&mdata->queue_lock);
     SOL_INT_CHECK(r, < 0);
-    if (mdata->output_queue.base.len == 0)
+    if (mdata->output_queue.len == 0)
         goto end;
 
-    for (i = 0; i < mdata->output_queue.base.len; i++) {
-        sml_output_data = sol_ptr_vector_get(&mdata->output_queue, i);
-        SOL_NULL_CHECK_GOTO(sml_output_data, end);
-        r = sml_output_data_send_packet(mdata->node,
-            SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__OUT__OUT,
-            sml_output_data);
+    for (i = 0; i < mdata->output_queue.len; i++) {
+        priv = sol_vector_get(&mdata->output_queue, i);
+        SOL_NULL_CHECK_GOTO(priv, end);
+        sml_output_data = priv->packet;
+        port = priv->predict ?
+            SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__OUT__OUT_PREDICT :
+            SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__OUT__OUT;
+        r = sml_output_data_send_packet(mdata->node, port, sml_output_data);
         packet_type_sml_output_data_packet_dispose(NULL, sml_output_data);
         free(sml_output_data);
     }
-    sol_ptr_vector_clear(&mdata->output_queue);
+    sol_vector_clear(&mdata->output_queue);
 
 end:
     pthread_mutex_unlock(&mdata->queue_lock);
@@ -1494,8 +1508,8 @@ static void
 machine_learning_sync_close(struct sol_flow_node *node, void *data)
 {
     struct machine_learning_sync_data *mdata = data;
-    struct packet_type_sml_output_data_packet_data *output_data;
     struct sml_data_priv *sml_data;
+    struct sml_output_data_priv *sml_output_data_priv;
     int error;
     uint16_t i;
 
@@ -1503,9 +1517,10 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
         SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
     if ((error = pthread_mutex_destroy(&mdata->queue_lock)))
         SOL_WRN("Error %d when destroying pthread mutex lock", error);
-    SOL_PTR_VECTOR_FOREACH_IDX (&mdata->output_queue, output_data, i) {
-        packet_type_sml_output_data_packet_dispose(NULL, output_data);
-        free(output_data);
+    SOL_VECTOR_FOREACH_IDX (&mdata->output_queue, sml_output_data_priv, i) {
+        packet_type_sml_output_data_packet_dispose(NULL,
+            sml_output_data_priv->packet);
+        free(sml_output_data_priv->packet);
     }
     SOL_PTR_VECTOR_FOREACH_IDX (&mdata->input_queue, sml_data, i) {
         packet_type_sml_data_packet_dispose(NULL, &sml_data->base);
@@ -1513,7 +1528,7 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
     }
     sml_free(mdata->sml);
     sol_ptr_vector_clear(&mdata->input_queue);
-    sol_ptr_vector_clear(&mdata->output_queue);
+    sol_vector_clear(&mdata->output_queue);
     free(mdata->output_steps);
     free(mdata->sml_data_dir);
 }
@@ -1656,8 +1671,8 @@ sync_read_state_cb(struct sml_object *sml, void *data)
 }
 
 static void
-sync_output_state_changed_cb(struct sml_object *sml,
-    struct sml_variables_list *changed, void *data)
+sync_output_state_changed_run(struct sml_object *sml,
+    struct sml_variables_list *changed, void *data, bool predict)
 {
     int r;
     uint16_t i, len;
@@ -1666,6 +1681,7 @@ sync_output_state_changed_cb(struct sml_object *sml,
     struct sml_variable *var;
     struct packet_type_sml_output_data_packet_data *sml_output_data;
     struct machine_learning_sync_data *mdata = data;
+    struct sml_output_data_priv *sml_output_data_priv;
 
     list = sml_get_output_list(sml);
     len = sml_variables_list_get_length(sml, list);
@@ -1680,7 +1696,7 @@ sync_output_state_changed_cb(struct sml_object *sml,
     for (i = 0; i < len; i++) {
         var = sml_variables_list_index(sml, list, i);
         SOL_NULL_CHECK_GOTO(var, err);
-        if (!changed || sml_variables_list_contains(sml, changed, var)) {
+        if (predict || sml_variables_list_contains(sml, changed, var)) {
             if (!sml_variable_get_range(sml, var, &min, &max))
                 goto err;
 
@@ -1702,17 +1718,27 @@ sync_output_state_changed_cb(struct sml_object *sml,
     r = mutex_lock(&mdata->queue_lock);
     SOL_INT_CHECK_GOTO(r, < 0, err);
 
-    r = sol_ptr_vector_append(&mdata->output_queue, sml_output_data);
+    sml_output_data_priv = sol_vector_append(&mdata->output_queue);
+    SOL_NULL_CHECK_GOTO(sml_output_data_priv, err_unlock);
+    sml_output_data_priv->predict = predict;
+    sml_output_data_priv->packet = sml_output_data;
 
     pthread_mutex_unlock(&mdata->queue_lock);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
     return;
 
+err_unlock:
+    pthread_mutex_unlock(&mdata->queue_lock);
 err:
     free(sml_output_data->outputs);
     free(sml_output_data);
 }
 
+static void
+sync_output_state_changed_cb(struct sml_object *sml,
+    struct sml_variables_list *changed, void *data)
+{
+    sync_output_state_changed_run(sml, changed, data, false);
+}
 int
 init_machine_learning_sync(struct machine_learning_sync_data *mdata)
 {
@@ -1730,7 +1756,7 @@ init_machine_learning_sync(struct machine_learning_sync_data *mdata)
     }
 
     sol_ptr_vector_init(&mdata->input_queue);
-    sol_ptr_vector_init(&mdata->output_queue);
+    sol_vector_init(&mdata->output_queue, sizeof(struct sml_output_data_priv));
 
     if ((r = pthread_mutex_init(&mdata->queue_lock, NULL))) {
         SOL_WRN("Failed to initialize pthread mutex lock");
