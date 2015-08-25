@@ -32,6 +32,7 @@
 
 DECLARE=EngineController:fbp:engine_controller.fbp
 DECLARE=FlowerPowerStatus:fbp:flower_power_status.fbp
+DECLARE=IsWeekend:fbp:is_weekend.fbp
 
 SmlFuzzy(SmlFuzzy)
 SmlAnn(SmlAnn)
@@ -84,3 +85,6 @@ FlowerPowerAPI OUT -> IN FilterAnn OUT -> FLOWER_POWER_PACKET SmlMessageConstruc
 
 SmlFuzzy OUT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerFuzzy
 SmlAnn OUT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerAnn
+
+IsWeekend(IsWeekend) IS_WEEKEND -> LEARN_DISABLED SmlFuzzy
+IsWeekend IS_WEEKEND -> LEARN_DISABLED SmlAnn
