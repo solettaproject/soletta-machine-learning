@@ -80,7 +80,9 @@ LocationIdFuzzy OUT -> ID FilterFuzzy(flower-power/filter-id)
 LocationIdAnn OUT -> ID FilterAnn(flower-power/filter-id)
 
 FlowerPowerAPI OUT -> IN FilterFuzzy OUT -> FLOWER_POWER_PACKET SmlMessageConstructorFuzzy OUT -> IN SmlFuzzy
+SmlMessageConstructorFuzzy OUT_PREDICT -> IN_PREDICT SmlFuzzy
 FlowerPowerAPI OUT -> IN FilterAnn OUT -> FLOWER_POWER_PACKET SmlMessageConstructorAnn OUT -> IN SmlAnn
+SmlMessageConstructorAnn OUT_PREDICT -> IN_PREDICT SmlAnn
 
-SmlFuzzy OUT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerFuzzy
-SmlAnn OUT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerAnn
+SmlFuzzy OUT_PREDICT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerFuzzy
+SmlAnn OUT_PREDICT -> IN _(machine-learning/filter-sync) OUT[0] -> SECONDS EngineControllerAnn
