@@ -192,11 +192,13 @@ timeblock_process(struct sol_flow_node *node, void *data,
 {
     struct sml_garden_data *sdata = data;
     int r, send_error = 0;
+    bool has_new_flower_power_packet;
 
+    has_new_flower_power_packet = !isnan(sdata->cur_water.val);
     if (!empty_irange(&sdata->cur_timeblock) &&
-        (!isnan(sdata->cur_water.val) || sdata->last_engine_on_duration > 0)) {
+        (has_new_flower_power_packet || sdata->last_engine_on_duration > 0)) {
         sdata->last_timeblock = sdata->cur_timeblock;
-        if (!isnan(sdata->cur_water.val)) {
+        if (has_new_flower_power_packet) {
             sdata->last_water = sdata->cur_water;
             sdata->cur_water.val = NAN;
         }
@@ -210,6 +212,11 @@ timeblock_process(struct sol_flow_node *node, void *data,
     r = sol_flow_packet_get_irange(packet, &sdata->cur_timeblock);
     SOL_INT_CHECK(r, < 0, r);
     SOL_DBG("Timeblock changed. Now:%d", sdata->cur_timeblock.val);
+
+    //No new flower power packet
+    if (!has_new_flower_power_packet)
+        return 0;
+
     return send_predict_packet(node, sdata);
 }
 
