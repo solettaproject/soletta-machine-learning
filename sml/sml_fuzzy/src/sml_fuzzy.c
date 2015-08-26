@@ -220,7 +220,7 @@ _get_next_term_id(struct sml_fuzzy *fuzzy, struct sml_variable *var)
     return 0;
 }
 
-static bool
+static int
 _create_fuzzy_terms(struct sml_fuzzy_engine *fuzzy_engine,
     struct sml_variable *var, float min, float max, bool real_min,
     bool real_max)
@@ -232,6 +232,7 @@ _create_fuzzy_terms(struct sml_fuzzy_engine *fuzzy_engine,
     char term_name[SML_TERM_NAME_MAX_LEN + 1];
     char var_name[SML_VARIABLE_NAME_MAX_LEN + 1];
     uint16_t term_name_id;
+    struct sml_fuzzy_term *term;
 
     fuzzy = fuzzy_engine->fuzzy;
     width = sml_fuzzy_bridge_variable_get_default_term_width(fuzzy, var);
@@ -265,16 +266,22 @@ _create_fuzzy_terms(struct sml_fuzzy_engine *fuzzy_engine,
         snprintf(term_name, sizeof(term_name), TERM_NAME_FMT, var_name,
             term_name_id, 0);
         if (real_min && real_max)
-            return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
+            term = sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
                 term_name, min, min + (max - min) / 2, max);
-        if (real_min)
-            return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
+        else if (real_min)
+            term = sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
                 term_name, min, min, max + overlap);
-        if (real_max)
-            return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
+        else if (real_max)
+            term = sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
                 term_name, min - overlap, max, max);
-        return sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
-            term_name, min - overlap, min + (max - min) / 2, max + overlap);
+        else
+            term = sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
+                term_name, min - overlap, min + (max - min) / 2, max + overlap);
+
+        if (term == NULL)
+            return -ENOMEM;
+        else
+            return 0;
     }
 
     for (i = 0; i < num_terms; i++) {
@@ -282,18 +289,21 @@ _create_fuzzy_terms(struct sml_fuzzy_engine *fuzzy_engine,
             term_name_id, i);
         if (real_min && i == 0) {
             last_stop = min + first_width;
-            sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var, term_name,
-                min, min, last_stop + overlap);
+            term = sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
+                term_name, min, min, last_stop + overlap);
         } else if (real_max && i == num_terms - 1)
-            sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var, term_name,
-                last_stop - overlap, max, max);
+            term = sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
+                term_name, last_stop - overlap, max, max);
         else {
             cur = last_stop + width;
-            sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var, term_name,
-                last_stop - overlap, last_stop + (cur - last_stop) / 2,
-                cur + overlap);
+            term = sml_fuzzy_bridge_variable_add_term_triangle(fuzzy, var,
+                term_name, last_stop - overlap,
+                last_stop + (cur - last_stop) / 2, cur + overlap);
             last_stop = cur;
         }
+
+        if (term == NULL)
+            return -ENOMEM;
     }
 
     return 0;
@@ -979,6 +989,7 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
     float overlap;
     uint16_t i, num_terms;
     bool is_id;
+    int error;
 
     width = sml_fuzzy_bridge_variable_get_default_term_width(fuzzy, variable);
     if (isnan(width))
@@ -1028,8 +1039,8 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
                 return false;
             if (is_id)
                 first_min -= width / 2;
-            if (!_create_fuzzy_terms(fuzzy_engine, variable, min, first_min,
-                true, false))
+            if ((error = _create_fuzzy_terms(fuzzy_engine, variable, min,
+                    first_min, true, false)))
                 return false;
         }
     }
@@ -1046,14 +1057,16 @@ _rearrange_fuzzy_terms(struct sml_engine *engine,
                 last_min - overlap, last_min + (last_max - last_min) / 2,
                 last_max + overlap))
                 return false;
-            if (!_create_fuzzy_terms(fuzzy_engine, variable, last_max,
-                max, false, true))
+            if ((error = _create_fuzzy_terms(fuzzy_engine, variable, last_max,
+                    max, false, true)))
                 return false;
         }
     }
 
     if (!(first_term || last_term))
-        _create_fuzzy_terms(fuzzy_engine, variable, min, max, true, true);
+        if ((error = _create_fuzzy_terms(fuzzy_engine, variable, min, max,
+                true, true)))
+            return false;
 
     return true;
 }
