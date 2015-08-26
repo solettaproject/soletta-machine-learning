@@ -291,6 +291,7 @@ sml_load_debug_log_file(struct sml_object *sml, const char *str)
     struct sml_engine *engine = (struct sml_engine *)sml;
     sml_read_state_cb read_state_cb;
     sml_change_cb output_state_changed_cb;
+    bool r;
 
     file = fopen(str, "r");
     ON_NULL_RETURN_VAL(file, false);
@@ -299,10 +300,14 @@ sml_load_debug_log_file(struct sml_object *sml, const char *str)
     output_state_changed_cb = engine->output_state_changed_cb;
     engine->read_state_cb = empty_read_state_cb;
     engine->output_state_changed_cb = empty_output_state_changed_cb;
+    r = false;
     while (fgets(line, LINE_SIZE, file)) {
         ret = strncmp(line, "sml_process", 11);
         if (ret == 0) {
-            sml_process(sml);
+            if (sml_process(sml)) {
+                sml_error("Could not execute process");
+                goto exit;
+            }
             continue;
         }
         ret = strncmp(line, "sml_predict", 11);
@@ -317,12 +322,18 @@ sml_load_debug_log_file(struct sml_object *sml, const char *str)
         }
         ret = sscanf(line, "sml_new_input %127s\n", name);
         if (ret > 0) {
-            sml_new_input(sml, name);
+            if (!sml_new_input(sml, name)) {
+                sml_error("Could not create the input %s", name);
+                goto exit;
+            }
             continue;
         }
         ret = sscanf(line, "sml_new_output %127s\n", name);
         if (ret > 0) {
-            sml_new_output(sml, name);
+            if (!sml_new_output(sml, name)) {
+                sml_error("Could not create the output %s", name);
+                goto exit;
+            }
             continue;
         }
         ret = sscanf(line, "sml_variable_set_value %127s %f\n", name,
@@ -357,11 +368,13 @@ sml_load_debug_log_file(struct sml_object *sml, const char *str)
             continue;
         }
     }
+    r = true;
+exit:
     fclose(file);
     engine->read_state_cb = read_state_cb;
     engine->output_state_changed_cb = output_state_changed_cb;
 
-    return true;
+    return r;
 #else
     return false;
 #endif
