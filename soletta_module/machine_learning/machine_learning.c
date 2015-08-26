@@ -238,6 +238,7 @@ struct machine_learning_data {
     struct sol_worker_thread *worker;
     pthread_mutex_t process_lock;
     pthread_mutex_t read_lock;
+    pthread_mutex_t thread_running;
 };
 
 struct machine_learning_var {
@@ -392,7 +393,8 @@ init_machine_learning(struct machine_learning_data *mdata)
         sizeof(struct machine_learning_output_var));
 
     if ((r = pthread_mutex_init(&mdata->process_lock, NULL)) ||
-        (r = pthread_mutex_init(&mdata->read_lock, NULL))) {
+        (r = pthread_mutex_init(&mdata->read_lock, NULL)) ||
+        (r = pthread_mutex_init(&mdata->thread_running, NULL))) {
         SOL_WRN("Failed to initialize pthread mutex lock");
         return -r;
     }
@@ -652,6 +654,14 @@ machine_learning_close(struct sol_flow_node *node, void *data)
     uint16_t i;
     int error;
 
+    if (mdata->worker) {
+        sol_worker_thread_cancel(mdata->worker);
+        if (mutex_lock(&mdata->thread_running) < 0)
+            SOL_WRN("Could not lock the thread_running lock");
+        else
+            pthread_mutex_unlock(&mdata->thread_running);
+    }
+
     sol_vector_clear(&mdata->input_vec);
     sol_vector_clear(&mdata->input_id_vec);
     SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i)
@@ -661,9 +671,11 @@ machine_learning_close(struct sol_flow_node *node, void *data)
         free(output_var->tag);
     sol_vector_clear(&mdata->output_id_vec);
     if ((error = pthread_mutex_destroy(&mdata->process_lock)))
-        SOL_WRN("Error %d when destroying pthread mutex lock", error);
+        SOL_WRN("Error %d when destroying pthread mutex lock (process_lock)", error);
     if ((error = pthread_mutex_destroy(&mdata->read_lock)))
-        SOL_WRN("Error %d when destroying pthread mutex lock", error);
+        SOL_WRN("Error %d when destroying pthread mutex lock (read_lock)", error);
+    if ((error = pthread_mutex_destroy(&mdata->thread_running)))
+        SOL_WRN("Error %d when destroying pthread mutex lock (thread_running)", error);
     if (mdata->sml_data_dir && !sml_save(mdata->sml, mdata->sml_data_dir))
         SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
     sml_free(mdata->sml);
@@ -888,6 +900,7 @@ machine_learning_worker_thread_finished(void *data)
     mdata->worker = NULL;
     machine_learning_worker_thread_feedback(data);
 
+    pthread_mutex_unlock(&mdata->thread_running);
     //No lock needed because worker thread is dead
     if (mdata->process_needed || mdata->predict_needed)
         worker_schedule(mdata);
@@ -898,9 +911,10 @@ machine_learning_worker_thread_iterate(void *data)
 {
     struct machine_learning_data *mdata = data;
     bool process_needed, predict_needed, save_needed, learn_disabled;
+    int r;
 
-    if (mutex_lock(&mdata->process_lock))
-        return false;
+    r = mutex_lock(&mdata->process_lock);
+    SOL_INT_CHECK(r, < 0, false);
 
     process_needed = mdata->process_needed;
     predict_needed = mdata->predict_needed;
@@ -962,6 +976,7 @@ machine_learning_worker_thread_iterate(void *data)
 static int
 worker_schedule(struct machine_learning_data *mdata)
 {
+    int r;
     struct sol_worker_thread_spec spec = {
         .api_version = SOL_WORKER_THREAD_SPEC_API_VERSION,
         .setup = machine_learning_worker_thread_setup,
@@ -972,10 +987,19 @@ worker_schedule(struct machine_learning_data *mdata)
         .data = mdata
     };
 
+    r = mutex_lock(&mdata->thread_running);
+    SOL_INT_CHECK(r, < 0, r);
     mdata->worker = sol_worker_thread_new(&spec);
-    SOL_NULL_CHECK(mdata->worker, -errno);
+    if (!mdata->worker) {
+        r = -errno;
+        SOL_ERR("Could not schedule the worker thread");
+        goto err_exit;
+    }
 
     return 0;
+err_exit:
+    pthread_mutex_unlock(&mdata->thread_running);
+    return r;
 }
 
 static int
@@ -1313,6 +1337,7 @@ struct machine_learning_sync_data {
 
     struct sol_worker_thread *worker;
     pthread_mutex_t queue_lock;
+    pthread_mutex_t thread_running;
 };
 
 struct sml_data_priv {
@@ -1532,6 +1557,7 @@ machine_learning_sync_worker_thread_finished(void *data)
     mdata->worker = NULL;
     machine_learning_sync_worker_thread_feedback(data);
 
+    pthread_mutex_unlock(&mdata->thread_running);
     //No lock needed because worker thread is dead
     if (mdata->input_queue.base.len > 0)
         machine_learning_sync_worker_schedule(mdata);
@@ -1540,6 +1566,7 @@ machine_learning_sync_worker_thread_finished(void *data)
 static int
 machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata)
 {
+    int r;
     struct sol_worker_thread_spec spec = {
         .api_version = SOL_WORKER_THREAD_SPEC_API_VERSION,
         .cleanup = NULL,
@@ -1549,10 +1576,19 @@ machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata)
         .data = mdata
     };
 
+    r = mutex_lock(&mdata->thread_running);
+    SOL_INT_CHECK(r, < 0, r);
     mdata->worker = sol_worker_thread_new(&spec);
-    SOL_NULL_CHECK(mdata->worker, -errno);
+    if (!mdata->worker) {
+        r = -errno;
+        SOL_ERR("Could not schedule the worker thread");
+        goto err_exit;
+    }
 
     return 0;
+err_exit:
+    pthread_mutex_unlock(&mdata->thread_running);
+    return r;
 }
 
 static void
@@ -1564,10 +1600,20 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
     int error;
     uint16_t i;
 
+    if (mdata->worker) {
+        sol_worker_thread_cancel(mdata->worker);
+        if (mutex_lock(&mdata->thread_running) < 0)
+            SOL_WRN("Could not lock the thread_running mutex");
+        else
+            pthread_mutex_unlock(&mdata->thread_running);
+    }
+
     if (mdata->sml_data_dir && !sml_save(mdata->sml, mdata->sml_data_dir))
         SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
     if ((error = pthread_mutex_destroy(&mdata->queue_lock)))
-        SOL_WRN("Error %d when destroying pthread mutex lock", error);
+        SOL_WRN("Error %d when destroying pthread mutex lock (queue_lock)", error);
+    if ((error = pthread_mutex_destroy(&mdata->thread_running)))
+        SOL_WRN("Error %d when destroying pthread mutex lock (thread_running)", error);
     SOL_VECTOR_FOREACH_IDX (&mdata->output_queue, sml_output_data_priv, i) {
         packet_type_sml_output_data_packet_dispose(NULL,
             sml_output_data_priv->packet);
@@ -1810,10 +1856,12 @@ init_machine_learning_sync(struct machine_learning_sync_data *mdata)
     sol_ptr_vector_init(&mdata->input_queue);
     sol_vector_init(&mdata->output_queue, sizeof(struct sml_output_data_priv));
 
-    if ((r = pthread_mutex_init(&mdata->queue_lock, NULL))) {
+    if ((r = pthread_mutex_init(&mdata->queue_lock, NULL)) ||
+        (r = pthread_mutex_init(&mdata->thread_running, NULL))) {
         SOL_WRN("Failed to initialize pthread mutex lock");
         return -r;
     }
+
     return 0;
 }
 
