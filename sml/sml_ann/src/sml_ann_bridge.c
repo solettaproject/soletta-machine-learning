@@ -470,10 +470,8 @@ sml_ann_bridge_add_observation(struct sml_ann_bridge *iann,
     sml_debug("ANN:%p observation_idx:%d", iann, iann->observation_idx);
     if (iann->observation_idx == iann->required_observations) {
         sml_debug("Retraining the ANN !");
-        fann_cascadetrain_on_data(iann->ann, iann->observations,
-            iann->max_neurons,
-            REPORTS_BETWEEN_EPOCHS,
-            iann->last_train_error);
+        fann_train_on_data(iann->ann, iann->observations, MAX_EPOCHS,
+            REPORTS_BETWEEN_EPOCHS, iann->last_train_error);
         iann->observation_idx = 0;
     }
 }
