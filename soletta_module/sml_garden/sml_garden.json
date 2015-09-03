@@ -37,8 +37,7 @@
                 }
             ],
             "methods": {
-                "open": "message_constructor_open",
-                "close": "message_constructor_close"
+                "open": "message_constructor_open"
             },
             "name": "sml-garden/message-constructor",
             "out_ports": [
