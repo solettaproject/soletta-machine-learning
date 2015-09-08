@@ -162,6 +162,14 @@
          "process": "debug_file_process"
         },
         "name": "DEBUG_FILE"
+       },
+       {
+        "data_type": "any",
+        "description": "Reset the machine-learning node to its initial state. All the previous learned scenario will be erased.",
+        "methods": {
+         "process": "erase_knowledge_process"
+        },
+        "name": "ERASE_KNOWLEDGE"
        }
       ],
       "methods": {
@@ -286,6 +294,14 @@
          "process": "debug_file_process"
         },
         "name": "DEBUG_FILE"
+       },
+       {
+        "data_type": "any",
+        "description": "Reset the machine-learning node to its initial state. All the previous learned scenario will be erased.",
+        "methods": {
+         "process": "erase_knowledge_process"
+        },
+        "name": "ERASE_KNOWLEDGE"
        }
       ],
       "methods": {
@@ -378,6 +394,14 @@
         "name": "DEBUG_FILE"
        },
        {
+        "data_type": "any",
+        "description": "Reset the machine-learning node to its initial state. All the previous learned scenario will be erased.",
+        "methods": {
+         "process": "sml_data_erase_knowledge_process"
+        },
+        "name": "ERASE_KNOWLEDGE"
+       },
+       {
         "data_type":"any",
         "description": "Port used to save fuzzy data",
         "methods": {
@@ -464,6 +488,14 @@
          "process": "sml_data_debug_file"
         },
         "name": "DEBUG_FILE"
+       },
+       {
+        "data_type": "any",
+        "description": "Reset the machine-learning node to its initial state. All the previous learned scenario will be erased.",
+        "methods": {
+         "process": "sml_data_erase_knowledge_process"
+        },
+        "name": "ERASE_KNOWLEDGE"
        },
        {
         "data_type":"any",

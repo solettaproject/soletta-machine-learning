@@ -231,7 +231,7 @@ struct machine_learning_data {
     struct sol_vector output_vec;
     struct sol_vector output_id_vec;
     bool process_needed, predict_needed, send_process_finished, save_needed,
-        learn_disabled, debug_file_changed;
+        learn_disabled, debug_file_changed, erase_knowledge;
     char *debug_file;
 
     struct sol_flow_node *node;
@@ -910,7 +910,7 @@ static bool
 machine_learning_worker_thread_iterate(void *data)
 {
     struct machine_learning_data *mdata = data;
-    bool process_needed, predict_needed, save_needed, learn_disabled;
+    bool process_needed, predict_needed, save_needed, learn_disabled, erase_knowledge;
     int r;
 
     r = mutex_lock(&mdata->process_lock);
@@ -920,7 +920,9 @@ machine_learning_worker_thread_iterate(void *data)
     predict_needed = mdata->predict_needed;
     save_needed = mdata->save_needed;
     learn_disabled = mdata->learn_disabled;
+    erase_knowledge = mdata->erase_knowledge;
 
+    mdata->erase_knowledge = false;
     if (mdata->debug_file_changed) {
         if (!sml_set_debug_log_file(mdata->sml, mdata->debug_file))
             SOL_WRN("Failed to set debug log file at : %s", mdata->debug_file);
@@ -935,6 +937,9 @@ machine_learning_worker_thread_iterate(void *data)
         SOL_WRN("Could not set the learn disabled to value:%s",
             learn_disabled ? "disabled" : "enabled");
     }
+
+    if (erase_knowledge && !sml_erase_knowledge(mdata->sml))
+        SOL_WRN("Could not erase the SML knowledge!");
 
     if (!process_needed && !predict_needed && !save_needed)
         return false;
@@ -1317,6 +1322,25 @@ err:
     return -ENOMEM;
 }
 
+static int
+erase_knowledge_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    struct machine_learning_data *mdata = data;
+    int r;
+
+    if (mdata->erase_knowledge)
+        return 0;
+
+    r = mutex_lock(&mdata->process_lock);
+    SOL_INT_CHECK(r, < 0, r);
+    mdata->erase_knowledge = true;
+    pthread_mutex_unlock(&mdata->process_lock);
+    if (!mdata->worker)
+        return worker_schedule(mdata);
+    return 0;
+}
+
 struct machine_learning_sync_data {
     //Used only in open method or/and worker thread. No need to lock
     struct sml_object *sml;
@@ -1332,7 +1356,7 @@ struct machine_learning_sync_data {
     //Used by main thread and process thread. Need to be locked
     struct sol_ptr_vector input_queue;
     struct sol_vector output_queue;
-    bool save_needed, learn_disabled, debug_file_changed;
+    bool save_needed, learn_disabled, debug_file_changed, erase_knowledge;
     char *debug_file;
 
     struct sol_worker_thread *worker;
@@ -1476,6 +1500,10 @@ machine_learning_sync_worker_thread_iterate(void *data)
         SOL_WRN("Could not set the learn disabled to value:%s",
             mdata->learn_disabled ? "disabled" : "enabled");
     }
+
+    if (mdata->erase_knowledge && !sml_erase_knowledge(mdata->sml))
+        SOL_WRN("Could not erase the SML knowledge!");
+    mdata->erase_knowledge = false;
 
     if (mdata->input_queue.base.len == 0)
         goto end;
@@ -1732,6 +1760,26 @@ sml_data_learn_disabled_process(struct sol_flow_node *node,
     }
     pthread_mutex_unlock(&mdata->queue_lock);
     return r;
+}
+
+static int
+sml_data_erase_knowledge_process(struct sol_flow_node *node,
+    void *data, uint16_t port, uint16_t conn_id,
+    const struct sol_flow_packet *packet)
+{
+    struct machine_learning_sync_data *mdata = data;
+    int r;
+
+    if (mdata->erase_knowledge)
+        return 0;
+
+    r = mutex_lock(&mdata->queue_lock);
+    SOL_INT_CHECK(r, < 0, r);
+    mdata->erase_knowledge = true;
+    pthread_mutex_unlock(&mdata->queue_lock);
+    if (!mdata->worker)
+        return machine_learning_sync_worker_schedule(mdata);
+    return 0;
 }
 
 static bool
