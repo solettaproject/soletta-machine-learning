@@ -1,6 +1,7 @@
 # Soletta Machine Learning
 
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/5845/badge.svg)](https://scan.coverity.com/projects/5845)
+[![Build Status](https://semaphoreci.com/api/v1/projects/bf8a2e2d-7645-4092-911d-26756acfbbce/527006/shields_badge.svg)](https://semaphoreci.com/solettaproject/soletta-machine-learning)
 
 **Soletta Machine Learning** is an open source machine learning library
 for development of IoT devices.
