@@ -1167,6 +1167,21 @@ sml_fuzzy_set_simplification_disabled(struct sml_object *sml, bool disabled)
     return true;
 }
 
+
+static bool
+_sml_fuzzy_erase_knowledge(struct sml_engine *engine)
+{
+    struct sml_fuzzy_engine *fuzzy_engine = (struct sml_fuzzy_engine *)engine;
+
+    sml_fuzzy_erase_rules(fuzzy_engine->fuzzy);
+    sml_measure_free(fuzzy_engine->last_stable_measure);
+    sml_observation_controller_clear(fuzzy_engine->observation_controller);
+    sml_terms_manager_clear(&fuzzy_engine->terms_manager);
+    fuzzy_engine->last_stable_measure = NULL;
+    fuzzy_engine->engine.hits = 0;
+    return true;
+}
+
 API_EXPORT struct sml_object *
 sml_fuzzy_new(void)
 {
@@ -1216,6 +1231,7 @@ sml_fuzzy_new(void)
     fuzzy_engine->engine.variable_set_range = _fuzzy_variable_set_range;
     fuzzy_engine->engine.variable_get_range = sml_fuzzy_variable_get_range;
     fuzzy_engine->engine.print_debug = _sml_print_debug;
+    fuzzy_engine->engine.erase_knowledge = _sml_fuzzy_erase_knowledge;
     fuzzy_engine->engine.magic_number = FUZZY_MAGIC;
 
     return (struct sml_object *)&fuzzy_engine->engine;

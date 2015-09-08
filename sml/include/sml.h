@@ -365,6 +365,18 @@ bool sml_predict(struct sml_object *sml);
 bool sml_set_stabilization_hits(struct sml_object *sml, uint16_t hits);
 
 /**
+ * @brief Erase all previous knowledge.
+ *
+ * Erases everything that the SML has learned, this will required that the SML
+ * is trained again.
+ *
+ * @param sml The ::sml_object object.
+ * @return @c true on success.
+ * @return @c false on failure.
+ */
+bool sml_erase_knowledge(struct sml_object *sml);
+
+/**
  * @brief Save the SML state on the disk.
  *
  * @param sml The ::sml_object object.

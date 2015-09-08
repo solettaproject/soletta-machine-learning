@@ -66,6 +66,7 @@ typedef struct sml_variable *(*sml_engine_variables_list_index)(struct sml_varia
 typedef bool (*sml_engine_variable_set_range)(struct sml_engine *engine, struct sml_variable *sml_variable, float min, float max);
 typedef bool (*sml_engine_variable_get_range)(struct sml_variable *sml_variable, float *min, float *max);
 typedef void (*sml_engine_print_debug)(struct sml_engine *engine, bool full);
+typedef bool (*sml_engine_erase_knowledge)(struct sml_engine *engine);
 
 int sml_call_read_state_cb(struct sml_engine *engine);
 void sml_call_output_state_changed_cb(struct sml_engine *engine, struct sml_variables_list *changed);
@@ -78,6 +79,7 @@ struct sml_engine {
     sml_engine_predict predict;
     sml_engine_save save;
     sml_engine_load load;
+    sml_engine_erase_knowledge erase_knowledge;
 
     /* Variables API */
     sml_engine_get_input_list get_input_list;

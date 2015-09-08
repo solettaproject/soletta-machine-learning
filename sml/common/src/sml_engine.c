@@ -367,6 +367,11 @@ sml_load_debug_log_file(struct sml_object *sml, const char *str)
                 sml_variable_set_range(sml, var, float_val, float_val2);
             continue;
         }
+        ret = strncmp(line, "sml_erase_knowledge", 19);
+        if (ret == 0) {
+            sml_erase_knowledge(sml);
+            continue;
+        }
     }
     r = true;
 exit:
@@ -450,6 +455,21 @@ sml_load(struct sml_object *sml, const char *path)
         return false;
     }
     return engine->load(engine, path);
+}
+
+API_EXPORT bool
+sml_erase_knowledge(struct sml_object *sml)
+{
+    struct sml_engine *engine = (struct sml_engine *)sml;
+
+    SML_LOG_DEBUG_DATA(engine, "sml_erase_knowledge\n");
+    ON_NULL_RETURN_VAL(sml, false);
+    if (!engine->erase_knowledge) {
+        sml_critical("Unexpected error. Implementation of function "
+            "sml_load is mandatory for engines.");
+        return false;
+    }
+    return engine->erase_knowledge(engine);
 }
 
 API_EXPORT struct sml_variables_list *

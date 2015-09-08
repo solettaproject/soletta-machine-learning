@@ -98,15 +98,21 @@ sml_ann_variables_list_add_last_value_to_observation(
 }
 
 void
-sml_ann_variables_list_reset_observations(struct sml_variables_list *list)
+sml_ann_variables_list_reset_observations(struct sml_variables_list *list,
+    bool reset_control_varaibles)
 {
     struct sml_variables_list_impl *impl =
         (struct sml_variables_list_impl *)list;
     struct sml_variable_impl *var;
     uint16_t i;
 
-    SOL_PTR_VECTOR_FOREACH_IDX (&impl->variables, var, i)
+    SOL_PTR_VECTOR_FOREACH_IDX (&impl->variables, var, i) {
         var->observations_idx = 0;
+        if (reset_control_varaibles) {
+            var->current_value = var->previous_value =
+                    var->last_stable_value = NAN;
+        }
+    }
 }
 
 void
