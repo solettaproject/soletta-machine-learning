@@ -76,7 +76,7 @@ int sml_ann_variable_set_enabled(struct sml_variable *var, bool enabled);
 bool sml_ann_variable_is_enabled(struct sml_variable *var);
 
 void sml_ann_variables_list_add_last_value_to_observation(struct sml_variables_list *list);
-void sml_ann_variables_list_reset_observations(struct sml_variables_list *list);
+void sml_ann_variables_list_reset_observations(struct sml_variables_list *list, bool reset_control_variables);
 void sml_ann_variables_list_set_current_value_as_stable(struct sml_variables_list *list);
 int sml_ann_variables_list_realloc_observations_array(struct sml_variables_list *list, unsigned int size);
 void sml_ann_variable_fill_with_random_values(struct sml_variable *var, unsigned int total);
