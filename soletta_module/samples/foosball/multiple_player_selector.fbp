@@ -28,7 +28,7 @@
 # (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
-INPORT=reset.IN:RESET
+INPORT=reset.IN[0]:RESET
 INPORT=enabled_hub.IN:ENABLED
 INPORT=btn_hub.IN[0]:BTN_CHANGE_PLAYER
 INPORT=next_hub.IN[0]:BTN_NEXT
@@ -41,7 +41,7 @@ OUTPORT=done.OUT:DONE
 
 #inputs
 reset(switcher/empty)
-_(constant/boolean:value=true) OUT -> IN enabled_hub(switcher/boolean)
+_(constant/boolean:value=true) OUT -> IN[0] enabled_hub(switcher/boolean)
 btn_hub(boolean/and)
 enabled_hub OUT[0] -> IN[1] btn_hub
 next_hub(boolean/and)
@@ -52,7 +52,7 @@ next_hub OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> INC player_se
 timer(timer:interval=10) OUT -> INC player_selection
 timer OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> ENABLED timer
 reset OUT[0] -> IN enable_timer(converter/empty-to-boolean:output_value=true) OUT -> ENABLED timer
-enable_timer OUT -> IN enabled_hub
+enable_timer OUT -> IN[0] enabled_hub
 
 #state machine
 player_selection(int/accumulator:setup_value=min:0|max:5)
@@ -60,7 +60,7 @@ player_selection OUT -> IN state_player1(converter/int-to-boolean:true_range=min
 player_selection OUT -> IN state_player2(converter/int-to-boolean:true_range=min:2|max:2)
 player_selection OUT -> IN state_player3(converter/int-to-boolean:true_range=min:3|max:3)
 player_selection OUT -> IN state_player4(converter/int-to-boolean:true_range=min:4|max:4)
-player_selection OUT -> IN done(converter/int-to-empty:range=min:5|max:5) OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> IN enabled_hub
+player_selection OUT -> IN done(converter/int-to-empty:range=min:5|max:5) OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> IN[0] enabled_hub
 reset OUT[0] -> RESET player_selection
 
 #Player1
@@ -105,10 +105,10 @@ _(constant/string:value="Player 4: ") OUT -> IN[0] lcd4(string/concatenate)
 player4 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd4
 state_player4 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 4: 0") OUT -> IN lcd
 
-lcd1 OUT -> IN lcd(switcher/string)
-lcd2 OUT -> IN lcd
-lcd3 OUT -> IN lcd
-lcd4 OUT -> IN lcd
+lcd1 OUT -> IN[0] lcd(switcher/string)
+lcd2 OUT -> IN[0] lcd
+lcd3 OUT -> IN[0] lcd
+lcd4 OUT -> IN[0] lcd
 
 #Don't allow multiple players selection
 player1 OUT -> IN[0] player2_cmp(int/equal)

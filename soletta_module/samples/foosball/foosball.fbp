@@ -139,7 +139,7 @@ red_winner OUT -> INC state
 yellow_winner OUT -> STOP time
 red_winner OUT -> STOP time
 
-sml PROCESS_END -> IN game_over(switcher/empty)
+sml PROCESS_END -> IN[0] game_over(switcher/empty)
 game_over OUT[0] -> RESET time
 game_over OUT[0] -> INC state
 game_over OUT[0] -> RESET yellow_goalkeeper

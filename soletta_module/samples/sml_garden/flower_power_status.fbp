@@ -36,5 +36,5 @@ ErrorToBoolean(converter/empty-to-boolean:output_value=false)
 FlowerPowerPacket(flower-power/get-value) WATER -> IN FloatToBoolean(converter/float-to-boolean:true_range=min:-1000|max:10000)
 
 
-ErrorToBoolean OUT -> IN LedOutput(switcher/boolean:out_port=0)
-FloatToBoolean OUT -> IN LedOutput
+ErrorToBoolean OUT -> IN[0] LedOutput(switcher/boolean:out_port=0)
+FloatToBoolean OUT -> IN[0] LedOutput

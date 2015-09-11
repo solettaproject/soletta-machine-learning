@@ -29,12 +29,12 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #Foosball SML
-INPORT=goalkeeper1.IN:GOAL_KEEPER1
-INPORT=striker1.IN:STRIKER1
-INPORT=goalkeeper2.IN:GOAL_KEEPER2
-INPORT=striker2.IN:STRIKER2
-INPORT=winner1.IN:WINNER1
-INPORT=winner2.IN:WINNER2
+INPORT=goalkeeper1.IN[0]:GOAL_KEEPER1
+INPORT=striker1.IN[0]:STRIKER1
+INPORT=goalkeeper2.IN[0]:GOAL_KEEPER2
+INPORT=striker2.IN[0]:STRIKER2
+INPORT=winner1.IN[0]:WINNER1
+INPORT=winner2.IN[0]:WINNER2
 INPORT=sml.PREDICTION_TRIGGER:PREDICTION_TRIGGER
 OUTPORT=predicted_winner1.OUT[0]:PREDICTED_WINNER1
 OUTPORT=predicted_winner2.OUT[0]:PREDICTED_WINNER2
@@ -84,8 +84,8 @@ sml_winner(converter/int-to-float) OUT -> IN tagger(machine-learning/tagger:tag=
 tagger OUT -> OUT_ID_VAR sml
 
 sml OUT -> IN FilterSml(machine-learning/filter:tag=winner)
-FilterSml OUT -> IN _(converter/float-to-empty:range=min:0.5|max:1.5) OUT -> IN predicted_winner1(switcher/empty)
-FilterSml OUT -> IN _(converter/float-to-empty:range=min:1.5|max:2) OUT -> IN predicted_winner2(switcher/empty)
+FilterSml OUT -> IN _(converter/float-to-empty:range=min:0.5|max:1.5) OUT -> IN[0] predicted_winner1(switcher/empty)
+FilterSml OUT -> IN _(converter/float-to-empty:range=min:1.5|max:2) OUT -> IN[0] predicted_winner2(switcher/empty)
 
 #Phase 1 - start
 state_start_phase1 OUT -> IN phase1_goalkeeper1(converter/empty-to-int)
