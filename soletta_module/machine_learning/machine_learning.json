@@ -151,7 +151,7 @@
         "data_type":"boolean",
         "description": "Port used to disable the learning process",
         "methods": {
-            "process": "sml_learn_disabled"
+            "process": "learn_disabled_process"
         },
         "name":"LEARN_DISABLED"
        },
@@ -173,8 +173,20 @@
        }
       ],
       "methods": {
-       "close": "machine_learning_close",
-       "open": "machine_learning_fuzzy_open"
+       "close": "machine_learning_base_close",
+       "open": "machine_learning_base_open"
+      },
+      "node_type": {
+        "access": [
+          "base"
+        ],
+        "data_type": "struct machine_learning_node_type",
+        "extra_methods": {
+          "worker_schedule_func": "worker_schedule",
+          "close_func": "machine_learning_close",
+          "open_func": "machine_learning_fuzzy_open",
+          "init_machine_learning_func": "init_machine_learning"
+        }
       },
       "name": "machine-learning/fuzzy",
       "options": {
@@ -283,7 +295,7 @@
         "data_type":"boolean",
         "description": "Port used to disable the learning process",
         "methods": {
-            "process": "sml_learn_disabled"
+            "process": "learn_disabled_process"
         },
         "name":"LEARN_DISABLED"
        },
@@ -305,8 +317,20 @@
        }
       ],
       "methods": {
-       "close": "machine_learning_close",
-       "open": "machine_learning_neural_network_open"
+       "close": "machine_learning_base_close",
+       "open": "machine_learning_base_open"
+      },
+      "node_type": {
+        "access": [
+          "base"
+        ],
+        "data_type": "struct machine_learning_node_type",
+        "extra_methods": {
+          "worker_schedule_func": "worker_schedule",
+          "close_func": "machine_learning_close",
+          "open_func": "machine_learning_neural_network_open",
+          "init_machine_learning_func": "init_machine_learning"
+        }
       },
       "name": "machine-learning/neural-network",
       "options": {
@@ -389,7 +413,7 @@
         "data_type": "string",
         "description": "File to log sml read data and predicted outputs.",
         "methods": {
-         "process": "sml_data_debug_file"
+         "process": "debug_file_process"
         },
         "name": "DEBUG_FILE"
        },
@@ -397,7 +421,7 @@
         "data_type": "any",
         "description": "Reset the machine-learning node to its initial state. All the previous learned scenario will be erased.",
         "methods": {
-         "process": "sml_data_erase_knowledge_process"
+         "process": "erase_knowledge_process"
         },
         "name": "ERASE_KNOWLEDGE"
        },
@@ -405,7 +429,7 @@
         "data_type":"any",
         "description": "Port used to save fuzzy data",
         "methods": {
-            "process": "sml_data_save_process"
+            "process": "save_process"
         },
         "name":"SAVE"
        },
@@ -413,14 +437,26 @@
         "data_type":"boolean",
         "description": "Port used to disable the learning process",
         "methods": {
-            "process": "sml_data_learn_disabled_process"
+            "process": "learn_disabled_process"
         },
         "name":"LEARN_DISABLED"
        }
       ],
       "methods": {
-       "close": "machine_learning_sync_close",
-       "open": "fuzzy_sync_open"
+       "close": "machine_learning_base_close",
+       "open": "machine_learning_base_open"
+      },
+      "node_type": {
+        "access": [
+          "base"
+        ],
+        "data_type": "struct machine_learning_node_type",
+        "extra_methods": {
+          "worker_schedule_func": "machine_learning_sync_worker_schedule",
+          "close_func": "machine_learning_sync_close",
+          "open_func": "machine_learning_sync_fuzzy_open",
+          "init_machine_learning_func": "init_machine_learning_sync"
+        }
       },
       "name": "machine-learning/fuzzy-sync",
       "options": {
@@ -485,7 +521,7 @@
         "data_type": "string",
         "description": "File to log sml read data and predicted outputs.",
         "methods": {
-         "process": "sml_data_debug_file"
+         "process": "debug_file_process"
         },
         "name": "DEBUG_FILE"
        },
@@ -493,7 +529,7 @@
         "data_type": "any",
         "description": "Reset the machine-learning node to its initial state. All the previous learned scenario will be erased.",
         "methods": {
-         "process": "sml_data_erase_knowledge_process"
+         "process": "erase_knowledge_process"
         },
         "name": "ERASE_KNOWLEDGE"
        },
@@ -501,7 +537,7 @@
         "data_type":"any",
         "description": "Port used to save neural network data",
         "methods": {
-            "process": "sml_data_save_process"
+            "process": "save_process"
         },
         "name":"SAVE"
        },
@@ -509,14 +545,26 @@
         "data_type":"boolean",
         "description": "Port used to disable the learning process",
         "methods": {
-            "process": "sml_data_learn_disabled_process"
+            "process": "learn_disabled_process"
         },
         "name":"LEARN_DISABLED"
        }
       ],
       "methods": {
-       "close": "machine_learning_sync_close",
-       "open": "neural_network_sync_open"
+       "close": "machine_learning_base_close",
+       "open": "machine_learning_base_open"
+      },
+      "node_type": {
+        "access": [
+          "base"
+        ],
+        "data_type": "struct machine_learning_node_type",
+        "extra_methods": {
+          "worker_schedule_func": "machine_learning_sync_worker_schedule",
+          "close_func": "machine_learning_sync_close",
+          "open_func": "machine_learning_sync_neural_network_open",
+          "init_machine_learning_func": "init_machine_learning_sync"
+        }
       },
       "name": "machine-learning/neural-network-sync",
       "options": {

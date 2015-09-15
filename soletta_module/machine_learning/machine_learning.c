@@ -218,27 +218,70 @@ filter_process(struct sol_flow_node *node, void *data, uint16_t port,
         &value);
 }
 
-struct machine_learning_data {
+struct machine_learning_base_data {
     //Used only in open method or/and worker thread. No need to lock
     struct sml_object *sml;
-    uint16_t number_of_terms;
-    bool run_process;
+    int32_t number_of_terms;
     char *sml_data_dir;
+
+    //Used by main thread and process thread. Need to be locked
+    volatile bool learn_disabled, debug_file_changed, erase_knowledge,
+        save_needed;
+    char *debug_file;
+
+    //Used only in main thread. No need to lock
+    struct sol_flow_node *node;
+
+    struct sol_worker_thread *worker;
+    pthread_mutex_t thread_running;
+    pthread_mutex_t general_lock;
+};
+
+struct machine_learning_data {
+    //Used only in open method or/and worker thread. No need to lock
+    struct machine_learning_base_data base;
+    bool run_process;
 
     //Used by main thread and process thread. Need to be locked
     struct sol_vector input_vec;
     struct sol_vector input_id_vec;
     struct sol_vector output_vec;
     struct sol_vector output_id_vec;
-    bool process_needed, predict_needed, send_process_finished, save_needed,
-        learn_disabled, debug_file_changed, erase_knowledge;
-    char *debug_file;
+    bool process_needed, predict_needed, send_process_finished;
 
-    struct sol_flow_node *node;
-    struct sol_worker_thread *worker;
-    pthread_mutex_t process_lock;
     pthread_mutex_t read_lock;
-    pthread_mutex_t thread_running;
+};
+
+struct machine_learning_sync_data {
+    //Used only in open method or/and worker thread. No need to lock
+    struct machine_learning_base_data base;
+    struct sml_data_priv *cur_sml_data;
+    double *output_steps;
+    uint16_t output_steps_len;
+
+    //Used by main thread and process thread. Need to be locked
+    struct sol_ptr_vector input_queue;
+    struct sol_vector output_queue;
+};
+
+struct machine_learning_node_type {
+    struct sol_flow_node_type base;
+    //struct machine_learning_sync_data or struct machine_learning_data
+    int (*worker_schedule_func) (void *data);
+    void (*close_func) (void *data);
+    int (*open_func) (void *data, const struct sol_flow_node_options *options,
+        const char **data_dir);
+    int (*init_machine_learning_func) (void *data);
+};
+
+struct sml_data_priv {
+    struct packet_type_sml_data_packet_data base;
+    bool predict;
+};
+
+struct sml_output_data_priv {
+    struct packet_type_sml_output_data_packet_data *packet;
+    bool predict;
 };
 
 struct machine_learning_var {
@@ -263,21 +306,21 @@ set_variable(struct machine_learning_data *mdata,
 {
     float width;
 
-    sml_variable_set_value(mdata->sml, var->sml_variable, var->value.val);
+    sml_variable_set_value(mdata->base.sml, var->sml_variable, var->value.val);
 
     if (!var->range_changed)
         return;
 
     var->range_changed = false;
-    if (sml_is_fuzzy(mdata->sml)) {
+    if (sml_is_fuzzy(mdata->base.sml)) {
         width = fmax((var->value.max - var->value.min + 1) /
-            mdata->number_of_terms, var->value.step);
+            mdata->base.number_of_terms, var->value.step);
 
-        sml_fuzzy_variable_set_default_term_width(mdata->sml, var->sml_variable,
-            width);
+        sml_fuzzy_variable_set_default_term_width(mdata->base.sml,
+            var->sml_variable, width);
     }
 
-    sml_variable_set_range(mdata->sml, var->sml_variable, var->value.min,
+    sml_variable_set_range(mdata->base.sml, var->sml_variable, var->value.min,
         var->value.max);
 }
 
@@ -344,9 +387,18 @@ output_state_changed_cb(struct sml_object *sml,
 }
 
 static int
-create_sml_fuzzy(struct sml_object **sml, int32_t stabilization_hits)
+create_sml_fuzzy(struct sml_object **sml, int32_t *number_of_terms,
+    int32_t stabilization_hits, int32_t opts_number_of_terms)
 {
     struct sml_object *sml_fuzzy;
+
+    if (opts_number_of_terms >= 0)
+        *number_of_terms = opts_number_of_terms;
+    else {
+        SOL_WRN("Number of fuzzy terms (%d) must be a positive value. "
+            "Assuming %d.", opts_number_of_terms, AUTOMATIC_TERMS);
+        *number_of_terms = AUTOMATIC_TERMS;
+    }
 
     sml_fuzzy = sml_fuzzy_new();
     SOL_NULL_CHECK(sml_fuzzy, -ENOMEM);
@@ -368,16 +420,17 @@ create_sml_fuzzy(struct sml_object **sml, int32_t stabilization_hits)
 }
 
 static int
-init_machine_learning(struct machine_learning_data *mdata)
+init_machine_learning(void *data)
 {
+    struct machine_learning_data *mdata = data;
     int r;
 
-    if (!sml_set_read_state_callback(mdata->sml, read_state_cb, mdata)) {
+    if (!sml_set_read_state_callback(mdata->base.sml, read_state_cb, mdata)) {
         SOL_WRN("Failed to set read callback");
         return -EINVAL;
     }
 
-    if (!sml_set_output_state_changed_callback(mdata->sml,
+    if (!sml_set_output_state_changed_callback(mdata->base.sml,
         output_state_changed_cb, mdata)) {
         SOL_WRN("Failed to set change state callback");
         return -EINVAL;
@@ -392,12 +445,8 @@ init_machine_learning(struct machine_learning_data *mdata)
     sol_vector_init(&mdata->output_id_vec,
         sizeof(struct machine_learning_output_var));
 
-    if ((r = pthread_mutex_init(&mdata->process_lock, NULL)) ||
-        (r = pthread_mutex_init(&mdata->read_lock, NULL)) ||
-        (r = pthread_mutex_init(&mdata->thread_running, NULL))) {
-        SOL_WRN("Failed to initialize pthread mutex lock");
-        return -r;
-    }
+    r = pthread_mutex_init(&mdata->read_lock, NULL);
+    SOL_INT_CHECK(r, != 0, -r);
     return 0;
 }
 
@@ -410,8 +459,8 @@ copy_str(char **dst, const char *src)
 }
 
 static int
-machine_learning_fuzzy_open(struct sol_flow_node *node, void *data,
-    const struct sol_flow_node_options *options)
+machine_learning_fuzzy_open(void *data,
+    const struct sol_flow_node_options *options, const char **data_dir)
 {
     struct machine_learning_data *mdata = data;
     const struct sol_flow_node_type_machine_learning_fuzzy_options *opts;
@@ -420,36 +469,12 @@ machine_learning_fuzzy_open(struct sol_flow_node *node, void *data,
     opts = (const struct
         sol_flow_node_type_machine_learning_fuzzy_options *)options;
 
-    mdata->node = node;
-
-    if (opts->number_of_terms.val >= 0)
-        mdata->number_of_terms = opts->number_of_terms.val;
-    else {
-        SOL_WRN("Number of fuzzy terms (%d) must be a positive value. "
-            "Assuming %d.", opts->number_of_terms.val, AUTOMATIC_TERMS);
-        mdata->number_of_terms = AUTOMATIC_TERMS;
-    }
-
-    r = create_sml_fuzzy(&mdata->sml, opts->stabilization_hits.val);
+    r = create_sml_fuzzy(&mdata->base.sml, &mdata->base.number_of_terms,
+        opts->stabilization_hits.val,
+        opts->number_of_terms.val);
     SOL_INT_CHECK(r, < 0, r);
-
-    r = init_machine_learning(mdata);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!opts->data_dir)
-        return 0;
-
-    r = copy_str(&mdata->sml_data_dir, opts->data_dir);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!sml_load(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Could not load the sml data at:%s", mdata->sml_data_dir);
-
+    *data_dir = opts->data_dir;
     return 0;
-
-err:
-    sml_free(mdata->sml);
-    return r;
 }
 
 static const struct activation_function {
@@ -609,8 +634,8 @@ err_r:
 }
 
 static int
-machine_learning_neural_network_open(struct sol_flow_node *node, void *data,
-    const struct sol_flow_node_options *options)
+machine_learning_neural_network_open(void *data,
+    const struct sol_flow_node_options *options, const char **data_dir)
 {
     int r;
     struct machine_learning_data *mdata = data;
@@ -620,47 +645,22 @@ machine_learning_neural_network_open(struct sol_flow_node *node, void *data,
     opts = (const struct
         sol_flow_node_type_machine_learning_neural_network_options *)options;
 
-    mdata->node = node;
-
-    r = create_sml_ann(&mdata->sml, opts->stabilization_hits.val,
+    r = create_sml_ann(&mdata->base.sml, opts->stabilization_hits.val,
         opts->mse.val, opts->initial_required_observations.val,
         opts->training_algorithm, opts->activation_functions);
     SOL_INT_CHECK(r, < 0, r);
 
-    r = init_machine_learning(mdata);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!opts->data_dir)
-        return 0;
-
-    r = copy_str(&mdata->sml_data_dir, opts->data_dir);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!sml_load(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Could not load the sml data at:%s", mdata->sml_data_dir);
-
+    *data_dir = opts->data_dir;
     return 0;
-
-err:
-    sml_free(mdata->sml);
-    return r;
 }
 
 static void
-machine_learning_close(struct sol_flow_node *node, void *data)
+machine_learning_close(void *data)
 {
-    struct machine_learning_data *mdata = data;
     struct machine_learning_output_var *output_var;
     uint16_t i;
     int error;
-
-    if (mdata->worker) {
-        sol_worker_thread_cancel(mdata->worker);
-        if (mutex_lock(&mdata->thread_running) < 0)
-            SOL_WRN("Could not lock the thread_running lock");
-        else
-            pthread_mutex_unlock(&mdata->thread_running);
-    }
+    struct machine_learning_data *mdata = data;
 
     sol_vector_clear(&mdata->input_vec);
     sol_vector_clear(&mdata->input_id_vec);
@@ -670,17 +670,9 @@ machine_learning_close(struct sol_flow_node *node, void *data)
     SOL_VECTOR_FOREACH_IDX (&mdata->output_id_vec, output_var, i)
         free(output_var->tag);
     sol_vector_clear(&mdata->output_id_vec);
-    if ((error = pthread_mutex_destroy(&mdata->process_lock)))
-        SOL_WRN("Error %d when destroying pthread mutex lock (process_lock)", error);
     if ((error = pthread_mutex_destroy(&mdata->read_lock)))
-        SOL_WRN("Error %d when destroying pthread mutex lock (read_lock)", error);
-    if ((error = pthread_mutex_destroy(&mdata->thread_running)))
-        SOL_WRN("Error %d when destroying pthread mutex lock (thread_running)", error);
-    if (mdata->sml_data_dir && !sml_save(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
-    sml_free(mdata->sml);
-    free(mdata->sml_data_dir);
-    free(mdata->debug_file);
+        SOL_WRN("Error %d when destroying pthread mutex lock (read_lock)",
+            error);
 }
 
 static int
@@ -694,18 +686,18 @@ input_var_connect(struct sol_flow_node *node, void *data, uint16_t port,
     char name[12];
 
     snprintf(name, sizeof(name), "InVar%d", conn_id);
-    sml_variable = sml_new_input(mdata->sml, name);
+    sml_variable = sml_new_input(mdata->base.sml, name);
     SOL_NULL_CHECK(sml_variable, -EBADR);
 
     if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__IN__IN_VAR)
         input_var = sol_vector_append(&mdata->input_vec);
     else {
-        sml_fuzzy_variable_set_is_id(mdata->sml, sml_variable, true);
+        sml_fuzzy_variable_set_is_id(mdata->base.sml, sml_variable, true);
         input_var = sol_vector_append(&mdata->input_id_vec);
     }
     if (!input_var) {
         SOL_WRN("Failed to append variable");
-        sml_remove_variable(mdata->sml, sml_variable);
+        sml_remove_variable(mdata->base.sml, sml_variable);
         return -ENOMEM;
     }
 
@@ -729,18 +721,18 @@ output_var_connect(struct sol_flow_node *node, void *data, uint16_t port,
     char name[12];
 
     snprintf(name, sizeof(name), "OutVar%d", conn_id);
-    sml_variable = sml_new_output(mdata->sml, name);
+    sml_variable = sml_new_output(mdata->base.sml, name);
     SOL_NULL_CHECK(sml_variable, -EBADR);
 
     if (port == SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__IN__OUT_VAR)
         output_var = sol_vector_append(&mdata->output_vec);
     else {
-        sml_fuzzy_variable_set_is_id(mdata->sml, sml_variable, true);
+        sml_fuzzy_variable_set_is_id(mdata->base.sml, sml_variable, true);
         output_var = sol_vector_append(&mdata->output_id_vec);
     }
     if (!output_var) {
         SOL_WRN("Failed to append variable");
-        sml_remove_variable(mdata->sml, sml_variable);
+        sml_remove_variable(mdata->base.sml, sml_variable);
         return -ENOMEM;
     }
 
@@ -873,34 +865,36 @@ machine_learning_worker_thread_feedback(void *data)
         return;
 
     SOL_VECTOR_FOREACH_IDX (&mdata->output_vec, output_var, i)
-        machine_learning_worker_thread_feedback_output(mdata->node, output_var);
+        machine_learning_worker_thread_feedback_output(mdata->base.node,
+            output_var);
     SOL_VECTOR_FOREACH_IDX (&mdata->output_id_vec, output_var, i)
-        machine_learning_worker_thread_feedback_output(mdata->node, output_var);
+        machine_learning_worker_thread_feedback_output(mdata->base.node,
+            output_var);
     pthread_mutex_unlock(&mdata->read_lock);
 
-    if (mutex_lock(&mdata->process_lock))
+    if (mutex_lock(&mdata->base.general_lock))
         return;
 
     if (mdata->send_process_finished) {
-        if (!sol_flow_send_empty_packet(mdata->node,
+        if (!sol_flow_send_empty_packet(mdata->base.node,
             SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY__OUT__PROCESS_FINISHED))
             mdata->send_process_finished = false;
     }
 
-    pthread_mutex_unlock(&mdata->process_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 }
 
-static int worker_schedule(struct machine_learning_data *mdata);
+static int worker_schedule(void *data);
 
 static void
 machine_learning_worker_thread_finished(void *data)
 {
     struct machine_learning_data *mdata = data;
 
-    mdata->worker = NULL;
+    mdata->base.worker = NULL;
     machine_learning_worker_thread_feedback(data);
 
-    pthread_mutex_unlock(&mdata->thread_running);
+    pthread_mutex_unlock(&mdata->base.thread_running);
     //No lock needed because worker thread is dead
     if (mdata->process_needed || mdata->predict_needed)
         worker_schedule(mdata);
@@ -910,57 +904,59 @@ static bool
 machine_learning_worker_thread_iterate(void *data)
 {
     struct machine_learning_data *mdata = data;
-    bool process_needed, predict_needed, save_needed, learn_disabled, erase_knowledge;
+    bool process_needed, predict_needed, save_needed, learn_disabled,
+        erase_knowledge;
     int r;
 
-    r = mutex_lock(&mdata->process_lock);
+    r = mutex_lock(&mdata->base.general_lock);
     SOL_INT_CHECK(r, < 0, false);
 
     process_needed = mdata->process_needed;
     predict_needed = mdata->predict_needed;
-    save_needed = mdata->save_needed;
-    learn_disabled = mdata->learn_disabled;
-    erase_knowledge = mdata->erase_knowledge;
+    save_needed = mdata->base.save_needed;
+    learn_disabled = mdata->base.learn_disabled;
+    erase_knowledge = mdata->base.erase_knowledge;
 
-    mdata->erase_knowledge = false;
-    if (mdata->debug_file_changed) {
-        if (!sml_set_debug_log_file(mdata->sml, mdata->debug_file))
-            SOL_WRN("Failed to set debug log file at : %s", mdata->debug_file);
-        free(mdata->debug_file);
-        mdata->debug_file = NULL;
-        mdata->debug_file_changed = false;
+    mdata->base.erase_knowledge = false;
+    if (mdata->base.debug_file_changed) {
+        if (!sml_set_debug_log_file(mdata->base.sml, mdata->base.debug_file))
+            SOL_WRN("Failed to set debug log file at : %s",
+                mdata->base.debug_file);
+        free(mdata->base.debug_file);
+        mdata->base.debug_file = NULL;
+        mdata->base.debug_file_changed = false;
     }
 
-    pthread_mutex_unlock(&mdata->process_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 
-    if (!sml_set_learn_disabled(mdata->sml, learn_disabled)) {
+    if (!sml_set_learn_disabled(mdata->base.sml, learn_disabled)) {
         SOL_WRN("Could not set the learn disabled to value:%s",
             learn_disabled ? "disabled" : "enabled");
     }
 
-    if (erase_knowledge && !sml_erase_knowledge(mdata->sml))
+    if (erase_knowledge && !sml_erase_knowledge(mdata->base.sml))
         SOL_WRN("Could not erase the SML knowledge!");
 
     if (!process_needed && !predict_needed && !save_needed)
         return false;
 
-    if (save_needed && !sml_save(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Failed to save SML data at: %s", mdata->sml_data_dir);
+    if (save_needed && !sml_save(mdata->base.sml, mdata->base.sml_data_dir))
+        SOL_WRN("Failed to save SML data at: %s", mdata->base.sml_data_dir);
 
     if ((mdata->run_process && process_needed) || !predict_needed) {
         //Execute process
-        if (sml_process(mdata->sml) < 0)
+        if (sml_process(mdata->base.sml) < 0)
             SOL_WRN("Process failed.");
         mdata->run_process = false;
     } else {
         //Execute predict
-        read_state_cb(mdata->sml, mdata);
-        if (sml_predict(mdata->sml))
-            output_state_changed_cb(mdata->sml, NULL, mdata);
+        read_state_cb(mdata->base.sml, mdata);
+        if (sml_predict(mdata->base.sml))
+            output_state_changed_cb(mdata->base.sml, NULL, mdata);
         mdata->run_process = true;
     }
 
-    if (mutex_lock(&mdata->process_lock))
+    if (mutex_lock(&mdata->base.general_lock))
         return false;
     if (mdata->run_process) {
         //Predict has run
@@ -970,17 +966,18 @@ machine_learning_worker_thread_iterate(void *data)
         mdata->process_needed = false;
         mdata->send_process_finished = true;
     }
-    mdata->save_needed = false;
-    pthread_mutex_unlock(&mdata->process_lock);
+    mdata->base.save_needed = false;
+    pthread_mutex_unlock(&mdata->base.general_lock);
 
-    sol_worker_thread_feedback(mdata->worker);
+    sol_worker_thread_feedback(mdata->base.worker);
 
     return true;
 }
 
 static int
-worker_schedule(struct machine_learning_data *mdata)
+worker_schedule(void *data)
 {
+    struct machine_learning_data *mdata = data;
     int r;
     struct sol_worker_thread_spec spec = {
         .api_version = SOL_WORKER_THREAD_SPEC_API_VERSION,
@@ -992,10 +989,10 @@ worker_schedule(struct machine_learning_data *mdata)
         .data = mdata
     };
 
-    r = mutex_lock(&mdata->thread_running);
+    r = mutex_lock(&mdata->base.thread_running);
     SOL_INT_CHECK(r, < 0, r);
-    mdata->worker = sol_worker_thread_new(&spec);
-    if (!mdata->worker) {
+    mdata->base.worker = sol_worker_thread_new(&spec);
+    if (!mdata->base.worker) {
         r = -errno;
         SOL_ERR("Could not schedule the worker thread");
         goto err_exit;
@@ -1003,7 +1000,7 @@ worker_schedule(struct machine_learning_data *mdata)
 
     return 0;
 err_exit:
-    pthread_mutex_unlock(&mdata->thread_running);
+    pthread_mutex_unlock(&mdata->base.thread_running);
     return r;
 }
 
@@ -1014,57 +1011,11 @@ trigger_process(struct sol_flow_node *node, void *data, uint16_t port,
     struct machine_learning_data *mdata = data;
     int r;
 
-    r = mutex_lock(&mdata->process_lock);
+    r = mutex_lock(&mdata->base.general_lock);
     SOL_INT_CHECK(r, < 0, r);
     mdata->process_needed = true;
-    pthread_mutex_unlock(&mdata->process_lock);
-
-    if (!mdata->worker)
-        return worker_schedule(mdata);
-
+    pthread_mutex_unlock(&mdata->base.general_lock);
     return 0;
-}
-
-static int
-save_process(struct sol_flow_node *node, void *data, uint16_t port,
-    uint16_t conn_id, const struct sol_flow_packet *packet)
-{
-    struct machine_learning_data *mdata = data;
-    int r;
-
-    if (!mdata->sml_data_dir) {
-        SOL_ERR("Could not save the SML data. The data dir is NULL !");
-        return -EINVAL;
-    }
-
-    r = mutex_lock(&mdata->process_lock);
-    SOL_INT_CHECK(r, < 0, r);
-    mdata->save_needed = true;
-    pthread_mutex_unlock(&mdata->process_lock);
-    if (!mdata->worker)
-        return worker_schedule(mdata);
-    return 0;
-}
-
-static int
-sml_learn_disabled(struct sol_flow_node *node, void *data, uint16_t port,
-    uint16_t conn_id, const struct sol_flow_packet *packet)
-{
-    struct machine_learning_data *mdata = data;
-    bool disabled;
-    int r;
-
-    r = sol_flow_packet_get_boolean(packet, &disabled);
-    SOL_INT_CHECK(r, < 0, r);
-    r = mutex_lock(&mdata->process_lock);
-    SOL_INT_CHECK(r, < 0, r);
-    if (mdata->learn_disabled != disabled) {
-        mdata->learn_disabled = disabled;
-        if (!mdata->worker)
-            r = worker_schedule(mdata);
-    }
-    pthread_mutex_unlock(&mdata->process_lock);
-    return r;
 }
 
 static int
@@ -1075,12 +1026,12 @@ prediction_trigger_process(struct sol_flow_node *node, void *data,
     struct machine_learning_data *mdata = data;
     int r;
 
-    r = mutex_lock(&mdata->process_lock);
+    r = mutex_lock(&mdata->base.general_lock);
     SOL_INT_CHECK(r, < 0, r);
     mdata->predict_needed = true;
-    pthread_mutex_unlock(&mdata->process_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 
-    if (!mdata->worker)
+    if (!mdata->base.worker)
         return worker_schedule(mdata);
 
     return 0;
@@ -1291,89 +1242,6 @@ sml_output_data_send_packet(struct sol_flow_node *src, uint16_t src_port,
     return sol_flow_send_packet(src, src_port, packet);
 }
 
-static int
-debug_file_process(struct sol_flow_node *node, void *data, uint16_t port,
-    uint16_t conn_id, const struct sol_flow_packet *packet)
-{
-    int r;
-    struct machine_learning_data *mdata = data;
-    const char *str;
-
-    r = sol_flow_packet_get_string(packet, &str);
-    SOL_INT_CHECK(r, < 0, r);
-
-    r = mutex_lock(&mdata->process_lock);
-    SOL_INT_CHECK(r, < 0, r);
-
-    free(mdata->debug_file);
-
-    if (str) {
-        mdata->debug_file = strdup(str);
-        SOL_NULL_CHECK_GOTO(mdata->debug_file, err);
-    } else
-        mdata->debug_file = NULL;
-    mdata->debug_file_changed = true;
-
-    pthread_mutex_unlock(&mdata->process_lock);
-    return 0;
-
-err:
-    pthread_mutex_unlock(&mdata->process_lock);
-    return -ENOMEM;
-}
-
-static int
-erase_knowledge_process(struct sol_flow_node *node, void *data, uint16_t port,
-    uint16_t conn_id, const struct sol_flow_packet *packet)
-{
-    struct machine_learning_data *mdata = data;
-    int r;
-
-    if (mdata->erase_knowledge)
-        return 0;
-
-    r = mutex_lock(&mdata->process_lock);
-    SOL_INT_CHECK(r, < 0, r);
-    mdata->erase_knowledge = true;
-    pthread_mutex_unlock(&mdata->process_lock);
-    if (!mdata->worker)
-        return worker_schedule(mdata);
-    return 0;
-}
-
-struct machine_learning_sync_data {
-    //Used only in open method or/and worker thread. No need to lock
-    struct sml_object *sml;
-    uint16_t number_of_terms;
-    struct sml_data_priv *cur_sml_data;
-    double *output_steps;
-    uint16_t output_steps_len;
-    char *sml_data_dir;
-
-    //Used only in main thread. No need to lock
-    struct sol_flow_node *node;
-
-    //Used by main thread and process thread. Need to be locked
-    struct sol_ptr_vector input_queue;
-    struct sol_vector output_queue;
-    bool save_needed, learn_disabled, debug_file_changed, erase_knowledge;
-    char *debug_file;
-
-    struct sol_worker_thread *worker;
-    pthread_mutex_t queue_lock;
-    pthread_mutex_t thread_running;
-};
-
-struct sml_data_priv {
-    struct packet_type_sml_data_packet_data base;
-    bool predict;
-};
-
-struct sml_output_data_priv {
-    struct packet_type_sml_output_data_packet_data *packet;
-    bool predict;
-};
-
 #define VARIABLE_INPUT_PREFIX "INPUT"
 #define VARIABLE_OUTPUT_PREFIX "OUTPUT"
 
@@ -1394,7 +1262,7 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         (struct sml_object *sml, const char *name);
 
     if (output_variable) {
-        list = sml_get_output_list(mdata->sml);
+        list = sml_get_output_list(mdata->base.sml);
         array = mdata->cur_sml_data->base.outputs;
         array_len = mdata->cur_sml_data->base.outputs_len;
         array_ids = mdata->cur_sml_data->base.output_ids;
@@ -1402,7 +1270,7 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         prefix = VARIABLE_OUTPUT_PREFIX;
         new_variable = sml_new_output;
     } else {
-        list = sml_get_input_list(mdata->sml);
+        list = sml_get_input_list(mdata->base.sml);
         array = mdata->cur_sml_data->base.inputs;
         array_len = mdata->cur_sml_data->base.inputs_len;
         array_ids = mdata->cur_sml_data->base.input_ids;
@@ -1411,7 +1279,7 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         new_variable = sml_new_input;
     }
 
-    len = sml_variables_list_get_length(mdata->sml, list);
+    len = sml_variables_list_get_length(mdata->base.sml, list);
     if (output_variable && array_len > mdata->output_steps_len) {
         mdata->output_steps = realloc(mdata->output_steps,
             sizeof(double) * array_len);
@@ -1422,24 +1290,24 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         val = &array[i];
         if (i >= len) {
             snprintf(var_name, sizeof(var_name), "%s%d", prefix, i);
-            var = new_variable(mdata->sml, var_name);
+            var = new_variable(mdata->base.sml, var_name);
         } else
-            var = sml_variables_list_index(mdata->sml, list, i);
+            var = sml_variables_list_index(mdata->base.sml, list, i);
         SOL_NULL_CHECK(var, -EINVAL);
 
-        if (!sml_variable_get_range(mdata->sml, var, &min, &max))
+        if (!sml_variable_get_range(mdata->base.sml, var, &min, &max))
             return -EINVAL;
 
         if ((!sol_drange_val_equal(min, val->min)) ||
             (!sol_drange_val_equal(max, val->max))) {
             width = fmax((val->max - val->min + 1) /
-                mdata->number_of_terms, val->step);
+                mdata->base.number_of_terms, val->step);
 
-            if (sml_is_fuzzy(mdata->sml) &&
-                !sml_fuzzy_variable_set_default_term_width(mdata->sml, var,
+            if (sml_is_fuzzy(mdata->base.sml) &&
+                !sml_fuzzy_variable_set_default_term_width(mdata->base.sml, var,
                 width))
                 return -EINVAL;
-            if (!sml_variable_set_range(mdata->sml, var, val->min, val->max))
+            if (!sml_variable_set_range(mdata->base.sml, var, val->min, val->max))
                 return -EINVAL;
         }
 
@@ -1449,7 +1317,7 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
 
     if (var && array_ids)
         for (i = 0; i < array_ids_len; i++)
-            if (!sml_fuzzy_variable_set_is_id(mdata->sml, var, array_ids[i]))
+            if (!sml_fuzzy_variable_set_is_id(mdata->base.sml, var, array_ids[i]))
                 return -EINVAL;
 
     return 0;
@@ -1481,29 +1349,29 @@ machine_learning_sync_worker_thread_iterate(void *data)
     struct sml_data_priv *sml_data;
     int r;
 
-    r = mutex_lock(&mdata->queue_lock);
+    r = mutex_lock(&mdata->base.general_lock);
     SOL_INT_CHECK(r, < 0, false);
 
-    if (mdata->debug_file_changed) {
-        if (!sml_set_debug_log_file(mdata->sml, mdata->debug_file))
-            SOL_WRN("Failed to set debug log file at : %s", mdata->debug_file);
-        free(mdata->debug_file);
-        mdata->debug_file = NULL;
-        mdata->debug_file_changed = false;
+    if (mdata->base.debug_file_changed) {
+        if (!sml_set_debug_log_file(mdata->base.sml, mdata->base.debug_file))
+            SOL_WRN("Failed to set debug log file at : %s", mdata->base.debug_file);
+        free(mdata->base.debug_file);
+        mdata->base.debug_file = NULL;
+        mdata->base.debug_file_changed = false;
     }
 
-    if (mdata->save_needed && !sml_save(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Failed to save the SML data at:%s", mdata->sml_data_dir);
-    mdata->save_needed = false;
+    if (mdata->base.save_needed && !sml_save(mdata->base.sml, mdata->base.sml_data_dir))
+        SOL_WRN("Failed to save the SML data at:%s", mdata->base.sml_data_dir);
+    mdata->base.save_needed = false;
 
-    if (!sml_set_learn_disabled(mdata->sml, mdata->learn_disabled)) {
+    if (!sml_set_learn_disabled(mdata->base.sml, mdata->base.learn_disabled)) {
         SOL_WRN("Could not set the learn disabled to value:%s",
-            mdata->learn_disabled ? "disabled" : "enabled");
+            mdata->base.learn_disabled ? "disabled" : "enabled");
     }
 
-    if (mdata->erase_knowledge && !sml_erase_knowledge(mdata->sml))
+    if (mdata->base.erase_knowledge && !sml_erase_knowledge(mdata->base.sml))
         SOL_WRN("Could not erase the SML knowledge!");
-    mdata->erase_knowledge = false;
+    mdata->base.erase_knowledge = false;
 
     if (mdata->input_queue.base.len == 0)
         goto end;
@@ -1514,7 +1382,7 @@ machine_learning_sync_worker_thread_iterate(void *data)
     r = sol_ptr_vector_del(&mdata->input_queue, 0);
     SOL_INT_CHECK_GOTO(r, < 0, end);
 
-    pthread_mutex_unlock(&mdata->queue_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 
     mdata->cur_sml_data = sml_data;
 
@@ -1522,13 +1390,13 @@ machine_learning_sync_worker_thread_iterate(void *data)
     SOL_INT_CHECK_GOTO(r, < 0, next);
 
     if (mdata->cur_sml_data->predict) {
-        sync_read_state_cb(mdata->sml, mdata);
-        if (sml_predict(mdata->sml))
-            sync_output_state_changed_run(mdata->sml, NULL, mdata, true);
+        sync_read_state_cb(mdata->base.sml, mdata);
+        if (sml_predict(mdata->base.sml))
+            sync_output_state_changed_run(mdata->base.sml, NULL, mdata, true);
         else
             SOL_WRN("Predict failed.");
     } else {
-        if (sml_process(mdata->sml) < 0)
+        if (sml_process(mdata->base.sml) < 0)
             SOL_WRN("Process failed.");
     }
 
@@ -1536,11 +1404,11 @@ next:
     packet_type_sml_data_packet_dispose(NULL, &sml_data->base);
     free(sml_data);
 
-    sol_worker_thread_feedback(mdata->worker);
+    sol_worker_thread_feedback(mdata->base.worker);
     return true;
 
 end:
-    pthread_mutex_unlock(&mdata->queue_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
     return false;
 }
 
@@ -1553,7 +1421,7 @@ machine_learning_sync_worker_thread_feedback(void *data)
     struct machine_learning_sync_data *mdata = data;
     struct sml_output_data_priv *priv;
 
-    r = mutex_lock(&mdata->queue_lock);
+    r = mutex_lock(&mdata->base.general_lock);
     SOL_INT_CHECK(r, < 0);
     if (mdata->output_queue.len == 0)
         goto end;
@@ -1565,35 +1433,37 @@ machine_learning_sync_worker_thread_feedback(void *data)
         port = priv->predict ?
             SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__OUT__OUT_PREDICT :
             SOL_FLOW_NODE_TYPE_MACHINE_LEARNING_FUZZY_SYNC__OUT__OUT;
-        r = sml_output_data_send_packet(mdata->node, port, sml_output_data);
+        r = sml_output_data_send_packet(mdata->base.node, port,
+            sml_output_data);
         packet_type_sml_output_data_packet_dispose(NULL, sml_output_data);
         free(sml_output_data);
     }
     sol_vector_clear(&mdata->output_queue);
 
 end:
-    pthread_mutex_unlock(&mdata->queue_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 }
 
-static int machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata);
+static int machine_learning_sync_worker_schedule(void *data);
 
 static void
 machine_learning_sync_worker_thread_finished(void *data)
 {
     struct machine_learning_sync_data *mdata = data;
 
-    mdata->worker = NULL;
+    mdata->base.worker = NULL;
     machine_learning_sync_worker_thread_feedback(data);
 
-    pthread_mutex_unlock(&mdata->thread_running);
+    pthread_mutex_unlock(&mdata->base.thread_running);
     //No lock needed because worker thread is dead
     if (mdata->input_queue.base.len > 0)
         machine_learning_sync_worker_schedule(mdata);
 }
 
 static int
-machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata)
+machine_learning_sync_worker_schedule(void *data)
 {
+    struct machine_learning_sync_data *mdata = data;
     int r;
     struct sol_worker_thread_spec spec = {
         .api_version = SOL_WORKER_THREAD_SPEC_API_VERSION,
@@ -1604,10 +1474,10 @@ machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata)
         .data = mdata
     };
 
-    r = mutex_lock(&mdata->thread_running);
+    r = mutex_lock(&mdata->base.thread_running);
     SOL_INT_CHECK(r, < 0, r);
-    mdata->worker = sol_worker_thread_new(&spec);
-    if (!mdata->worker) {
+    mdata->base.worker = sol_worker_thread_new(&spec);
+    if (!mdata->base.worker) {
         r = -errno;
         SOL_ERR("Could not schedule the worker thread");
         goto err_exit;
@@ -1615,33 +1485,18 @@ machine_learning_sync_worker_schedule(struct machine_learning_sync_data *mdata)
 
     return 0;
 err_exit:
-    pthread_mutex_unlock(&mdata->thread_running);
+    pthread_mutex_unlock(&mdata->base.thread_running);
     return r;
 }
 
 static void
-machine_learning_sync_close(struct sol_flow_node *node, void *data)
+machine_learning_sync_close(void *data)
 {
     struct machine_learning_sync_data *mdata = data;
     struct sml_data_priv *sml_data;
     struct sml_output_data_priv *sml_output_data_priv;
-    int error;
     uint16_t i;
 
-    if (mdata->worker) {
-        sol_worker_thread_cancel(mdata->worker);
-        if (mutex_lock(&mdata->thread_running) < 0)
-            SOL_WRN("Could not lock the thread_running mutex");
-        else
-            pthread_mutex_unlock(&mdata->thread_running);
-    }
-
-    if (mdata->sml_data_dir && !sml_save(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
-    if ((error = pthread_mutex_destroy(&mdata->queue_lock)))
-        SOL_WRN("Error %d when destroying pthread mutex lock (queue_lock)", error);
-    if ((error = pthread_mutex_destroy(&mdata->thread_running)))
-        SOL_WRN("Error %d when destroying pthread mutex lock (thread_running)", error);
     SOL_VECTOR_FOREACH_IDX (&mdata->output_queue, sml_output_data_priv, i) {
         packet_type_sml_output_data_packet_dispose(NULL,
             sml_output_data_priv->packet);
@@ -1651,12 +1506,9 @@ machine_learning_sync_close(struct sol_flow_node *node, void *data)
         packet_type_sml_data_packet_dispose(NULL, &sml_data->base);
         free(sml_data);
     }
-    sml_free(mdata->sml);
     sol_ptr_vector_clear(&mdata->input_queue);
     sol_vector_clear(&mdata->output_queue);
     free(mdata->output_steps);
-    free(mdata->sml_data_dir);
-    free(mdata->debug_file);
 }
 
 static int
@@ -1700,86 +1552,23 @@ sml_data_process(struct sol_flow_node *node, void *data, uint16_t port,
     else
         new_sml_data->predict = true;
 
-    r = mutex_lock(&mdata->queue_lock);
+    r = mutex_lock(&mdata->base.general_lock);
     SOL_INT_CHECK_GOTO(r, < 0, err);
 
     r = sol_ptr_vector_append(&mdata->input_queue, new_sml_data);
     SOL_INT_CHECK_GOTO(r, < 0, err_mutex);
 
-    pthread_mutex_unlock(&mdata->queue_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 
-    if (!mdata->worker)
+    if (!mdata->base.worker)
         return machine_learning_sync_worker_schedule(mdata);
     return 0;
 
 err_mutex:
-    pthread_mutex_unlock(&mdata->queue_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 err:
     free(new_sml_data);
     return r;
-}
-
-static int
-sml_data_save_process(struct sol_flow_node *node, void *data, uint16_t port,
-    uint16_t conn_id, const struct sol_flow_packet *packet)
-{
-    struct machine_learning_sync_data *mdata = data;
-    int r;
-
-    if (!mdata->sml_data_dir) {
-        SOL_ERR("Could not save the SML data. The data dir is NULL !");
-        return -EINVAL;
-    }
-
-    r = mutex_lock(&mdata->queue_lock);
-    SOL_INT_CHECK(r, < 0, r);
-    mdata->save_needed = true;
-    pthread_mutex_unlock(&mdata->queue_lock);
-    if (!mdata->worker)
-        return machine_learning_sync_worker_schedule(mdata);
-    return 0;
-}
-
-static int
-sml_data_learn_disabled_process(struct sol_flow_node *node,
-    void *data, uint16_t port, uint16_t conn_id,
-    const struct sol_flow_packet *packet)
-{
-    struct machine_learning_sync_data *mdata = data;
-    bool disabled;
-    int r;
-
-    r = sol_flow_packet_get_boolean(packet, &disabled);
-    SOL_INT_CHECK(r, < 0, r);
-    r = mutex_lock(&mdata->queue_lock);
-    SOL_INT_CHECK(r, < 0, r);
-    if (mdata->learn_disabled != disabled) {
-        mdata->learn_disabled = disabled;
-        if (!mdata->worker)
-            r = machine_learning_sync_worker_schedule(mdata);
-    }
-    pthread_mutex_unlock(&mdata->queue_lock);
-    return r;
-}
-
-static int
-sml_data_erase_knowledge_process(struct sol_flow_node *node,
-    void *data, uint16_t port, uint16_t conn_id,
-    const struct sol_flow_packet *packet)
-{
-    struct machine_learning_sync_data *mdata = data;
-    int r;
-
-    if (mdata->erase_knowledge)
-        return 0;
-
-    r = mutex_lock(&mdata->queue_lock);
-    SOL_INT_CHECK(r, < 0, r);
-    mdata->erase_knowledge = true;
-    pthread_mutex_unlock(&mdata->queue_lock);
-    if (!mdata->worker)
-        return machine_learning_sync_worker_schedule(mdata);
-    return 0;
 }
 
 static bool
@@ -1861,7 +1650,7 @@ sync_output_state_changed_run(struct sml_object *sml,
         }
     }
 
-    r = mutex_lock(&mdata->queue_lock);
+    r = mutex_lock(&mdata->base.general_lock);
     SOL_INT_CHECK_GOTO(r, < 0, err);
 
     sml_output_data_priv = sol_vector_append(&mdata->output_queue);
@@ -1869,11 +1658,11 @@ sync_output_state_changed_run(struct sml_object *sml,
     sml_output_data_priv->predict = predict;
     sml_output_data_priv->packet = sml_output_data;
 
-    pthread_mutex_unlock(&mdata->queue_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
     return;
 
 err_unlock:
-    pthread_mutex_unlock(&mdata->queue_lock);
+    pthread_mutex_unlock(&mdata->base.general_lock);
 err:
     free(sml_output_data->outputs);
     free(sml_output_data);
@@ -1885,17 +1674,19 @@ sync_output_state_changed_cb(struct sml_object *sml,
 {
     sync_output_state_changed_run(sml, changed, data, false);
 }
-int
-init_machine_learning_sync(struct machine_learning_sync_data *mdata)
-{
-    int r;
 
-    if (!sml_set_read_state_callback(mdata->sml, sync_read_state_cb, mdata)) {
+static int
+init_machine_learning_sync(void *data)
+{
+    struct machine_learning_sync_data *mdata = data;
+
+    if (!sml_set_read_state_callback(mdata->base.sml, sync_read_state_cb,
+        mdata)) {
         SOL_WRN("Failed to set read callback");
         return -EINVAL;
     }
 
-    if (!sml_set_output_state_changed_callback(mdata->sml,
+    if (!sml_set_output_state_changed_callback(mdata->base.sml,
         sync_output_state_changed_cb, mdata)) {
         SOL_WRN("Failed to set change state callback");
         return -EINVAL;
@@ -1904,18 +1695,12 @@ init_machine_learning_sync(struct machine_learning_sync_data *mdata)
     sol_ptr_vector_init(&mdata->input_queue);
     sol_vector_init(&mdata->output_queue, sizeof(struct sml_output_data_priv));
 
-    if ((r = pthread_mutex_init(&mdata->queue_lock, NULL)) ||
-        (r = pthread_mutex_init(&mdata->thread_running, NULL))) {
-        SOL_WRN("Failed to initialize pthread mutex lock");
-        return -r;
-    }
-
     return 0;
 }
 
 static int
-fuzzy_sync_open(struct sol_flow_node *node, void *data,
-    const struct sol_flow_node_options *options)
+machine_learning_sync_fuzzy_open(void *data,
+    const struct sol_flow_node_options *options, const char **data_dir)
 {
     const struct sol_flow_node_type_machine_learning_fuzzy_options *opts;
     struct machine_learning_sync_data *mdata = data;
@@ -1924,40 +1709,18 @@ fuzzy_sync_open(struct sol_flow_node *node, void *data,
     opts = (const struct
         sol_flow_node_type_machine_learning_fuzzy_options *)options;
 
-    mdata->node = node;
-    if (opts->number_of_terms.val >= 0)
-        mdata->number_of_terms = opts->number_of_terms.val;
-    else {
-        SOL_WRN("Number of fuzzy terms (%d) must be a positive value. "
-            "Assuming %d.", opts->number_of_terms.val, AUTOMATIC_TERMS);
-        mdata->number_of_terms = AUTOMATIC_TERMS;
-    }
-
-    r = create_sml_fuzzy(&mdata->sml, opts->stabilization_hits.val);
+    r = create_sml_fuzzy(&mdata->base.sml, &mdata->base.number_of_terms,
+        opts->stabilization_hits.val,
+        opts->number_of_terms.val);
     SOL_INT_CHECK(r, < 0, r);
 
-    r = init_machine_learning_sync(mdata);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!opts->data_dir)
-        return 0;
-
-    r = copy_str(&mdata->sml_data_dir, opts->data_dir);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!sml_load(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Could not load the sml data at:%s", mdata->sml_data_dir);
-
+    *data_dir = opts->data_dir;
     return 0;
-
-err:
-    sml_free(mdata->sml);
-    return r;
 }
 
 static int
-neural_network_sync_open(struct sol_flow_node *node, void *data,
-    const struct sol_flow_node_options *options)
+machine_learning_sync_neural_network_open(void *data,
+    const struct sol_flow_node_options *options, const char **data_dir)
 {
     int r;
     struct machine_learning_sync_data *mdata = data;
@@ -1967,61 +1730,14 @@ neural_network_sync_open(struct sol_flow_node *node, void *data,
     opts = (const struct
         sol_flow_node_type_machine_learning_neural_network_options *)options;
 
-    mdata->node = node;
-    r = create_sml_ann(&mdata->sml, opts->stabilization_hits.val,
+    r = create_sml_ann(&mdata->base.sml, opts->stabilization_hits.val,
         opts->mse.val, opts->initial_required_observations.val,
         opts->training_algorithm, opts->activation_functions);
     SOL_INT_CHECK(r, < 0, r);
 
-    r = init_machine_learning_sync(mdata);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!opts->data_dir)
-        return 0;
-
-    r = copy_str(&mdata->sml_data_dir, opts->data_dir);
-    SOL_INT_CHECK_GOTO(r, < 0, err);
-
-    if (!sml_load(mdata->sml, mdata->sml_data_dir))
-        SOL_WRN("Could not load the sml data at:%s", mdata->sml_data_dir);
-
+    *data_dir = opts->data_dir;
     return 0;
 
-err:
-    sml_free(mdata->sml);
-    return r;
-}
-
-static int
-sml_data_debug_file(struct sol_flow_node *node, void *data, uint16_t port,
-    uint16_t conn_id, const struct sol_flow_packet *packet)
-{
-    int r;
-    struct machine_learning_sync_data *mdata = data;
-    const char *str;
-
-    r = sol_flow_packet_get_string(packet, &str);
-    SOL_INT_CHECK(r, < 0, r);
-
-    r = mutex_lock(&mdata->queue_lock);
-    SOL_INT_CHECK(r, < 0, r);
-
-    free(mdata->debug_file);
-
-    if (str) {
-        mdata->debug_file = strdup(str);
-        SOL_NULL_CHECK_GOTO(mdata->debug_file, err);
-    } else
-        mdata->debug_file = NULL;
-    mdata->debug_file_changed = true;
-
-    pthread_mutex_unlock(&mdata->queue_lock);
-
-    return 0;
-
-err:
-    pthread_mutex_unlock(&mdata->queue_lock);
-    return -ENOMEM;
 }
 
 static int
@@ -2042,6 +1758,193 @@ filter_sync_process(struct sol_flow_node *node, void *data, uint16_t port,
     }
 
     return 0;
+}
+
+//Common Sync/Non sync functions.
+static int
+machine_learning_base_open(struct sol_flow_node *node, void *data,
+    const struct sol_flow_node_options *options)
+{
+    struct machine_learning_base_data *mdata = data;
+    const struct machine_learning_node_type *type;
+    const char *data_dir;
+    int r;
+
+    mdata->node = node;
+
+    type = (const struct machine_learning_node_type *)
+        sol_flow_node_get_type(node);
+
+    r = type->open_func(mdata, options, &data_dir);
+    SOL_INT_CHECK(r, < 0, r);
+
+    r = pthread_mutex_init(&mdata->general_lock, NULL);
+    SOL_INT_CHECK_GOTO(r, != 0, err_general_lock);
+
+    r = pthread_mutex_init(&mdata->thread_running, NULL);
+    SOL_INT_CHECK_GOTO(r, != 0, err_thread_running);
+
+    r = type->init_machine_learning_func(mdata);
+    SOL_INT_CHECK_GOTO(r, < 0, err_init);
+
+    if (!data_dir)
+        return 0;
+
+    r = copy_str(&mdata->sml_data_dir, data_dir);
+    SOL_INT_CHECK_GOTO(r, < 0, err_init);
+
+    if (!sml_load(mdata->sml, mdata->sml_data_dir))
+        SOL_WRN("Could not load the sml data at:%s", mdata->sml_data_dir);
+
+    return 0;
+
+err_init:
+    pthread_mutex_destroy(&mdata->thread_running);
+err_thread_running:
+    pthread_mutex_destroy(&mdata->general_lock);
+err_general_lock:
+    sml_free(mdata->sml);
+    return r;
+}
+
+static void
+machine_learning_base_close(struct sol_flow_node *node, void *data)
+{
+    struct machine_learning_base_data *mdata = data;
+    const struct machine_learning_node_type *type;
+    int error;
+
+    if (mdata->worker) {
+        sol_worker_thread_cancel(mdata->worker);
+        if (mutex_lock(&mdata->thread_running) < 0)
+            SOL_WRN("Could not lock the thread_running lock");
+        else
+            pthread_mutex_unlock(&mdata->thread_running);
+    }
+
+    type = (const struct machine_learning_node_type *)
+        sol_flow_node_get_type(node);
+
+    type->close_func(mdata);
+
+    if ((error = pthread_mutex_destroy(&mdata->general_lock)))
+        SOL_WRN("Error %d when destroying pthread mutex lock (process_lock)",
+            error);
+
+    if ((error = pthread_mutex_destroy(&mdata->thread_running)))
+        SOL_WRN("Error %d when destroying pthread mutex lock (thread_running)",
+            error);
+    if (mdata->sml_data_dir && !sml_save(mdata->sml,
+        mdata->sml_data_dir))
+        SOL_WRN("Failed to save SML data at:%s", mdata->sml_data_dir);
+
+    sml_free(mdata->sml);
+    free(mdata->sml_data_dir);
+    free(mdata->debug_file);
+}
+
+static int
+schedule_worker_if_needed(struct sol_flow_node *node,
+    struct machine_learning_base_data *mdata)
+{
+    const struct machine_learning_node_type *type;
+
+    if (mdata->worker)
+        return 0;
+
+    type = (const struct machine_learning_node_type *)
+        sol_flow_node_get_type(node);
+    return type->worker_schedule_func(mdata);
+}
+
+static int
+save_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    struct machine_learning_base_data *mdata = data;
+    int r;
+
+    if (!mdata->sml_data_dir) {
+        SOL_ERR("Could not save the SML data. The data dir is NULL !");
+        return -EINVAL;
+    } else if (mdata->save_needed)
+        return 0;
+
+    r = mutex_lock(&mdata->general_lock);
+    SOL_INT_CHECK(r, < 0, r);
+    mdata->save_needed = true;
+    pthread_mutex_unlock(&mdata->general_lock);
+    return schedule_worker_if_needed(node, mdata);
+}
+
+static int
+learn_disabled_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    struct machine_learning_base_data *mdata = data;
+    bool disabled;
+    int r;
+
+    r = sol_flow_packet_get_boolean(packet, &disabled);
+    SOL_INT_CHECK(r, < 0, r);
+
+    if (mdata->learn_disabled == disabled)
+        return 0;
+
+    r = mutex_lock(&mdata->general_lock);
+    SOL_INT_CHECK(r, < 0, r);
+    mdata->learn_disabled = disabled;
+    pthread_mutex_unlock(&mdata->general_lock);
+
+    return schedule_worker_if_needed(node, mdata);
+}
+
+static int
+debug_file_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    int r;
+    struct machine_learning_base_data *mdata = data;
+    const char *str;
+
+    r = sol_flow_packet_get_string(packet, &str);
+    SOL_INT_CHECK(r, < 0, r);
+
+    r = mutex_lock(&mdata->general_lock);
+    SOL_INT_CHECK(r, < 0, r);
+
+    free(mdata->debug_file);
+
+    if (str) {
+        mdata->debug_file = strdup(str);
+        SOL_NULL_CHECK_GOTO(mdata->debug_file, err);
+    } else
+        mdata->debug_file = NULL;
+    mdata->debug_file_changed = true;
+
+    pthread_mutex_unlock(&mdata->general_lock);
+    return 0;
+
+err:
+    pthread_mutex_unlock(&mdata->general_lock);
+    return -ENOMEM;
+}
+
+static int
+erase_knowledge_process(struct sol_flow_node *node, void *data, uint16_t port,
+    uint16_t conn_id, const struct sol_flow_packet *packet)
+{
+    struct machine_learning_base_data *mdata = data;
+    int r;
+
+    if (mdata->erase_knowledge)
+        return 0;
+
+    r = mutex_lock(&mdata->general_lock);
+    SOL_INT_CHECK(r, < 0, r);
+    mdata->erase_knowledge = true;
+    pthread_mutex_unlock(&mdata->general_lock);
+    return schedule_worker_if_needed(node, mdata);
 }
 
 #undef MAX_FUNCTIONS
