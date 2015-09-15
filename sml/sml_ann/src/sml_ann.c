@@ -445,8 +445,8 @@ _sml_ann_change_ann_layout_if_needed(struct sml_ann_engine *ann_engine)
         if ((error = _sml_ann_train(ann_engine, iann,
                 ann_engine->required_observations)))
             return error;
-        sml_ann_variables_list_reset_observations(ann_engine->inputs);
-        sml_ann_variables_list_reset_observations(ann_engine->outputs);
+        sml_ann_variables_list_reset_observations(ann_engine->inputs, false);
+        sml_ann_variables_list_reset_observations(ann_engine->outputs, false);
     }
     return 0;
 }
@@ -735,8 +735,8 @@ _sml_ann_store_observations(struct sml_ann_engine *ann_engine)
 
             if (sml_ann_bridge_is_trained(iann)) {
                 sml_debug("ANN is trained, reseting variable observations.");
-                sml_ann_variables_list_reset_observations(ann_engine->inputs);
-                sml_ann_variables_list_reset_observations(ann_engine->outputs);
+                sml_ann_variables_list_reset_observations(ann_engine->inputs, false);
+                sml_ann_variables_list_reset_observations(ann_engine->outputs, false);
             }
         }
     }
@@ -1165,6 +1165,19 @@ _sml_ann_cache_element_free(void *element, void *data)
     sml_ann_bridge_free(element);
 }
 
+static bool
+_sml_ann_erase_knowledge(struct sml_engine *engine)
+{
+    struct sml_ann_engine *ann_engine = (struct sml_ann_engine *)engine;
+
+    sml_cache_clear(ann_engine->anns_cache);
+    sml_ann_variables_list_reset_observations(ann_engine->inputs, true);
+    sml_ann_variables_list_reset_observations(ann_engine->outputs, true);
+    ann_engine->engine.hits = 0;
+    ann_engine->first_run = true;
+    return true;
+}
+
 API_EXPORT struct sml_object *
 sml_ann_new(void)
 {
@@ -1230,6 +1243,7 @@ sml_ann_new(void)
     ann_engine->engine.variable_set_range = sml_ann_variable_set_range;
     ann_engine->engine.variable_get_range = sml_ann_variable_get_range;
     ann_engine->engine.print_debug = _sml_ann_print_debug;
+    ann_engine->engine.erase_knowledge = _sml_ann_erase_knowledge;
     ann_engine->engine.magic_number = ANN_MAGIC;
 
     return (struct sml_object *)&ann_engine->engine;

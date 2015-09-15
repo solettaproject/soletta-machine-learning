@@ -63,6 +63,7 @@ int sml_fuzzy_process_output(struct sml_fuzzy *fuzzy);
 bool sml_fuzzy_load_file(struct sml_fuzzy *fuzzy, const char *filename);
 bool sml_fuzzy_save_file(struct sml_fuzzy *fuzzy, const char *filename);
 void sml_fuzzy_destroy(struct sml_fuzzy *fuzzy);
+void sml_fuzzy_erase_rules(struct sml_fuzzy *fuzzy);
 
 bool sml_fuzzy_bridge_conjunction_set(struct sml_fuzzy *fuzzy, enum sml_fuzzy_tnorm norm);
 bool sml_fuzzy_bridge_disjunction_set(struct sml_fuzzy *fuzzy, enum sml_fuzzy_snorm norm);

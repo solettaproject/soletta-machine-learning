@@ -752,6 +752,22 @@ sml_fuzzy_bridge_output_set_accumulation(struct sml_variable *variable,
 }
 
 void
+sml_fuzzy_erase_rules(struct sml_fuzzy *fuzzy)
+{
+    fl::Engine *engine = (fl::Engine *) fuzzy->engine;
+    fl::RuleBlock *block;
+    int rules;
+
+    if (engine->numberOfRuleBlocks() == 0)
+      return;
+
+    block = engine->getRuleBlock(0);
+    rules = block->numberOfRules();
+    for (int i = 0; i < rules; i++)
+      delete block->removeRule(0);
+}
+
+void
 sml_fuzzy_bridge_variable_set_range(struct sml_variable *variable, float min,
     float max)
 {
