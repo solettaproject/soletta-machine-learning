@@ -470,8 +470,8 @@ machine_learning_fuzzy_open(void *data,
         sol_flow_node_type_machine_learning_fuzzy_options *)options;
 
     r = create_sml_fuzzy(&mdata->base.sml, &mdata->base.number_of_terms,
-        opts->stabilization_hits.val,
-        opts->number_of_terms.val);
+        opts->stabilization_hits,
+        opts->number_of_terms);
     SOL_INT_CHECK(r, < 0, r);
     *data_dir = opts->data_dir;
     return 0;
@@ -645,8 +645,8 @@ machine_learning_neural_network_open(void *data,
     opts = (const struct
         sol_flow_node_type_machine_learning_neural_network_options *)options;
 
-    r = create_sml_ann(&mdata->base.sml, opts->stabilization_hits.val,
-        opts->mse.val, opts->initial_required_observations.val,
+    r = create_sml_ann(&mdata->base.sml, opts->stabilization_hits,
+        opts->mse, opts->initial_required_observations,
         opts->training_algorithm, opts->activation_functions);
     SOL_INT_CHECK(r, < 0, r);
 
@@ -1710,8 +1710,8 @@ machine_learning_sync_fuzzy_open(void *data,
         sol_flow_node_type_machine_learning_fuzzy_options *)options;
 
     r = create_sml_fuzzy(&mdata->base.sml, &mdata->base.number_of_terms,
-        opts->stabilization_hits.val,
-        opts->number_of_terms.val);
+        opts->stabilization_hits,
+        opts->number_of_terms);
     SOL_INT_CHECK(r, < 0, r);
 
     *data_dir = opts->data_dir;
@@ -1730,8 +1730,8 @@ machine_learning_sync_neural_network_open(void *data,
     opts = (const struct
         sol_flow_node_type_machine_learning_neural_network_options *)options;
 
-    r = create_sml_ann(&mdata->base.sml, opts->stabilization_hits.val,
-        opts->mse.val, opts->initial_required_observations.val,
+    r = create_sml_ann(&mdata->base.sml, opts->stabilization_hits,
+        opts->mse, opts->initial_required_observations,
         opts->training_algorithm, opts->activation_functions);
     SOL_INT_CHECK(r, < 0, r);
 
