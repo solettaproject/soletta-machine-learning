@@ -98,8 +98,8 @@ goalkeeper1 OUT[0] -> OUTPUT_VALUE phase1_goalkeeper1
 striker1 OUT[0] -> OUTPUT_VALUE phase1_striker1
 goalkeeper2 OUT[0] -> OUTPUT_VALUE phase1_goalkeeper2
 striker2 OUT[0] -> OUTPUT_VALUE phase1_striker2
-winner1(switcher/empty) OUT[0] -> IN _(converter/empty-to-int:output_value=val:1|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
-winner2(switcher/empty) OUT[0] -> IN _(converter/empty-to-int:output_value=val:2|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
+winner1(switcher/empty) OUT[0] -> IN _(converter/empty-to-int:output_value=1,output_value_spec=min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
+winner2(switcher/empty) OUT[0] -> IN _(converter/empty-to-int:output_value=2,output_value_spec=min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase1_winner
 
 phase1_goalkeeper1 OUT -> IN sml_goalkeeper1
 phase1_striker1 OUT -> IN sml_striker1
@@ -123,8 +123,8 @@ goalkeeper1 OUT[0] -> OUTPUT_VALUE phase2_goalkeeper1
 striker1 OUT[0] -> OUTPUT_VALUE phase2_striker1
 goalkeeper2 OUT[0] -> OUTPUT_VALUE phase2_goalkeeper2
 striker2 OUT[0] -> OUTPUT_VALUE phase2_striker2
-winner1 OUT[0] -> IN _(converter/empty-to-int:output_value=val:2|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
-winner2 OUT[0] -> IN _(converter/empty-to-int:output_value=val:1|min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
+winner1 OUT[0] -> IN _(converter/empty-to-int:output_value=2,output_value_spec=min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
+winner2 OUT[0] -> IN _(converter/empty-to-int:output_value=1,output_value_spec=min:0|max:2|step:1) OUT -> OUTPUT_VALUE phase2_winner
 
 phase2_goalkeeper2 OUT -> IN sml_goalkeeper1
 phase2_striker2 OUT -> IN sml_striker1
@@ -137,7 +137,7 @@ state_run_phase2 OUT -> TRIGGER sml
 state_run_phase2 OUT -> IN _(converter/empty-to-boolean:output_value=false) OUT -> ENABLED timer
 
 #End
-state_end OUT -> IN _(converter/empty-to-int:output_value=val:0|min:0|max:2|step:1) OUT -> IN sml_winner
+state_end OUT -> IN _(converter/empty-to-int:output_value=0,output_value_spec=min:0|max:2|step:1) OUT -> IN sml_winner
 
 #Prediction phase
 goalkeeper1 OUT[0] -> IN sml_goalkeeper1

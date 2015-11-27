@@ -91,19 +91,19 @@ player4_enabled OUT -> IN _(boolean/filter) TRUE -> INC player4
 #player_selection OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd(string/concatenate)
 _(constant/string:value="Player 1: ") OUT -> IN[0] lcd1(string/concatenate)
 player1 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd1
-state_player1 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 1: 0") OUT -> IN lcd
+state_player1 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 1: 0") OUT -> IN[0] lcd
 
 _(constant/string:value="Player 2: ") OUT -> IN[0] lcd2(string/concatenate)
 player2 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd2
-state_player2 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 2: 0") OUT -> IN lcd
+state_player2 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 2: 0") OUT -> IN[0] lcd
 
 _(constant/string:value="Player 3: ") OUT -> IN[0] lcd3(string/concatenate)
 player3 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd3
-state_player3 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 3: 0") OUT -> IN lcd
+state_player3 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 3: 0") OUT -> IN[0] lcd
 
 _(constant/string:value="Player 4: ") OUT -> IN[0] lcd4(string/concatenate)
 player4 OUT -> IN _(converter/int-to-string) OUT -> IN[1] lcd4
-state_player4 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 4: 0") OUT -> IN lcd
+state_player4 OUT -> PULSE_IF_TRUE _(converter/boolean-to-empty) OUT -> IN _(converter/empty-to-string:output_value="Player 4: 0") OUT -> IN[0] lcd
 
 lcd1 OUT -> IN[0] lcd(switcher/string)
 lcd2 OUT -> IN[0] lcd
