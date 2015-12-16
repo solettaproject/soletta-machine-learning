@@ -30,6 +30,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#include <sol-flow.h>
 #include <sol-flower-power.h>
 #include <string.h>
 #include <errno.h>
@@ -52,6 +53,8 @@ struct sml_garden_data {
     struct sol_drange cur_water, last_water;
     struct sol_irange cur_timeblock, last_timeblock;
 };
+
+static const struct sol_flow_packet_type *PACKET_TYPE_FLOWER_POWER;
 
 static int
 send_sml_garden_packet(struct sol_flow_node *node, int port,
@@ -123,8 +126,12 @@ flower_power_packet_process(struct sol_flow_node *node, void *data,
     struct sml_garden_data *sdata = data;
     struct sol_flower_power_data fpd;
 
-    r = sol_flower_power_get_packet(packet, &fpd);
+    if (sol_flow_packet_get_type(packet) != PACKET_TYPE_FLOWER_POWER)
+      return -EINVAL;
+
+    r = sol_flow_packet_get(packet, &fpd);
     SOL_INT_CHECK(r, < 0, r);
+
     SOL_DBG("Received packet - id: %s - timestamp: %lld - water:%g", fpd.id,
         (long long)fpd.timestamp.tv_sec, fpd.water.val);
 
@@ -215,9 +222,13 @@ static int
 message_constructor_open(struct sol_flow_node *node, void *data,
     const struct sol_flow_node_options *options)
 {
+    int r;
     struct sml_garden_data *sdata = data;
 
     sdata->cur_water.val = NAN;
+
+    r = sol_flow_get_packet_type("flower-power", PACKET_TYPE_FLOWER_POWER, &PACKET_TYPE_FLOWER_POWER);
+    SOL_INT_CHECK(r, < 0, r);
 
     return 0;
 }
