@@ -1,3 +1,21 @@
+/*
+ * This file is part of the Soletta Project
+ *
+ * Copyright (C) 2015 Intel Corporation. All rights reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 #pragma once
 
 #include "sol-flow.h"
@@ -30,7 +48,6 @@ int sml_data_get_packet(const struct sol_flow_packet *packet, struct packet_type
 struct sol_flow_packet *sml_output_data_new_packet(struct packet_type_sml_output_data_packet_data *sml_output_data);
 int sml_output_data_get_packet(const struct sol_flow_packet *packet, struct packet_type_sml_output_data_packet_data *sml_output_data);
 int sml_output_data_send_packet(struct sol_flow_node *src, uint16_t src_port, struct packet_type_sml_output_data_packet_data *sml_output_data);
-
 
 #ifdef __cplusplus
 }
