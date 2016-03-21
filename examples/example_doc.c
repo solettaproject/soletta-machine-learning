@@ -21,11 +21,11 @@
  * controlled by the user, that eventually forgets to turn lights off.
  */
 
-/* WARNING: when this sample breaks, it means "Getting Started on SML"
- * wiki page must to be updated.
+/* WARNING: when this sample breaks, it means "Soletta Machine Learning:
+ * Light Sensor Tutorial" wiki page must to be updated.
  * All patches applied here should be applied there as well.
  *
- * https://github.com/solettaproject/soletta/wiki/Getting-Started-on-SML
+ * https://github.com/solettaproject/soletta/wiki/Soletta-Machine-Learning%3A-Light-Sensor-Tutorial
  */
 
 #include <math.h>
