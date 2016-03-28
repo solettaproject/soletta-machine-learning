@@ -20,10 +20,11 @@
 #include <float.h>
 #include <math.h>
 #include <sol-vector.h>
+#include <sol-util.h>
+#include <sol-worker-thread.h>
 #include <stdio.h>
 #include <string.h>
 #include <pthread.h>
-#include <sol-worker-thread.h>
 
 #include "sml_ann.h"
 #include "sml_fuzzy.h"
@@ -758,8 +759,8 @@ input_var_process(struct sol_flow_node *node, void *data, uint16_t port,
         return -EINVAL;
     }
 
-    if ((!sol_drange_val_equal(input_var->base.value.min, value.min)) ||
-        (!sol_drange_val_equal(input_var->base.value.max, value.max)))
+    if ((!sol_util_double_equal(input_var->base.value.min, value.min)) ||
+        (!sol_util_double_equal(input_var->base.value.max, value.max)))
         input_var->base.range_changed = true;
     input_var->base.value = value;
     pthread_mutex_unlock(&mdata->read_lock);
@@ -802,8 +803,8 @@ output_var_process(struct sol_flow_node *node, void *data, uint16_t port,
         }
     }
 
-    if ((!sol_drange_val_equal(output_var->base.value.min, value.min)) ||
-        (!sol_drange_val_equal(output_var->base.value.max, value.max)))
+    if ((!sol_util_double_equal(output_var->base.value.min, value.min)) ||
+        (!sol_util_double_equal(output_var->base.value.max, value.max)))
         output_var->base.range_changed = true;
     output_var->base.value = value;
     output_var->predicted_value = NAN;
@@ -965,8 +966,8 @@ worker_schedule(void *data)
 {
     struct machine_learning_data *mdata = data;
     int r;
-    struct sol_worker_thread_spec spec = {
-        .api_version = SOL_WORKER_THREAD_SPEC_API_VERSION,
+    struct sol_worker_thread_config thread_config = {
+        .api_version = SOL_WORKER_THREAD_CONFIG_API_VERSION,
         .setup = machine_learning_worker_thread_setup,
         .cleanup = NULL,
         .iterate = machine_learning_worker_thread_iterate,
@@ -977,7 +978,7 @@ worker_schedule(void *data)
 
     r = mutex_lock(&mdata->base.thread_running);
     SOL_INT_CHECK(r, < 0, r);
-    mdata->base.worker = sol_worker_thread_new(&spec);
+    mdata->base.worker = sol_worker_thread_new(&thread_config);
     if (!mdata->base.worker) {
         r = -errno;
         SOL_ERR("Could not schedule the worker thread");
@@ -1284,8 +1285,8 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         if (!sml_variable_get_range(mdata->base.sml, var, &min, &max))
             return -EINVAL;
 
-        if ((!sol_drange_val_equal(min, val->min)) ||
-            (!sol_drange_val_equal(max, val->max))) {
+        if ((!sol_util_double_equal(min, val->min)) ||
+            (!sol_util_double_equal(max, val->max))) {
             width = fmax((val->max - val->min + 1) /
                 mdata->base.number_of_terms, val->step);
 
@@ -1451,8 +1452,8 @@ machine_learning_sync_worker_schedule(void *data)
 {
     struct machine_learning_sync_data *mdata = data;
     int r;
-    struct sol_worker_thread_spec spec = {
-        .api_version = SOL_WORKER_THREAD_SPEC_API_VERSION,
+    struct sol_worker_thread_config thread_config = {
+        .api_version = SOL_WORKER_THREAD_CONFIG_API_VERSION,
         .cleanup = NULL,
         .iterate = machine_learning_sync_worker_thread_iterate,
         .finished = machine_learning_sync_worker_thread_finished,
@@ -1462,7 +1463,7 @@ machine_learning_sync_worker_schedule(void *data)
 
     r = mutex_lock(&mdata->base.thread_running);
     SOL_INT_CHECK(r, < 0, r);
-    mdata->base.worker = sol_worker_thread_new(&spec);
+    mdata->base.worker = sol_worker_thread_new(&thread_config);
     if (!mdata->base.worker) {
         r = -errno;
         SOL_ERR("Could not schedule the worker thread");
