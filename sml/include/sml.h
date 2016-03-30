@@ -648,9 +648,9 @@ bool sml_variable_set_range(struct sml_object *sml, struct sml_variable *sml_var
  */
 bool sml_variable_get_range(struct sml_object *sml, struct sml_variable *sml_variable, float *min, float *max);
 
-#define SML_VARIABLES_LIST_FOREACH(sml, list, len, var, i)              \
-    for (i = 0, len = sml_variables_list_get_length(sml, list);         \
-        i < len && ((var = sml_variables_list_index(sml, list, i)));   \
+#define SML_VARIABLES_LIST_FOREACH(sml, list, len, var, i) \
+    for (i = 0, len = sml_variables_list_get_length(sml, list); \
+        i < len && ((var = sml_variables_list_index(sml, list, i))); \
         i++)
 
 /**
