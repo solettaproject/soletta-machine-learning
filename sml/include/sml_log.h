@@ -34,7 +34,7 @@ extern "C" {
  * @brief Log level types
  */
 enum sml_log_level {
-    SML_LOG_LEVEL_DEBUG = 1 << 0,     /**< Show debug messages. The debug messages will not be loged with SML is compiled in Release mode. */
+    SML_LOG_LEVEL_DEBUG = 1 << 0,     /**< Show debug messages. The debug messages will not be logged with SML is compiled in Release mode. */
     SML_LOG_LEVEL_INFO = 1 << 1,     /**< Show info messages. */
     SML_LOG_LEVEL_WARNING = 1 << 2, /**< Show warning messages. */
     SML_LOG_LEVEL_ERROR = 1 << 3, /**< Show error messages. */
@@ -59,7 +59,7 @@ typedef void (*sml_log_handler_cb)(enum sml_log_level level, const char *msg, vo
 /**
  * @brief Set a log handler.
  *
- * This function is usefull if one wants to log SML events in files
+ * This function is useful if one wants to log SML events in files
  * or do not want to log ::SML_LOG_LEVEL_WARNING messages, for example.
  * SML provides a default ::sml_log_handler_cb that is automatically set at
  * startup, the log level is set to ::SML_LOG_LEVEL_ALL and all messages will be
@@ -83,7 +83,7 @@ void sml_log_set_log_handler(enum sml_log_level levels, sml_log_handler_cb cb, v
 void sml_log_print(enum sml_log_level level, const char *format, ...);
 
 /**
- * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_DEBUG, "debug message")
+ * @brief Syntactic sugar to ::sml_log_print(SML_LOG_LEVEL_DEBUG, "debug message")
  *
  * @param ... A formatted message
  *
@@ -92,7 +92,7 @@ void sml_log_print(enum sml_log_level level, const char *format, ...);
 #define sml_debug(...) sml_log_print(SML_LOG_LEVEL_DEBUG, __VA_ARGS__)
 
 /**
- * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_INFO, "info message")
+ * @brief Syntactic sugar to ::sml_log_print(SML_LOG_LEVEL_INFO, "info message")
  *
  * @param ... A formatted message
  *
@@ -101,7 +101,7 @@ void sml_log_print(enum sml_log_level level, const char *format, ...);
 #define sml_info(...) sml_log_print(SML_LOG_LEVEL_INFO, __VA_ARGS__)
 
 /**
- * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_WARNING, "warning message")
+ * @brief Syntactic sugar to ::sml_log_print(SML_LOG_LEVEL_WARNING, "warning message")
  *
  * @param ... A formatted message
  *
@@ -110,7 +110,7 @@ void sml_log_print(enum sml_log_level level, const char *format, ...);
 #define sml_warning(...) sml_log_print(SML_LOG_LEVEL_WARNING, __VA_ARGS__)
 
 /**
- * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_ERROR, "error message")
+ * @brief Syntactic sugar to ::sml_log_print(SML_LOG_LEVEL_ERROR, "error message")
  *
  * @param ... A formatted message
  *
@@ -119,7 +119,7 @@ void sml_log_print(enum sml_log_level level, const char *format, ...);
 #define sml_error(...) sml_log_print(SML_LOG_LEVEL_ERROR, __VA_ARGS__)
 
 /**
- * @brief Syntatic sugar to ::sml_log_print(SML_LOG_LEVEL_CRITICAL, "critical message")
+ * @brief Syntactic sugar to ::sml_log_print(SML_LOG_LEVEL_CRITICAL, "critical message")
  *
  * @param ... A formatted message
  *

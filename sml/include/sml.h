@@ -66,7 +66,7 @@ extern "C" {
  * the person leaves. For that, this person has a presence sensor.
  *
  * Choosing engines and creating variables is straight-forward after
- * the solution is modeled. Let's say fuzzy was the choosen one.
+ * the solution is modeled. Let's say fuzzy was the chosen one.
  * Registering callbacks is simple as well:
  *
  * @dontinclude example_doc.c
@@ -105,7 +105,7 @@ extern "C" {
  * depending in your product. It may be synchronous or asynchronous.
  *
  * To keep it simple, yet illustrative, we're going to simulate the values
- * in a function read_state_cb() Variable sensor_state represents presense
+ * in a function read_state_cb() Variable sensor_state represents presence
  * sensor reading, switch_state represents light state.
  *
  * This variable will be global since its going to be used by the callback
@@ -154,7 +154,7 @@ extern "C" {
  *  - If you want to control a light and an air-conditioning and they
  *    are independent of each other. Create two SML objects,
  *    one will control the light and another one the air-conditioning.
- *  - Try to avoid adding unnecessary inputs/outpus to SML (or forget
+ *  - Try to avoid adding unnecessary inputs/outputs to SML (or forget
  *    to add relevant inputs/outputs), this may lead the poor
  *    predictions.
  *  - Test both engines and check which one has the best results
@@ -169,8 +169,8 @@ extern "C" {
 /**
  * @struct sml_object
  *
- * Instance of the choosen machine learning engine, it may be created with
- * sml_fuzzy_new() or sml_ann_new() and shold be deleted after usage with
+ * Instance of the chosen machine learning engine, it may be created with
+ * sml_fuzzy_new() or sml_ann_new() and should be deleted after usage with
  * sml_free().
  */
 struct sml_object;
@@ -236,7 +236,7 @@ bool sml_load_fll_file(struct sml_object *sml, const char *filename);
 void sml_free(struct sml_object *sml);
 
 /**
- * @brief Register a read calblack.
+ * @brief Register a read callblack.
  *
  * It should be used to set a callback function to read variables
  * values. This callback must return true if it was able to
@@ -303,7 +303,7 @@ int sml_process(struct sml_object *sml);
 /**
  * @brief Make a prediction based on the most recent observations.
  *
- * This is usefull for making predictions without the normal SML flow,
+ * This is useful for making predictions without the normal SML flow,
  * without a mainloop and a registered ::sml_change_cb. Take a look
  * in the following example:
  *
@@ -475,7 +475,7 @@ struct sml_variables_list *sml_get_output_list(struct sml_object *sml);
  * New input variables start with NAN set as value.
  *
  * @param sml The ::sml_object object.
- * @param name The variable name. If lenght is greater
+ * @param name The variable name. If length is greater
  * than ::SML_VARIABLE_NAME_MAX_LEN variable creation will fail.
  * @return ::sml_variable on success.
  * @return @c NULL on failure.
@@ -489,7 +489,7 @@ struct sml_variable *sml_new_input(struct sml_object *sml, const char *name);
  * the value set on NAN will be used.
  *
  * @param sml The ::sml_object object.
- * @param name The variable name. If lenght is greater
+ * @param name The variable name. If length is greater
  * than ::SML_VARIABLE_NAME_MAX_LEN variable creation will fail.
  * @return ::sml_variable on success.
  * @return @c NULL on failure.
@@ -522,7 +522,7 @@ struct sml_variable *sml_get_output(struct sml_object *sml, const char *name);
  * @param sml The ::sml_object object.
  * @param sml_variable The ::sml_variable
  * @param value The desired value.
- * @return @c true on succcess.
+ * @return @c true on success.
  * @return @c false on failure.
  */
 bool sml_variable_set_value(struct sml_object *sml, struct sml_variable *sml_variable, float value);
@@ -532,7 +532,7 @@ bool sml_variable_set_value(struct sml_object *sml, struct sml_variable *sml_var
  *
  * @param sml The ::sml_object object.
  * @param sml_variable The ::sml_variable
- * @return @c true on succcess.
+ * @return @c true on success.
  * @return @c false on failure.
  */
 float sml_variable_get_value(struct sml_object *sml, struct sml_variable *sml_variable);
@@ -569,7 +569,7 @@ int sml_variable_set_enabled(struct sml_object *sml, struct sml_variable *variab
  *
  * @param sml The ::sml_object object.
  * @param variable The ::sml_variable
- * @return @c true on succcess.
+ * @return @c true on success.
  * @return @c false on failure.
  */
 bool sml_variable_is_enabled(struct sml_object *sml, struct sml_variable *variable);
@@ -583,7 +583,7 @@ bool sml_variable_is_enabled(struct sml_object *sml, struct sml_variable *variab
  *
  * @param sml The ::sml_object object.
  * @param variable The ::sml_variable to be removed
- * @return @c true on succcess.
+ * @return @c true on success.
  * @return @c false on failure.
  */
 bool sml_remove_variable(struct sml_object *sml, struct sml_variable *variable);
@@ -604,7 +604,7 @@ uint16_t sml_variables_list_get_length(struct sml_object *sml, struct sml_variab
  * @param list The ::sml_variables_list.
  * @param index The list index.
  * @return ::sml_variable on success.
- * @return @c NULL on faiulre..
+ * @return @c NULL on failure..
  */
 struct sml_variable *sml_variables_list_index(struct sml_object *sml, struct sml_variables_list *list, uint16_t index);
 
