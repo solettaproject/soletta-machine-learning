@@ -33,8 +33,8 @@ extern "C" {
  * A neural network consists in a set of neurons that are inter-connected
  * and distributed in layers, usually three (Input, hidden and output layers).
  * For every connection between neurons there is a weight associated to it,
- * these weights are initialized randomly with values beetween -0.2 and 0.2 and
- * adjusted during the traning phase, so the neural networkt
+ * these weights are initialized randomly with values between -0.2 and 0.2 and
+ * adjusted during the training phase, so the neural network
  * output predict the right value.
  *
  * The neuron is the basic unit of the neural network and it's responsible for
@@ -60,7 +60,7 @@ extern "C" {
  *
  * Consider that Bob is present (input is 1) and Alice (input is 0) is not.
  *
- * The first step is to provide the Bob's and Alice's presence to the input nerons,
+ * The first step is to provide the Bob's and Alice's presence to the input neurons,
  * In a neuron network the input neurons are special, because they do not apply the formula (1) to produce an output.
  * The output value from a input neuron is the input value itself, so in this case the
  * N1 and N2 neurons will output 1 and 0 respectively.
@@ -95,9 +95,9 @@ extern "C" {
  * @remark The values used in the neural network above
  * (inputs, outputs, neuron weights) were chosen randomly.
  *
- * The example above uses two neurons in the hidden layer, however for some problem, two nerons is not good enough.
+ * The example above uses two neurons in the hidden layer, however for some problem, two neurons is not good enough.
  * There is no silver bullet about how many neurons one should use in the hidden layer, this number is obtained by trial and error.
- * SML can handle this automatically, during the traning phase SML will automatically choose the neural network topology
+ * SML can handle this automatically, during the training phase SML will automatically choose the neural network topology
  * (how many neurons the hidden layer must have), it will also decide which is the best activation function.
  *
  * The SML neural network engine has two methods of operation, these methods try
@@ -108,8 +108,8 @@ extern "C" {
  * that has learnt in the past and only accumulate recent memory. This happens due the nature
  * of their training. In order to reduce this problem the following methods were implemented.
  *
- * The first method is called pseudohearsal (the default one), in this method only one neural network is created
- * and everytime it needs be retrained, random inputs are genereted and
+ * The first method is called pseudo-rehearsal (the default one), in this method only one neural network is created
+ * and everytime it needs be retrained, random inputs are generated and
  * feed to the network. The corresponding outputs are stored and used to train the neural network
  * with the new collected data.
  *
@@ -188,7 +188,7 @@ bool sml_is_ann(struct sml_object *sml);
 bool sml_ann_supported(void);
 
 /**
- * @brief Set the neural network trainning algorithm.
+ * @brief Set the neural network training algorithm.
  *
  * The training algorithm is responsible for adjusting the neural network weights.
  *
@@ -207,7 +207,7 @@ bool sml_ann_set_training_algorithm(struct sml_object *sml, enum sml_ann_trainin
  * Activation functions resides inside the neurons and they are responsible for producing the
  * neuron output value. As choosing the correct activation functions may required a
  * lot of trial and error tests, the SML uses an algorithm that tries to suit the best
- * activiation functions for a given problem.
+ * activation functions for a given problem.
  *
  * @remark By default all ::sml_ann_activation_function are used as candidates.
  *
@@ -244,7 +244,7 @@ bool sml_ann_set_max_neurons(struct sml_object *sml, unsigned int max_neurons);
  * To do so, it will create (M * 4) neuron candidates (where M is
  * the number of activation function candidates) and then N (where N is the number of candidate groups)
  * candidate groups will be created, ending up with M*4*N candidate neurons.
- * The only different beetwen these candidate groups is the initial weight values.
+ * The only different between these candidate groups is the initial weight values.
  *
  * @remark The default number of candidates is 6
  *
@@ -259,7 +259,7 @@ bool sml_ann_set_max_neurons(struct sml_object *sml, unsigned int max_neurons);
 bool sml_ann_set_candidate_groups(struct sml_object *sml, unsigned int candidate_groups);
 
 /**
- * @brief Set the neral network train epochs
+ * @brief Set the neural network train epochs
  *
  * The training epochs is used to know when to stop the training.
  * If the desired error is never reached, the training phase will stop
@@ -329,7 +329,7 @@ bool sml_ann_set_cache_max_size(struct sml_object *sml, unsigned int max_size);
 bool sml_ann_set_initial_required_observations(struct sml_object *sml, unsigned int required_observations);
 
 /**
- * @brief Set the pseudoreharsal strategy
+ * @brief Set the pseudorehearsal strategy
  *
  * For more information about the pseudorehearsal strategy look at the
  * \ref Neural_Network_Engine_Introduction

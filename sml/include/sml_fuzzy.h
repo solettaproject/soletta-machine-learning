@@ -57,7 +57,7 @@ enum sml_fuzzy_snorm {
 
 /**
  * @enum sml_fuzzy_tnorm
- * @brief TNorm rules are also known as conjuntion.
+ * @brief TNorm rules are also known as conjunction.
  *
  * @see ::sml_fuzzy_conjunction_set
  */
@@ -81,11 +81,11 @@ enum sml_fuzzy_tnorm {
 enum sml_fuzzy_defuzzifier {
     SML_FUZZY_DEFUZZIFIER_BISECTOR,     /**< The point that divide the curve into two equal sub-regions */
     SML_FUZZY_DEFUZZIFIER_CENTROID,     /**< The center of the area under the curve */
-    SML_FUZZY_DEFUZZIFIER_LARGEST_OF_MAXIMUM,     /**< The largest value of the maximun degrees of membership */
+    SML_FUZZY_DEFUZZIFIER_LARGEST_OF_MAXIMUM,     /**< The largest value of the maximum degrees of membership */
     SML_FUZZY_DEFUZZIFIER_MEAN_OF_MAXIMUM,     /**< The mean of the maximum degrees of membership */
     SML_FUZZY_DEFUZZIFIER_SMALLEST_OF_MAXIMUM,     /**< The smallest value of the maximun degrees of membership */
-    SML_FUZZY_DEFUZZIFIER_WEIGHTED_AVERAGE,     /**< The avarage of the activation degrees multipled by a weight*/
-    SML_FUZZY_DEFUZZIFIER_WEIGHTED_SUM,     /**< The sum of the activation degrees multipled by a weight*/
+    SML_FUZZY_DEFUZZIFIER_WEIGHTED_AVERAGE,     /**< The average of the activation degrees multiplied by a weight*/
+    SML_FUZZY_DEFUZZIFIER_WEIGHTED_SUM,     /**< The sum of the activation degrees multiplied by a weight*/
 };     /**< A fuzzy Defuzzifier type. */
 
 /**
@@ -138,9 +138,9 @@ bool sml_fuzzy_supported(void);
 /**
  * @brief Set the conjunction fuzzy rule.
  *
- * The conjuction rule is equivalent to the boolean and operation.
+ * The conjunction rule is equivalent to the boolean and operation.
  * Example:
- * If the fuzzy engie encounters the following expression in a fuzzy rule, "... A and B ...".
+ * If the fuzzy engine encounters the following expression in a fuzzy rule, "... A and B ...".
  * Given that A is 0.6 and B is 0.8 and the conjunction operator is ::SML_FUZZY_TNORM_MINIMUM,
  * the result of the operation will be 0.6
  *
@@ -172,7 +172,7 @@ bool sml_fuzzy_conjunction_set(struct sml_object *sml, enum sml_fuzzy_tnorm norm
  * Values greater than @c 1 or lower than @c 0 are not accepted and rules with
  * weight @c zero are always ignored.
  *
- * @remark The default weight treshold is 0.05
+ * @remark The default weight threshold is 0.05
  *
  * @param sml The ::sml_object object.
  * @param weight_threshold The desired threshold.
@@ -231,7 +231,7 @@ bool sml_fuzzy_output_set_accumulation(struct sml_object *sml, struct sml_variab
  * automatically create terms for this variable. Some properties are important
  * help fuzzy engine to improve the quality of the created terms.
  *
- * Width is the width of each creted term. Other important properties are
+ * Width is the width of each created term. Other important properties are
  * is_id, set by ::sml_fuzzy_variable_set_is_id and range (min and max), set by
  * ::sml_variable_set_range.
  *
@@ -351,13 +351,13 @@ bool sml_fuzzy_variable_get_is_id(struct sml_object *sml, struct sml_variable *s
 struct sml_fuzzy_term *sml_fuzzy_variable_add_term_rectangle(struct sml_object *sml, struct sml_variable *variable, const char *name, float start, float end);
 
 /**
- * @brief Add a tirangle term for a variable.
+ * @brief Add a triangle term for a variable.
  *
  * A triangle term uses is a mathematical function defined by 3 vertex (a, b c).
  * For X coordinates between vertex a and b, function value is
  * obtained by the linear function connecting points (vertex_a; 0) to
  * (vertex_b; 1). In vertex_b, function value will 1.0  and from vertex_b to vertex_c,
- * function value is obtained by the linear function connecting opints (vertex_b; 1.0)
+ * function value is obtained by the linear function connecting points (vertex_b; 1.0)
  * to (vertex_c; 0).
  * For all other X values, the function value will be @c zero.
  *
@@ -378,7 +378,7 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_triangle(struct sml_object *s
  * @brief Add a cosine term for a variable.
  *
  * Cosine term value is obtained by the function value from a cosine function
- * centered in X coordinate center and with width defined by width paramenter.
+ * centered in X coordinate center and with width defined by width parameter.
  * The maximum value (1.0) of the cosine function is in X coordinate center.
  *
  * @remark The term name can not contain spaces!
@@ -397,7 +397,7 @@ struct sml_fuzzy_term *sml_fuzzy_variable_add_term_cosine(struct sml_object *sml
  * @brief Add a gaussian term for a variable.
  *
  * Gaussian term value is obtained by the function value from a gaussian
- * function defined by the parametes mean, standard_deviation. The maximum
+ * function defined by the parameters mean, standard_deviation. The maximum
  * value in Y axis of the gaussian function is 1.0.
  *
  * @remark The term name can not contain spaces!
@@ -475,7 +475,7 @@ bool sml_fuzzy_variable_remove_term(struct sml_object *sml, struct sml_variable 
  *
  * The rule simplification uses a heuristic to try to simplify the fuzzy rules.
  * For example, if the fuzzy engine is controlling a a home Light using two variables
- * (Weekday and TimeOfTheDay) we can ha ve the following rules:
+ * (Weekday and TimeOfTheDay) we can have the following rules:
  * <BLOCKQUOTE>
  * If Weekday is Sunday and TimeOfTheDay is Night then Light is On. <BR>
  * If Weekday is Monday and TimeOfTheDay is Night then Light is On. <BR>
