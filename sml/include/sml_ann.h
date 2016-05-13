@@ -109,12 +109,12 @@ extern "C" {
  * of their training. In order to reduce this problem the following methods were implemented.
  *
  * The first method is called pseudo-rehearsal (the default one), in this method only one neural network is created
- * and everytime it needs be retrained, random inputs are generated and
+ * and every time it needs be retrained, random inputs are generated and
  * feed to the network. The corresponding outputs are stored and used to train the neural network
  * with the new collected data.
  *
  * The second method of operation consists in creating N neural networks,
- * that are very specific for each pattern that SML encounters and everytime the SML wants to make a prediction,
+ * that are very specific for each pattern that SML encounters and every time the SML wants to make a prediction,
  * it will choose which is the best neural network for the current situation.
  * It is possible to set a limit of how many neural networks SML will have in memory, this limit
  * can be set with ::sml_ann_set_cache_max_size. This cache implements the LRU algorithm so,

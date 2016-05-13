@@ -203,7 +203,7 @@ struct sml_variables_list;
 typedef bool (*sml_read_state_cb) (struct sml_object *sml, void *data);
 
 /**
- * @brief Called everytime the SML made a prediction.
+ * @brief Called every time the SML made a prediction.
  * @param sml The ::sml_object Object.
  * @param changed A ::sml_variables_list with the predicted variables.
  * @param data User defined data.

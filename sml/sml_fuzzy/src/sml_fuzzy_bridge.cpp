@@ -553,7 +553,7 @@ sml_fuzzy_variable_get_value(struct sml_variable *variable)
     if (output_var)
         return _var_get_val_in_range(fl_var, output_var->getOutputValue());
 
-    sml_warning("Trying to use unkown class of variable");
+    sml_warning("Trying to use unknown class of variable");
     return NAN;
 }
 
@@ -576,7 +576,7 @@ sml_fuzzy_variable_set_value(struct sml_variable *variable, float value)
         return;
     }
 
-    sml_warning("Trying to use unkown class of variable");
+    sml_warning("Trying to use unknown class of variable");
 }
 
 struct sml_variable *

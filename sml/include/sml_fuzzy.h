@@ -277,7 +277,7 @@ bool sml_fuzzy_output_set_accumulation(struct sml_object *sml, struct sml_variab
  * - triange from 3.4 to 4.6, with peak at 4
  * - ramp from 4.4 to 5
  *
- * Terms autocreated are also rebalanced everytime ::sml_variable_set_range is
+ * Terms autocreated are also rebalanced every time ::sml_variable_set_range is
  * called. So new terms are created to make sure all variable range is covered.
  * And terms that are no longer necessary are removed.
  *
