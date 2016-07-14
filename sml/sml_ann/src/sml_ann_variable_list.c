@@ -294,7 +294,7 @@ sml_ann_variable_list_remove(struct sml_variables_list *list, uint16_t index)
 {
     struct sml_variables_list_impl *impl =
         (struct sml_variables_list_impl *)list;
-    struct sml_variable *var = sol_ptr_vector_take(&impl->variables, index);
+    struct sml_variable *var = sol_ptr_vector_steal(&impl->variables, index);
 
     if (!var) {
         sml_critical("Could not remove the index %d", index);

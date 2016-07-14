@@ -139,7 +139,7 @@ engine_state_process(struct sol_flow_node *node, void *data,
     struct sml_garden_data *sdata = data;
     time_t now = time(NULL);
 
-    r = sol_flow_packet_get_boolean(packet, &engine_is_on);
+    r = sol_flow_packet_get_bool(packet, &engine_is_on);
     SOL_INT_CHECK(r, < 0, r);
 
     if (engine_is_on)

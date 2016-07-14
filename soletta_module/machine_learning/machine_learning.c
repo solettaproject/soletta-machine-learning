@@ -759,8 +759,8 @@ input_var_process(struct sol_flow_node *node, void *data, uint16_t port,
         return -EINVAL;
     }
 
-    if ((!sol_util_double_equal(input_var->base.value.min, value.min)) ||
-        (!sol_util_double_equal(input_var->base.value.max, value.max)))
+    if ((!sol_util_double_eq(input_var->base.value.min, value.min)) ||
+        (!sol_util_double_eq(input_var->base.value.max, value.max)))
         input_var->base.range_changed = true;
     input_var->base.value = value;
     pthread_mutex_unlock(&mdata->read_lock);
@@ -803,8 +803,8 @@ output_var_process(struct sol_flow_node *node, void *data, uint16_t port,
         }
     }
 
-    if ((!sol_util_double_equal(output_var->base.value.min, value.min)) ||
-        (!sol_util_double_equal(output_var->base.value.max, value.max)))
+    if ((!sol_util_double_eq(output_var->base.value.min, value.min)) ||
+        (!sol_util_double_eq(output_var->base.value.max, value.max)))
         output_var->base.range_changed = true;
     output_var->base.value = value;
     output_var->predicted_value = NAN;
@@ -1285,8 +1285,8 @@ machine_learning_sync_update_variables(struct machine_learning_sync_data *mdata,
         if (!sml_variable_get_range(mdata->base.sml, var, &min, &max))
             return -EINVAL;
 
-        if ((!sol_util_double_equal(min, val->min)) ||
-            (!sol_util_double_equal(max, val->max))) {
+        if ((!sol_util_double_eq(min, val->min)) ||
+            (!sol_util_double_eq(max, val->max))) {
             width = fmax((val->max - val->min + 1) /
                 mdata->base.number_of_terms, val->step);
 
@@ -1872,7 +1872,7 @@ learn_disabled_process(struct sol_flow_node *node, void *data, uint16_t port,
     bool disabled;
     int r;
 
-    r = sol_flow_packet_get_boolean(packet, &disabled);
+    r = sol_flow_packet_get_bool(packet, &disabled);
     SOL_INT_CHECK(r, < 0, r);
 
     if (mdata->learn_disabled == disabled)

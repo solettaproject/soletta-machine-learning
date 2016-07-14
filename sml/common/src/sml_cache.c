@@ -69,7 +69,7 @@ sml_cache_set_max_size(struct sml_cache *cache, uint16_t max_elements)
 
     cache->max_elements = max_elements;
     while (sol_ptr_vector_get_len(&cache->elements) > max_elements) {
-        to_del = sol_ptr_vector_take(&cache->elements, 0);
+        to_del = sol_ptr_vector_steal(&cache->elements, 0);
         if (!to_del) {
             sml_critical("Could not remove an element from the cache!");
             return false;
@@ -104,7 +104,7 @@ sml_cache_put(struct sml_cache *cache, void *data)
     void *to_del;
 
     if (cache->max_elements && count == cache->max_elements) {
-        to_del = sol_ptr_vector_take(&cache->elements, 0);
+        to_del = sol_ptr_vector_steal(&cache->elements, 0);
         if (!to_del) {
             sml_critical("Could not remove the oldest element in the cache");
             return false;
@@ -188,7 +188,7 @@ sml_cache_remove_by_id(struct sml_cache *cache, uint16_t elem)
 {
     void *to_del;
 
-    to_del = sol_ptr_vector_take(&cache->elements, elem);
+    to_del = sol_ptr_vector_steal(&cache->elements, elem);
     if (!to_del) {
         sml_critical("Could not remove the oldest element in the cache");
         return false;
